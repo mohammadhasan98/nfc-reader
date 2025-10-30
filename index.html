@@ -113,8 +113,9 @@ button:disabled {
     margin-top: 30px;
 }
 
+/* CHANGE: موقعیت دکمه تمام صفحه به پایین-چپ تغییر کرد */
 .floating-btn {
-  position: fixed; top: 15px; left: 15px;
+  position: fixed; bottom: 15px; left: 15px;
   width: 50px; height: 50px; border-radius: 50%;
   background: var(--secondary); color: var(--text);
   display: flex; justify-content: center; align-items: center;
@@ -461,24 +462,23 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   <p class="scan-prompt">لطفا کارت هر بازیکن را اسکن کنید</p>
   <div id="scannedPlayersList"></div>
   <label for="startMoney">موجودی اولیه:</label>
-  <input type="text" inputmode="numeric" id="startMoney" placeholder="مثلاً ۱۵,۰۰۰">
+  <!-- CHANGE: مثال Placeholder تغییر کرد -->
+  <input type="text" inputmode="numeric" id="startMoney" placeholder="مثلاً ۱,۵۰۰">
   <label for="turnReward">پاداش دور کامل:</label>
-  <input type="text" inputmode="numeric" id="turnReward" placeholder="مثلاً ۲,۰۰۰">
+  <!-- CHANGE: مثال Placeholder تغییر کرد -->
+  <input type="text" inputmode="numeric" id="turnReward" placeholder="مثلاً ۲۰۰">
   <button id="startGameBtn" class="btn-primary" disabled>شروع بازی</button>
 </section>
 
 <section id="game">
-  <!-- CHANGE START: ساختار دکمه‌ها طبق درخواست تغییر کرد -->
   <div class="game-actions-container">
-    <!-- به دلیل dir="rtl"، این دکمه در سمت راست نمایش داده می‌شود -->
     <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
-    <!-- این بخش در سمت چپ نمایش داده می‌شود -->
     <div class="stacked-buttons">
       <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
-      <button id="bankTxBtn" class="btn-primary">🏦 پرداخت/دریافت</button>
+      <!-- CHANGE: نام دکمه تغییر کرد -->
+      <button id="bankTxBtn" class="btn-primary">🏦 بانکداری</button>
     </div>
   </div>
-  <!-- CHANGE END -->
 
   <div id="playerList"></div>
   <button id="endGame" class="btn-danger" style="margin-top: 30px;">اتمام و شروع مجدد 🔄</button>
@@ -516,7 +516,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
 <div id="bankTxPopup" class="popup">
     <div class="popup-box">
-      <h3>🏦 دریافت یا پرداخت به بانک</h3>
+      <!-- CHANGE: عنوان پاپ‌آپ تغییر کرد -->
+      <h3>🏦 بانکداری</h3>
       <input type="text" id="bankTxAmountInput" readonly placeholder="مبلغ">
       <div class="keyboard" id="bankTxNumPad"></div>
       <div class="circle" id="bankTxCircle">بازیکن</div>
@@ -956,7 +957,7 @@ function showRewardAnimation(name, amount, duration) {
     setTimeout(() => fade.classList.remove('active'), duration);
 }
 
-// --- پرداخت/دریافت از بانک ---
+// --- بانکداری ---
 let bankTxPlayerTag = null;
 const bankTxCircle = document.getElementById('bankTxCircle');
 function resetBankTxPopup() {
