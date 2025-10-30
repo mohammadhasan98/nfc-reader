@@ -127,7 +127,6 @@ input:focus, select:focus {
 label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
 /* --- صفحه شروع --- */
-/* NEW: استایل انیمیشن اعلان اسکن */
 @keyframes pulse-border {
   0% { box-shadow: 0 0 0 0 rgba(58, 134, 255, 0.6); }
   70% { box-shadow: 0 0 0 10px rgba(58, 134, 255, 0); }
@@ -217,19 +216,24 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   animation-delay: 0.2s;
 }
 
-/* انیمیشن‌های تغییر موجودی */
-@keyframes balance-up { 
+/* --- انیمیشن‌های تغییر موجودی --- */
+@keyframes balance-up-anim { 
   0% { color: var(--success); transform: scale(1.15); } 
   80% { color: var(--success); transform: scale(1); }
   100% { color: var(--text); transform: scale(1); } 
 }
-@keyframes balance-down { 
+@keyframes balance-down-anim { 
   0% { color: var(--danger); transform: scale(1.15); } 
   80% { color: var(--danger); transform: scale(1); }
   100% { color: var(--text); transform: scale(1); } 
 }
-.balance-up { animation: balance-up 1.5s ease; }
-.balance-down { animation: balance-down 1.5s ease; }
+/* انیمیشن عمومی برای پاداش */
+.balance-up { animation: balance-up-anim 1.5s ease; }
+.balance-down { animation: balance-down-anim 1.5s ease; }
+
+/* NEW: انیمیشن‌های زمان‌بندی‌شده و سریع برای انتقال وجه */
+.balance-down-delayed { animation: balance-down-anim 0.5s ease; }
+.balance-up-delayed { animation: balance-up-anim 0.5s ease; }
 
 /* --- پاپ‌آپ‌ها --- */
 @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
@@ -290,7 +294,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 #transferInfo .arrow { 
   opacity: 0; width:60px; height:60px; 
   border-top:5px solid #fff; border-left:5px solid #fff;
-  transform: rotate(-135deg); /* جهت فلش به چپ */
+  transform: rotate(-135deg); /* شکل فلش اشاره‌کننده به چپ */
 }
 #fadeAmount {
     position: absolute; left: 50%; transform: translateX(-50%); top: -40px;
@@ -299,7 +303,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-/* انیمیشن حرکت فلش از راست به چپ */
+/* انیمیشن حرکت فلش از راست به چپ (مناسب RTL) */
 @keyframes arrowAnimRTL {
     from { transform: translateX(80px) rotate(-135deg); opacity: 0; }
     to { transform: translateX(-80px) rotate(-135deg); opacity: 1; }
@@ -308,7 +312,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 .fade-arrow-anim { animation: arrowAnimRTL 1s ease-in-out forwards; animation-delay: 0.5s; opacity: 0; }
 .fade-receiver-anim { animation: pulse 0.8s ease-in-out forwards; animation-delay: 1.5s; opacity: 1 !important; transform: scale(1);}
 
-/* انیمیشن پاداش دور */
+/* انیمیشن پاداش دور (بدون تغییر) */
 .reward-arrow {
   width:50px; height:50px; border-bottom:5px solid #fff; 
   border-left:5px solid #fff; margin: 15px auto; 
@@ -339,12 +343,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
 <section id="start" class="active">
   <h1>🏦 بانک مونوپولی</h1>
-  
-  <!-- UPDATED: اعلان اسکن کارت با انیمیشن -->
   <p class="scan-prompt">لطفا کارت هر بازیکن را اسکن کنید</p>
-
   <div id="scannedPlayersList"></div>
-
   <label for="startMoney">موجودی اولیه:</label>
   <input type="text" inputmode="numeric" id="startMoney" placeholder="مثلاً ۱۵,۰۰۰">
   <label for="turnReward">پاداش دور کامل:</label>
@@ -353,7 +353,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 </section>
 
 <section id="game">
-  <!-- REMOVED: حذف عنوان مدیریت بازی -->
   <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 30px;">
     <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
     <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
@@ -371,8 +370,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     <div class="keyboard" id="numPad"></div>
     <div style="display:flex; justify-content:space-around; align-items: center; margin-top:10px;">
       <div class="circle" id="giverCircle">دهنده</div>
-      <!-- UPDATED: تغییر جهت فلش به راست -->
-      <p style="font-size: 30px; margin: 0 10px;">→</p>
+      <!-- UPDATED: تغییر جهت فلش به چپ برای طرح راست‌چین -->
+      <p style="font-size: 30px; margin: 0 10px;">←</p>
       <div class="circle" id="receiverCircle">گیرنده</div>
     </div>
     <div class="button-group">
@@ -417,8 +416,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 <div id="transferFade" class="fade">
   <div id="transferInfo">
     <div id="fadeAmount"></div>
-    <!-- توجه: در حالت RTL، ترتیب نمایش عناصر flex معکوس است -->
-    <!-- پس giver در سمت راست و receiver در چپ نمایش داده می‌شود -->
+    <!-- در حالت RTL، ترتیب نمایش عناصر flex معکوس است (دهنده در راست، گیرنده در چپ) -->
     <div class="circle filled" id="fadeGiver"></div>
     <div class="arrow"></div>
     <div class="circle filled" id="fadeReceiver"></div>
@@ -562,7 +560,6 @@ function renderPlayerList() {
         card.style.animationDelay = `${index * 100}ms`;
         if (p.bankrupt) card.classList.add('bankrupt');
 
-        // UPDATED: تغییر "تگ" به "ش.ک"
         card.innerHTML = `
             <div class="player-card-header">
                 <span class="player-name">${p.name}</span>
@@ -675,21 +672,30 @@ document.getElementById('transferBtn').onclick = () => {
     });
 };
 document.getElementById('transferCancel').onclick = resetTransferPopup;
+
 document.getElementById('transferConfirm').onclick = () => {
     const amount = parseInt(toEnglishDigits(amountInput.value));
     if (!giverTag || !receiverTag) { customAlert("کارت دهنده و گیرنده را اسکن کنید."); return; }
     if (isNaN(amount) || amount <= 0) { customAlert("مبلغ انتقال را به درستی وارد کنید."); return; }
-    const oldPlayers = JSON.parse(localStorage.getItem('players'));
-    let players = JSON.parse(JSON.stringify(oldPlayers));
-    const giver = players.find(p => p.id === giverTag.id), receiver = players.find(p => p.id === receiverTag.id);
+
+    let players = JSON.parse(localStorage.getItem('players'));
+    const giver = players.find(p => p.id === giverTag.id);
+    const receiver = players.find(p => p.id === receiverTag.id);
+
     if (giver.balance < amount) { customAlert(`موجودی «${giver.name}» کافی نیست!`); return; }
-    giver.balance -= amount; receiver.balance += amount;
+    
+    giver.balance -= amount;
+    receiver.balance += amount;
     localStorage.setItem('players', JSON.stringify(players));
-    showTransferAnimation(giver.name, receiver.name, amount);
+    
+    // NEW: فراخوانی تابع انیمیشن با اطلاعات کامل برای اجرای انیمیشن‌های زنجیره‌ای
+    showTransferAnimation(giver.name, receiver.name, amount, giver.id, receiver.id, players); 
+    
     resetTransferPopup();
-    setTimeout(() => updatePlayerDisplays(players, oldPlayers), 100);
 };
-function showTransferAnimation(giverName, receiverName, amount) {
+
+// UPDATED: تابع انیمیشن انتقال با منطق جدید
+function showTransferAnimation(giverName, receiverName, amount, giverId, receiverId, newPlayers) {
     const fade = document.getElementById('transferFade');
     const giverEl = document.getElementById('fadeGiver');
     const receiverEl = document.getElementById('fadeReceiver');
@@ -706,13 +712,42 @@ function showTransferAnimation(giverName, receiverName, amount) {
     amountEl.style.opacity = '0';
     
     fade.classList.add('active');
+    
     setTimeout(() => {
         giverEl.classList.add('fade-giver-anim'); 
         arrowEl.classList.add('fade-arrow-anim'); 
         receiverEl.classList.add('fade-receiver-anim');
         amountEl.style.opacity = '1';
     }, 50);
-    setTimeout(() => { fade.classList.remove('active'); }, 2500);
+
+    // NEW LOGIC: پس از اتمام انیمیشن انتقال وجه، انیمیشن‌های تغییر موجودی اجرا می‌شوند
+    setTimeout(() => {
+        fade.classList.remove('active');
+
+        const giverData = newPlayers.find(p => p.id === giverId);
+        const receiverData = newPlayers.find(p => p.id === receiverId);
+        
+        // 1. انیمیشن کاهش موجودی دهنده
+        if (giverData) {
+            const giverBalanceEl = document.querySelector(`.player-balance[data-balance-id="${giverId}"]`);
+            giverBalanceEl.textContent = giverData.balance.toLocaleString('fa-IR');
+            giverBalanceEl.classList.remove('balance-up-delayed', 'balance-down-delayed');
+            void giverBalanceEl.offsetWidth; // Force reflow
+            giverBalanceEl.classList.add('balance-down-delayed');
+        }
+        
+        // 2. پس از اتمام انیمیشن دهنده، انیمیشن افزایش موجودی گیرنده اجرا می‌شود
+        setTimeout(() => {
+            if (receiverData) {
+                const receiverBalanceEl = document.querySelector(`.player-balance[data-balance-id="${receiverId}"]`);
+                receiverBalanceEl.textContent = receiverData.balance.toLocaleString('fa-IR');
+                receiverBalanceEl.classList.remove('balance-up-delayed', 'balance-down-delayed');
+                void receiverBalanceEl.offsetWidth; // Force reflow
+                receiverBalanceEl.classList.add('balance-up-delayed');
+            }
+        }, 500); // برابر با زمان انیمیشن کاهش (0.5 ثانیه)
+
+    }, 2500); // زمان کلی انیمیشن انتقال وجه
 }
 
 // --- پاداش دور ---
@@ -777,10 +812,10 @@ function init() {
     } else {
         showSection('start');
         startNFCScan(handleInitialScan);
-    }
-}
 init();
 </script>
 
 </body>
 </html>
+```tml>
+
