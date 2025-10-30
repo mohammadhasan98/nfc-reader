@@ -129,6 +129,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   color: #fff;
   font-family: monospace; /* برای دیدن دقیق کاراکترها */
   font-size: 14px;
+  line-height: 1.6;
 }
 
 /* --- پاپ‌آپ‌ها --- */
@@ -155,7 +156,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
 .circle {
   width:100px; height:100px; border-radius:50%;
-  border: 2px solid var(--primary); color:var(--text); font-size:16px; /* فونت کوچکتر برای جا شدن نام‌ها */
+  border: 2px solid var(--primary); color:var(--text); font-size:16px;
   display: flex; justify-content: center; align-items: center; text-align: center;
   padding: 5px; margin:20px auto; transition: all .3s ease;
   word-break: break-word;
@@ -214,8 +215,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
   <button id="rewardBtn" class="btn-primary">🎁 دریافت پاداش دور</button>
   
-  <!-- کادر تست NFC -->
-  <div id="nfcDebugOutput">برای تست، تگ را به گوشی نزدیک کنید تا محتوای آن اینجا نمایش داده شود.</div>
+  <div id="nfcDebugOutput">برای تست، تگ را به گوشی نزدیک کنید.</div>
   
   <div id="playerList"></div>
   <button id="endGame" class="btn-secondary">اتمام بازی ❌</button>
@@ -226,7 +226,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   <div class="popup-box">
     <h3>💳 کارت به کارت</h3>
     <div id="formattedAmountDisplay"></div>
-    <input type="hidden" id="amountInput"> <!-- مخفی شد و فقط برای نگهداری عدد خام استفاده می‌شود -->
+    <input type="hidden" id="amountInput">
     <div class="keyboard" id="numPad"></div>
     <div style="display:flex; justify-content:space-around; align-items: center; margin-top:10px;">
       <div class="circle" id="giverCircle">دهنده</div>
@@ -253,22 +253,9 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   </div>
 </div>
 
-<!----------- انیمیشن انتقال ----------->
-<div id="transferFade" class="fade">
-  <div id="transferInfo" style="text-align: center;">
-    <div class="circle filled" id="fadeGiver"></div>
-    <div class="arrow"></div>
-    <div class="circle filled" id="fadeReceiver"></div>
-  </div>
-</div>
-
-<div id="rewardFade" class="fade">
-  <div style="text-align: center;">
-    <div id="rewardShow" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;"></div>
-    <div class="arrow"></div>
-    <div class="circle filled" id="rewardTo"></div>
-  </div>
-</div>
+<!----------- انیمیشن‌ها ----------->
+<div id="transferFade" class="fade">...</div>
+<div id="rewardFade" class="fade">...</div>
 
 <script>
 document.addEventListener('contextmenu', e => e.preventDefault());
@@ -277,10 +264,17 @@ document.addEventListener('contextmenu', e => e.preventDefault());
 const sections = { start: document.getElementById('start'), names: document.getElementById('names'), game: document.getElementById('game') };
 const popups = { transfer: document.getElementById('transferPopup'), reward: document.getElementById('rewardPopup') };
 const nfcDebugOutput = document.getElementById('nfcDebugOutput');
-let ndefReader;
-let nfcAbortController = null;
+let nfcInitialized = false;
 
-// ------------------------- تابع کمکی برای فرمت اعداد -------------------------
+// کنترل‌کننده پیش‌فرض NFC که فقط در کادر تست می‌نویسد
+const defaultNfcHandler = (player) => {
+    nfcDebugOutput.innerHTML = `تگ اسکن شد:<br>ID: ${player.id}, نام: ${player.name}`;
+};
+
+// متغیر اصلی برای نگهداری وظیفه فعلی NFC
+let currentNfcReadHandler = defaultNfcHandler;
+
+// ------------------------- تابع کمکی فرمت اعداد -------------------------
 function formatToPersian(num) {
   return new Intl.NumberFormat('fa-IR').format(num);
 }
@@ -289,13 +283,81 @@ function formatToPersian(num) {
 function showSection(id) {
   for (let key in sections) sections[key].classList.remove('active');
   sections[id].classList.add('active');
-  // اگر به صفحه بازی رفتیم، اسکن NFC برای تست فعال شود
-  if (id === 'game') {
-      startGlobalNFCScanForDebug();
+  if (id === 'game' && !nfcInitialized) {
+      initializeMainNFCListener();
   }
 }
 
-// ------------------------- مرحله ۱: تنظیمات اولیه -------------------------
+// ------------------------- منطق NFC مرکزی (جدید) -------------------------
+async function initializeMainNFCListener() {
+    if (!('NDEFReader' in window)) {
+        nfcDebugOutput.textContent = "مرورگر شما از Web NFC پشتیبانی نمی‌کند.";
+        return;
+    }
+    nfcInitialized = true;
+    try {
+        const ndef = new NDEFReader();
+        await ndef.scan();
+        nfcDebugOutput.textContent = "NFC آماده اسکن است...";
+
+        ndef.onreading = event => {
+            try {
+                const decoder = new TextDecoder();
+                const rawText = decoder.decode(event.message.records[0].data).trim();
+                const parts = rawText.split('\n');
+                const id = parseInt(parts[0]);
+
+                nfcDebugOutput.innerHTML = `داده خام تگ: [${rawText}]`;
+
+                if (isNaN(id)) {
+                    nfcDebugOutput.innerHTML += '<br><span style="color:red;">خطا: ID خوانده شده عدد نیست!</span>';
+                    return;
+                }
+
+                const players = JSON.parse(localStorage.getItem('players'));
+                const player = players.find(p => p.id === id);
+
+                if (player) {
+                    if (player.bankrupt) {
+                       nfcDebugOutput.innerHTML += `<br><span style="color:orange;">بازیکن «${player.name}» ورشکسته است.</span>`;
+                       return;
+                    }
+                    // فراخوانی کنترل‌کننده فعلی
+                    currentNfcReadHandler(player);
+                } else {
+                    nfcDebugOutput.innerHTML += `<br><span style="color:red;">خطا: بازیکنی با ID=${id} یافت نشد!</span>`;
+                }
+            } catch (err) {
+                 nfcDebugOutput.innerHTML = `<span style="color:red;">خطا در پردازش تگ: ${err.message}</span>`;
+            }
+        };
+
+        ndef.onreadingerror = () => {
+             nfcDebugOutput.innerHTML = '<span style="color:red;">خطا در خواندن تگ NFC.</span>';
+        };
+    } catch (error) {
+        nfcDebugOutput.innerHTML = `<span style="color:red;">خطا در فعالسازی NFC: ${error.message}</span>`;
+    }
+}
+
+
+// ------------------------- مرحله ۱ و ۲: تنظیمات و نام‌ها -------------------------
+document.getElementById('continueToNames').onclick = () => { /* ... بدون تغییر ... */ };
+function generateNameInputs(count) { /* ... بدون تغییر ... */ }
+document.getElementById('startGame').onclick = () => {
+    // ... (کد قبلی برای گرفتن نام‌ها) ...
+    const count = parseInt(localStorage.getItem('playerCount'));
+    let players = [];
+    for (let i = 1; i <= count; i++) {
+        let name = document.getElementById(`playerName${i}`).value.trim();
+        if (!name) { alert("نام تمام بازیکنان را وارد کنید."); return; }
+        players.push({ id: i, name: name, balance: parseInt(localStorage.getItem('startMoney')), bankrupt: false });
+    }
+    localStorage.setItem('players', JSON.stringify(players));
+    renderPlayerList();
+    showSection('game');
+};
+// کدهای بدون تغییر برای اختصار حذف شدند، آنها را از کد قبلی خود کپی کنید
 document.getElementById('continueToNames').onclick = () => {
   const count = parseInt(playerCount.value);
   const startMoneyVal = parseInt(startMoney.value);
@@ -310,8 +372,6 @@ document.getElementById('continueToNames').onclick = () => {
   generateNameInputs(count);
   showSection('names');
 };
-
-// ------------------------- مرحله ۲: نام بازیکنان -------------------------
 function generateNameInputs(count) {
   const container = document.getElementById('nameInputs');
   container.innerHTML = '';
@@ -322,21 +382,9 @@ function generateNameInputs(count) {
     container.appendChild(input);
   }
 }
-
-document.getElementById('startGame').onclick = () => {
-  const count = parseInt(localStorage.getItem('playerCount'));
-  let players = [];
-  for (let i = 1; i <= count; i++) {
-    let name = document.getElementById(`playerName${i}`).value.trim();
-    if (!name) { alert("نام تمام بازیکنان را وارد کنید."); return; }
-    players.push({ id: i, name: name, balance: parseInt(localStorage.getItem('startMoney')), bankrupt: false });
-  }
-  localStorage.setItem('players', JSON.stringify(players));
-  renderPlayerList();
-  showSection('game');
-};
-
 // ------------------------- مرحله ۳: صفحه بازی -------------------------
+function renderPlayerList() { /* ... بدون تغییر ... */ }
+// کد بدون تغییر برای اختصار حذف شد
 function renderPlayerList() {
   const playerListContainer = document.getElementById('playerList');
   playerListContainer.innerHTML = '';
@@ -367,75 +415,7 @@ function renderPlayerList() {
     playerListContainer.appendChild(card);
   });
 }
-
-// ------------------------- منطق NFC -------------------------
-async function startNFCScan(onRead, onScanStart, onScanEnd) {
-    if (!('NDEFReader' in window)) {
-        alert("مرورگر شما از Web NFC پشتیبانی نمی‌کند. از گوگل کروم در اندروید استفاده کنید.");
-        return;
-    }
-    try {
-        if (!ndefReader) ndefReader = new NDEFReader();
-        nfcAbortController = new AbortController();
-        if (onScanStart) onScanStart();
-
-        ndefReader.onreading = event => {
-            const decoder = new TextDecoder();
-            const rawText = decoder.decode(event.message.records[0].data).trim();
-            
-            // نمایش خروجی خام در کادر تست
-            nfcDebugOutput.textContent = `داده خام تگ: [${rawText}]`;
-
-            const parts = rawText.split('\n');
-            const id = parseInt(parts[0]);
-            
-            if (isNaN(id)) {
-                nfcDebugOutput.textContent += ' | خطا: ID خوانده شده عدد نیست!';
-                return; 
-            }
-            
-            const players = JSON.parse(localStorage.getItem('players'));
-            const player = players.find(p => p.id === id);
-            
-            if (player && !player.bankrupt) {
-                onRead(player);
-            } else if (!player) {
-                nfcDebugOutput.textContent += ` | خطا: بازیکنی با ID=${id} یافت نشد!`;
-            }
-        };
-
-        await ndefReader.scan({ signal: nfcAbortController.signal });
-
-    } catch (error) {
-        if (onScanEnd) onScanEnd();
-        nfcDebugOutput.textContent = `خطا در فعالسازی NFC: ${error.message}`;
-    }
-}
-
-function stopNFCScan() {
-    if (nfcAbortController) {
-        nfcAbortController.abort();
-        nfcAbortController = null;
-    }
-}
-
-// تابع اسکن سراسری فقط برای کادر تست
-async function startGlobalNFCScanForDebug() {
-    if (!('NDEFReader' in window)) return;
-    try {
-        const reader = new NDEFReader();
-        await reader.scan();
-        reader.onreading = event => {
-            const decoder = new TextDecoder();
-            const rawText = decoder.decode(event.message.records[0].data).trim();
-            nfcDebugOutput.textContent = `داده خام تگ: [${rawText}]`;
-        };
-    } catch (error) {
-        // این خطا طبیعی است اگر اسکن دیگری (از پاپ‌آپ‌ها) فعال شود
-    }
-}
-
-// ------------------------- کارت به کارت -------------------------
+// ------------------------- کیبورد عددی (بدون تغییر) -------------------------
 const numPad = document.getElementById('numPad');
 const amountInput = document.getElementById('amountInput');
 const formattedAmountDisplay = document.getElementById('formattedAmountDisplay');
@@ -444,36 +424,26 @@ function updateFormattedAmount() {
     const amount = parseInt(amountInput.value) || 0;
     formattedAmountDisplay.textContent = amount > 0 ? `${formatToPersian(amount)} تومان` : '';
 }
-
 ['۱','۲','۳','۴','۵','۶','۷','۸','۹','۰','⌫','پاک'].forEach((key, i) => {
     const btn = document.createElement('button');
     btn.textContent = key;
     if (key === '⌫') {
-        btn.onclick = () => {
-            amountInput.value = amountInput.value.slice(0, -1);
-            updateFormattedAmount();
-        };
+        btn.onclick = () => { amountInput.value = amountInput.value.slice(0, -1); updateFormattedAmount(); };
     } else if (key === 'پاک') {
-        btn.onclick = () => {
-            amountInput.value = '';
-            updateFormattedAmount();
-        };
+        btn.onclick = () => { amountInput.value = ''; updateFormattedAmount(); };
     } else {
         const num = i === 9 ? '0' : (i + 1).toString();
-        btn.onclick = () => {
-            amountInput.value += num;
-            updateFormattedAmount();
-        };
+        btn.onclick = () => { amountInput.value += num; updateFormattedAmount(); };
     }
     numPad.appendChild(btn);
 });
-
+// ------------------------- کارت به کارت (منطق جدید) -------------------------
 let giverTag = null, receiverTag = null;
 const giverCircle = document.getElementById('giverCircle');
 const receiverCircle = document.getElementById('receiverCircle');
 
 function resetTransferPopup() {
-    stopNFCScan();
+    popups.transfer.classList.remove('active');
     giverTag = null; receiverTag = null;
     giverCircle.textContent = 'دهنده';
     receiverCircle.textContent = 'گیرنده';
@@ -481,38 +451,31 @@ function resetTransferPopup() {
     receiverCircle.classList.remove('filled');
     amountInput.value = '';
     updateFormattedAmount();
-    popups.transfer.classList.remove('active');
+    // بازگرداندن کنترل‌کننده NFC به حالت پیش‌فرض
+    currentNfcReadHandler = defaultNfcHandler;
 }
 
 document.getElementById('transferBtn').onclick = () => {
     popups.transfer.classList.add('active');
     giverCircle.textContent = 'در حال اسکن...';
-    startNFCScan(
-        // onRead
-        player => {
-            if (!giverTag) {
-                giverTag = player;
-                giverCircle.textContent = player.name;
-                giverCircle.classList.add('filled');
-                receiverCircle.textContent = 'در حال اسکن...';
-            } else if (!receiverTag && player.id !== giverTag.id) {
-                receiverTag = player;
-                receiverCircle.textContent = player.name;
-                receiverCircle.classList.add('filled');
-                stopNFCScan();
-            }
-        },
-        // onScanStart
-        () => {
-            if (!giverTag) giverCircle.textContent = 'در حال اسکن...';
-            else receiverCircle.textContent = 'در حال اسکن...';
-        },
-        // onScanEnd
-        () => {
-            if (!giverTag) giverCircle.textContent = 'دهنده';
-            if (!receiverTag) receiverCircle.textContent = 'گیرنده';
+    
+    // تغییر وظیفه کنترل‌کننده NFC
+    currentNfcReadHandler = (player) => {
+        if (!giverTag) {
+            giverTag = player;
+            giverCircle.textContent = player.name;
+            giverCircle.classList.add('filled');
+            receiverCircle.textContent = 'در حال اسکن...';
+        } else if (!receiverTag && player.id !== giverTag.id) {
+            receiverTag = player;
+            receiverCircle.textContent = player.name;
+            receiverCircle.classList.add('filled');
+            // اسکن تمام شد، می‌توانیم موقتاً کنترل‌کننده را غیرفعال کنیم تا اسکن تکراری انجام نشود
+            currentNfcReadHandler = () => { 
+                nfcDebugOutput.innerHTML += '<br><span style="color:yellow;">لطفا ابتدا انتقال را تایید یا لغو کنید.</span>';
+            };
         }
-    );
+    };
 };
 
 document.getElementById('transferCancel').onclick = resetTransferPopup;
@@ -537,23 +500,17 @@ document.getElementById('transferConfirm').onclick = () => {
     setTimeout(renderPlayerList, 1100);
 };
 
-function showTransferAnimation(giverName, receiverName) {
-    document.getElementById('fadeGiver').textContent = giverName;
-    document.getElementById('fadeReceiver').textContent = receiverName;
-    document.getElementById('transferFade').classList.add('active');
-    setTimeout(() => document.getElementById('transferFade').classList.remove('active'), 1200);
-}
-
-// ------------------------- پاداش دور -------------------------
+// ------------------------- پاداش دور (منطق جدید) -------------------------
 let rewardTag = null;
 const rewardCircle = document.getElementById('rewardCircle');
 
 function resetRewardPopup() {
-    stopNFCScan();
+    popups.reward.classList.remove('active');
     rewardTag = null;
     rewardCircle.textContent = 'بازیکن';
     rewardCircle.classList.remove('filled');
-    popups.reward.classList.remove('active');
+    // بازگرداندن کنترل‌کننده NFC به حالت پیش‌فرض
+    currentNfcReadHandler = defaultNfcHandler;
 }
 
 document.getElementById('rewardBtn').onclick = () => {
@@ -561,16 +518,19 @@ document.getElementById('rewardBtn').onclick = () => {
     document.getElementById('rewardAmount').textContent = `مبلغ پاداش: ${formatToPersian(turnReward)} تومان`;
     popups.reward.classList.add('active');
     rewardCircle.textContent = 'در حال اسکن...';
-    startNFCScan(
-        player => {
+    
+    // تغییر وظیفه کنترل‌کننده NFC
+    currentNfcReadHandler = (player) => {
+        if (!rewardTag) {
             rewardTag = player;
             rewardCircle.textContent = player.name;
             rewardCircle.classList.add('filled');
-            stopNFCScan();
-        },
-        () => { rewardCircle.textContent = 'در حال اسکن...'; },
-        () => { if (!rewardTag) rewardCircle.textContent = 'بازیکن'; }
-    );
+             // اسکن تمام شد، کنترل‌کننده را غیرفعال می‌کنیم
+            currentNfcReadHandler = () => { 
+                nfcDebugOutput.innerHTML += '<br><span style="color:yellow;">لطفا ابتدا پاداش را تایید یا لغو کنید.</span>';
+            };
+        }
+    };
 };
 
 document.getElementById('rewardCancel').onclick = resetRewardPopup;
@@ -588,14 +548,35 @@ document.getElementById('rewardConfirm').onclick = () => {
     setTimeout(renderPlayerList, 1100);
 };
 
-function showRewardAnimation(name, amount) {
-    document.getElementById('rewardTo').textContent = name;
-    document.getElementById('rewardShow').textContent = `+${formatToPersian(amount)} تومان`;
-    document.getElementById('rewardFade').classList.add('active');
-    setTimeout(() => document.getElementById('rewardFade').classList.remove('active'), 1200);
+// ------------------------- توابع انیمیشن و اتمام بازی (بدون تغییر) -------------------------
+function showTransferAnimation(giverName, receiverName) { /* ... بدون تغییر ... */ }
+function showRewardAnimation(name, amount) { /* ... بدون تغییر ... */ }
+document.getElementById('endGame').onclick = () => { /* ... بدون تغییر ... */ };
+
+// کدهای بدون تغییر برای اختصار حذف شدند
+function showTransferAnimation(giverName, receiverName) {
+    const fade = document.getElementById('transferFade');
+    fade.innerHTML = `
+      <div id="transferInfo" style="text-align: center;">
+        <div class="circle filled">${giverName}</div>
+        <div class="arrow"></div>
+        <div class="circle filled">${receiverName}</div>
+      </div>`;
+    fade.classList.add('active');
+    setTimeout(() => fade.classList.remove('active'), 1200);
 }
 
-// ------------------------- اتمام بازی -------------------------
+function showRewardAnimation(name, amount) {
+    const fade = document.getElementById('rewardFade');
+    fade.innerHTML = `
+      <div style="text-align: center;">
+        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">+${formatToPersian(amount)} تومان</div>
+        <div class="arrow"></div>
+        <div class="circle filled">${name}</div>
+      </div>`;
+    fade.classList.add('active');
+    setTimeout(() => fade.classList.remove('active'), 1200);
+}
 document.getElementById('endGame').onclick = () => {
     if (confirm("آیا برای شروع یک بازی جدید، تمام اطلاعات پاک شود؟")) {
         localStorage.clear();
