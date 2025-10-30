@@ -154,160 +154,93 @@
             animation: fadeInUp 0.7s ease-out forwards;
         }
 
-        .start-container h1 {
-            font-size: clamp(1.8rem, 5vw, 2.2rem);
-            margin-bottom: 30px;
-        }
-        .start-container h2 {
-            font-size: 1.2rem;
-            text-align: right;
-            margin-bottom: 15px;
-            color: #aab;
-        }
-
+        .start-container h1 { font-size: clamp(1.8rem, 5vw, 2.2rem); margin-bottom: 30px; }
+        .start-container h2 { font-size: 1.2rem; text-align: right; margin-bottom: 15px; color: #aab; }
         .player-registration-area { margin-bottom: 30px; }
-        #scannedPlayersList {
-            background: rgba(0,0,0,0.2);
-            border-radius: 15px;
-            padding: 15px;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            transition: all 0.3s ease;
-        }
-        .scan-prompt {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            color: #899ab8;
-            flex-grow: 1;
-            text-align: center;
-        }
+        #scannedPlayersList { background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px; min-height: 120px; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease; }
+        .scan-prompt { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; color: #899ab8; flex-grow: 1; text-align: center; }
         .scan-prompt svg { width: 32px; height: 32px; opacity: 0.7; }
-
-        @keyframes slideInPlayerChip {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .scanned-player-item {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: right;
-            box-shadow: 0 4px 10px rgba(58, 134, 255, 0.2);
-            animation: slideInPlayerChip 0.4s ease;
-        }
-
+        @keyframes slideInPlayerChip { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .scanned-player-item { background: var(--primary); color: white; padding: 12px 20px; border-radius: 12px; font-size: 18px; font-weight: 600; text-align: right; box-shadow: 0 4px 10px rgba(58, 134, 255, 0.2); animation: slideInPlayerChip 0.4s ease; }
         .game-settings-area { margin-bottom: 35px; display: flex; flex-direction: column; gap: 15px; }
-        .setting-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 15px;
-            padding: 10px 20px;
-        }
+        .setting-item { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 10px 20px; }
         .setting-item svg { width: 24px; height: 24px; color: var(--primary); flex-shrink: 0; }
-        .setting-item label { text-align: right; margin: 0; color: var(--text); font-weight: 600; }
-        .setting-item input {
-            flex-grow: 1; background: transparent; border: none; padding: 10px 0; margin: 0;
-            width: auto; color: var(--text); font-size: 17px; text-align: left; direction: ltr;
+        /* --- اصلاح استایل لیبل‌ها در صفحه شروع --- */
+        .setting-item label {
+            text-align: right; margin: 0; color: var(--text); font-weight: 600;
+            font-family: 'Vazirmatn', sans-serif; flex-shrink: 0; white-space: nowrap;
         }
+        .setting-item input { flex-grow: 1; background: transparent; border: none; padding: 10px 0; margin: 0; width: auto; color: var(--text); font-size: 17px; text-align: left; direction: ltr; }
         .setting-item input:focus { box-shadow: none; border-color: transparent; }
-
         #startGameBtn { width: 100%; padding: 15px; font-size: 18px; border-radius: 15px; }
-
-        @keyframes glow-on-enable {
-            0%, 100% { box-shadow: 0 0 5px rgba(58, 134, 255, 0.4), 0 0 10px rgba(58, 134, 255, 0.3); }
-            50% { box-shadow: 0 0 15px rgba(58, 134, 255, 0.7), 0 0 25px rgba(58, 134, 255, 0.5); }
-        }
+        @keyframes glow-on-enable { 0%, 100% { box-shadow: 0 0 5px rgba(58, 134, 255, 0.4), 0 0 10px rgba(58, 134, 255, 0.3); } 50% { box-shadow: 0 0 15px rgba(58, 134, 255, 0.7), 0 0 25px rgba(58, 134, 255, 0.5); } }
         #startGameBtn:not(:disabled) { animation: glow-on-enable 2.5s infinite ease-in-out; }
 
-        /* --- استایل‌های صفحه بازی --- */
+        /* --- استایل‌های جدید صفحه بازی --- */
         #game h1 { margin-bottom: 20px; }
-        #playerList { display: flex; flex-direction: column; gap: 12px; }
+        /* --- چیدمان گرید برای لیست بازیکنان --- */
+        #playerList {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* دو ستون با عرض برابر */
+            gap: 15px;
+        }
 
+        /* --- استایل جدید کارت بازیکن --- */
         .player {
             background-color: var(--card-bg);
             border-radius: 15px;
-            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            overflow: hidden; /* برای گرد شدن گوشه‌های هدر */
+            display: flex;
+            flex-direction: column;
+        }
+        .player.bankrupt { opacity: 0.5; background-color: #374151; }
+        .player.bankrupt .player-name { text-decoration: line-through; }
+        
+        .player-header {
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
         }
-        .player.bankrupt {
-            opacity: 0.5;
-            background-color: #374151;
-            text-decoration: line-through;
-        }
-        .player-info { display: flex; flex-direction: column; align-items: flex-end; }
-        .player-name { font-size: 18px; font-weight: 600; }
-        .player-balance {
-            font-size: 20px;
-            font-weight: 500;
-            direction: ltr;
-            color: var(--text-muted);
-            transition: color 0.3s ease;
+        .player-id { font-size: 14px; opacity: 0.9; }
+        .player-name { font-size: 16px; }
+
+        .player-body {
+            padding: 15px;
+            text-align: center;
         }
 
-        /* انیمیشن افزایش/کاهش موجودی */
-        @keyframes balance-up {
-            0% { color: var(--success); transform: scale(1.1); }
-            100% { color: var(--text-muted); transform: scale(1); }
+        .player-balance {
+            font-size: 24px; /* بزرگتر کردن فونت موجودی */
+            font-weight: 700; /* بولد کردن موجودی */
+            direction: ltr;
+            color: var(--text); /* رنگ پیش‌فرض روشن */
+            transition: color 0.3s ease, transform 0.3s ease;
         }
-        @keyframes balance-down {
-            0% { color: var(--danger); transform: scale(1.1); }
-            100% { color: var(--text-muted); transform: scale(1); }
-        }
+        
+        @keyframes balance-up { 0% { color: var(--success); transform: scale(1.1); } 80% { color: var(--success); transform: scale(1.05); } 100% { color: var(--text); transform: scale(1); } }
+        @keyframes balance-down { 0% { color: var(--danger); transform: scale(1.1); } 80% { color: var(--danger); transform: scale(1.05); } 100% { color: var(--text); transform: scale(1); } }
         .balance-up { animation: balance-up 1.5s forwards; }
         .balance-down { animation: balance-down 1.5s forwards; }
-        
-        /* انیمیشن فلش قرمز و سبز روی آیتم بازیکن */
-        @keyframes flash-red-anim {
-            0%, 100% { background-color: var(--card-bg); color: inherit; transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-            50% { background-color: #e53e3e; color: white; transform: scale(1.04); box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4); }
-        }
-        @keyframes flash-green-anim {
-            0%, 100% { background-color: var(--card-bg); color: inherit; transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-            50% { background-color: #38a169; color: white; transform: scale(1.04); box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4); }
-        }
+
+        @keyframes flash-red-anim { 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); } 50% { transform: scale(1.04); box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4); } }
+        @keyframes flash-green-anim { 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); } 50% { transform: scale(1.04); box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4); } }
         .flash-red { animation: flash-red-anim 0.5s ease-in-out; }
+        .flash-red .player-header { background-color: #e53e3e !important; }
         .flash-green { animation: flash-green-anim 0.5s ease-in-out; }
+        .flash-green .player-header { background-color: #38a169 !important; }
+
 
         /* --- استایل پاپ‌آپ‌ها و منوی عملیات --- */
-        .popup-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 100; }
         .popup-overlay.show { display: flex; }
-        .popup {
-            background-color: var(--popup-bg);
-            padding: 25px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid var(--border-color);
-        }
+        .popup { background-color: var(--popup-bg); padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
         .popup h3 { font-size: 20px; margin-bottom: 5px; }
         .popup-buttons { display: flex; gap: 10px; }
         .popup-buttons button { flex: 1; }
@@ -318,51 +251,27 @@
         #actionMenu button { width: 100%; text-align: right; background: none; color: var(--text); padding: 12px 15px; }
         #actionMenu button:hover { background-color: rgba(255,255,255,0.1); }
         
-        /* استایل پاپ‌آپ انتقال وجه */
         .transfer-flow { display: flex; justify-content: space-around; align-items: center; text-align: center; }
         .flow-person { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .flow-person-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; background: var(--bg-dark); }
         .flow-arrow { font-size: 24px; }
         
-        /* انیمیشن تمام‌صفحه انتقال و پاداش */
-        .fullscreen-fade {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 500;
-            background: rgba(17, 24, 39, 0.9);
-            display: none; justify-content: center; align-items: center; text-align: center;
-            opacity: 0; transition: opacity 0.4s ease;
-        }
+        .fullscreen-fade { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 500; background: rgba(17, 24, 39, 0.9); display: none; justify-content: center; align-items: center; text-align: center; opacity: 0; transition: opacity 0.4s ease; }
         .fullscreen-fade.show { display: flex; }
         .fullscreen-fade.visible { opacity: 1; }
-        
-        /* انیمیشن انتقال */
         #transferFade .content { display: flex; justify-content: space-between; align-items: center; width: 80%; max-width: 500px; position: relative; }
         #transferFade .person-circle { width: 100px; height: 100px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 600; color: white; }
         #transferGiverCircle { background-color: var(--danger); }
         #transferReceiverCircle { background-color: var(--success); }
         #transferArrow { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 50px; color: var(--primary); opacity: 0; }
         #transferAmountLabel { position: absolute; left: 50%; top: 20%; transform: translateX(-50%); font-size: 32px; font-weight: bold; color: white; opacity: 0; }
-        
-        @keyframes arrowAnimLTR {
-            0% { opacity: 0; transform: translate(-150%, -50%) scale(0.5); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translate(50%, -50%) scale(0.5); }
-        }
-        @keyframes fadeInAmount {
-            from { opacity: 0; transform: translate(-50%, 0); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
-        /* انیمیشن پاداش */
+        @keyframes arrowAnimLTR { 0% { opacity: 0; transform: translate(-150%, -50%) scale(0.5); } 50% { opacity: 1; } 100% { opacity: 0; transform: translate(50%, -50%) scale(0.5); } }
+        @keyframes fadeInAmount { from { opacity: 0; transform: translate(-50%, 0); } to { opacity: 1; transform: translate(-50%, -50%); } }
         #rewardFade .content { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px; position: relative; }
         #rewardAmountLabel { font-size: 32px; font-weight: bold; color: white; }
         #rewardPlayerCircle { width: 100px; height: 100px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 600; color: white; background-color: var(--success); }
         #rewardArrow { font-size: 50px; color: var(--primary); opacity: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        @keyframes arrowAnimTopDown {
-            0% { opacity: 0; transform: translate(-50%, -150%) scale(0.5); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translate(-50%, 50%) scale(0.5); }
-        }
+        @keyframes arrowAnimTopDown { 0% { opacity: 0; transform: translate(-50%, -150%) scale(0.5); } 50% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, 50%) scale(0.5); } }
 
     </style>
 </head>
@@ -378,7 +287,6 @@
     <section id="start" class="active">
       <div class="start-container">
         <h1>🏦 بانک مونوپولی</h1>
-        
         <div class="player-registration-area">
             <h2>بازیکنان</h2>
             <div id="scannedPlayersList">
@@ -388,7 +296,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="game-settings-area">
             <h2>تنظیمات بازی</h2>
             <div class="setting-item">
@@ -402,7 +309,6 @@
                 <input type="text" inputmode="numeric" id="turnReward" placeholder="مثلاً ۲,۰۰۰">
             </div>
         </div>
-        
         <button id="startGameBtn" class="btn-primary" disabled>شروع بازی</button>
       </div>
     </section>
@@ -414,89 +320,19 @@
     </section>
 
     <!-- پاپ آپ افزودن بازیکن جدید -->
-    <div id="addPlayerPopup" class="popup-overlay">
-        <div class="popup">
-            <h3>ثبت بازیکن جدید</h3>
-            <p>لطفا نام بازیکن را وارد کنید:</p>
-            <input type="text" id="newPlayerNameInput" placeholder="نام بازیکن">
-            <div class="popup-buttons">
-                <button id="cancelAddPlayer" class="btn-secondary">انصراف</button>
-                <button id="confirmAddPlayer" class="btn-primary">ثبت</button>
-            </div>
-        </div>
-    </div>
-    
+    <div id="addPlayerPopup" class="popup-overlay"><div class="popup"><h3>ثبت بازیکن جدید</h3><p>لطفا نام بازیکن را وارد کنید:</p><input type="text" id="newPlayerNameInput" placeholder="نام بازیکن"><div class="popup-buttons"><button id="cancelAddPlayer" class="btn-secondary">انصراف</button><button id="confirmAddPlayer" class="btn-primary">ثبت</button></div></div></div>
     <!-- پاپ آپ انتقال وجه -->
-    <div id="transferPopup" class="popup-overlay">
-        <div class="popup">
-            <h3>انتقال وجه</h3>
-            <div class="transfer-flow">
-                <div class="flow-person">
-                    <div id="transferReceiverCircle" class="flow-person-circle"></div>
-                    <span>گیرنده</span>
-                </div>
-                <span class="flow-arrow">←</span>
-                <div class="flow-person">
-                    <div id="transferGiverCircle" class="flow-person-circle"></div>
-                    <span>دهنده</span>
-                </div>
-            </div>
-            <p>مبلغ را وارد و تگ گیرنده را اسکن کنید:</p>
-            <input type="text" inputmode="numeric" id="transferAmount" placeholder="مبلغ انتقال">
-            <div class="popup-buttons">
-                <button id="cancelTransfer" class="btn-secondary">لغو</button>
-            </div>
-        </div>
-    </div>
-
+    <div id="transferPopup" class="popup-overlay"><div class="popup"><h3>انتقال وجه</h3><div class="transfer-flow"><div class="flow-person"><div id="transferReceiverCircle" class="flow-person-circle"></div><span>گیرنده</span></div><span class="flow-arrow">←</span><div class="flow-person"><div id="transferGiverCircle" class="flow-person-circle"></div><span>دهنده</span></div></div><p>مبلغ را وارد و تگ گیرنده را اسکن کنید:</p><input type="text" inputmode="numeric" id="transferAmount" placeholder="مبلغ انتقال"><div class="popup-buttons"><button id="cancelTransfer" class="btn-secondary">لغو</button></div></div></div>
     <!-- پاپ آپ پاداش -->
-    <div id="rewardPopup" class="popup-overlay">
-        <div class="popup">
-            <h3>پرداخت پاداش عبور از شروع</h3>
-            <p>برای پرداخت پاداش به <b id="rewardPlayerName"></b>، تگ او را دوباره اسکن کنید.</p>
-             <div class="popup-buttons">
-                <button id="cancelReward" class="btn-secondary">لغو</button>
-            </div>
-        </div>
-    </div>
-
+    <div id="rewardPopup" class="popup-overlay"><div class="popup"><h3>پرداخت پاداش عبور از شروع</h3><p>برای پرداخت پاداش به <b id="rewardPlayerName"></b>، تگ او را دوباره اسکن کنید.</p><div class="popup-buttons"><button id="cancelReward" class="btn-secondary">لغو</button></div></div></div>
     <!-- پاپ آپ ورشکستگی -->
-    <div id="bankruptPopup" class="popup-overlay">
-        <div class="popup">
-            <h3>اعلام ورشکستگی</h3>
-            <p>آیا مطمئن هستید که <b id="bankruptPlayerName"></b> ورشکست شده است؟</p>
-            <div class="popup-buttons">
-                <button id="cancelBankrupt" class="btn-secondary">خیر</button>
-                <button id="confirmBankrupt" class="btn-danger">بله، ورشکست شد</button>
-            </div>
-        </div>
-    </div>
-
+    <div id="bankruptPopup" class="popup-overlay"><div class="popup"><h3>اعلام ورشکستگی</h3><p>آیا مطمئن هستید که <b id="bankruptPlayerName"></b> ورشکست شده است؟</p><div class="popup-buttons"><button id="cancelBankrupt" class="btn-secondary">خیر</button><button id="confirmBankrupt" class="btn-danger">بله، ورشکست شد</button></div></div></div>
     <!-- منوی عملیات (راست کلیک) -->
-    <div id="actionMenu">
-        <button id="menuTransfer">انتقال وجه</button>
-        <button id="menuReward">پاداش عبور از شروع</button>
-        <button id="menuBankrupt">اعلام ورشکستگی</button>
-    </div>
-
+    <div id="actionMenu"><button id="menuTransfer">انتقال وجه</button><button id="menuReward">پاداش عبور از شروع</button><button id="menuBankrupt">اعلام ورشکستگی</button></div>
     <!-- انیمیشن انتقال -->
-    <div id="transferFade" class="fullscreen-fade">
-        <div class="content">
-            <div id="transferGiverCircle" class="person-circle"></div>
-            <div id="transferAmountLabel"></div>
-            <div id="transferArrow">→</div>
-            <div id="transferReceiverCircle" class="person-circle"></div>
-        </div>
-    </div>
-
+    <div id="transferFade" class="fullscreen-fade"><div class="content"><div id="transferGiverCircle" class="person-circle"></div><div id="transferAmountLabel"></div><div id="transferArrow">→</div><div id="transferReceiverCircle" class="person-circle"></div></div></div>
     <!-- انیمیشن پاداش -->
-    <div id="rewardFade" class="fullscreen-fade">
-        <div class="content">
-            <div id="rewardAmountLabel"></div>
-            <div id="rewardArrow">↓</div>
-            <div id="rewardPlayerCircle" class="person-circle"></div>
-        </div>
-    </div>
+    <div id="rewardFade" class="fullscreen-fade"><div class="content"><div id="rewardAmountLabel"></div><div id="rewardArrow">↓</div><div id="rewardPlayerCircle" class="person-circle"></div></div></div>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -507,54 +343,49 @@
         const startGameBtn = document.getElementById('startGameBtn');
         const startMoneyInput = document.getElementById('startMoney');
         const turnRewardInput = document.getElementById('turnReward');
-        
-        // عناصر صفحه شروع
         const scannedPlayersList = document.getElementById('scannedPlayersList');
         const addPlayerPopup = document.getElementById('addPlayerPopup');
         const newPlayerNameInput = document.getElementById('newPlayerNameInput');
         const confirmAddPlayerBtn = document.getElementById('confirmAddPlayer');
         const cancelAddPlayerBtn = document.getElementById('cancelAddPlayer');
-
-        // عناصر منوی عملیات و پاپ‌آپ‌ها
         const actionMenu = document.getElementById('actionMenu');
         const menuTransfer = document.getElementById('menuTransfer');
         const menuReward = document.getElementById('menuReward');
         const menuBankrupt = document.getElementById('menuBankrupt');
-
         const transferPopup = document.getElementById('transferPopup');
         const transferGiverCircle = document.getElementById('transferGiverCircle');
         const transferReceiverCircle = document.getElementById('transferReceiverCircle');
         const transferAmountInput = document.getElementById('transferAmount');
         const cancelTransferBtn = document.getElementById('cancelTransfer');
-
         const rewardPopup = document.getElementById('rewardPopup');
         const rewardPlayerName = document.getElementById('rewardPlayerName');
         const cancelRewardBtn = document.getElementById('cancelReward');
-
         const bankruptPopup = document.getElementById('bankruptPopup');
         const bankruptPlayerName = document.getElementById('bankruptPlayerName');
         const confirmBankruptBtn = document.getElementById('confirmBankrupt');
         const cancelBankruptBtn = document.getElementById('cancelBankrupt');
-
-        // عناصر انیمیشن
         const transferFade = document.getElementById('transferFade');
         const rewardFade = document.getElementById('rewardFade');
-
-        // دکمه تمام صفحه
         const fullscreenBtn = document.getElementById('fullscreenBtn');
         const fsEnterIcon = document.getElementById('fullscreen-enter-icon');
         const fsExitIcon = document.getElementById('fullscreen-exit-icon');
 
         // --- متغیرهای وضعیت برنامه ---
         let players = [];
-        let tempPlayers = []; // بازیکنان در مرحله ثبت‌نام
+        let tempPlayers = [];
         let currentTagId = null;
-        let contextPlayerId = null; // ID بازیکنی که روی آن راست کلیک شده
+        let contextPlayerId = null;
         let isTransferMode = false;
         let transferData = {};
         let isRewardMode = false;
         let rewardData = {};
         let ndef = null;
+
+        // --- آرایه رنگ‌ها برای کارت‌های بازیکنان ---
+        const playerColors = [
+            '#4A148C', '#004D40', '#D50000', '#0D47A1',
+            '#FF6F00', '#263238', '#3E2723', '#880E4F'
+        ];
 
         // --- توابع کمکی ---
         const toPersianDigits = (n) => n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
@@ -565,11 +396,7 @@
         function updateScannedPlayersList() {
             scannedPlayersList.innerHTML = '';
             if (tempPlayers.length === 0) {
-                scannedPlayersList.innerHTML = `
-                    <div class="scan-prompt">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5A6.5 6.5 0 0 1 10.5 4v0A6.5 6.5 0 0 1 17 10.5V12a2 2 0 0 1-2 2h-1.5a2 2 0 0 0-2 2v1.5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1.5a2 2 0 0 0-2-2V10.5Z"/><path d="M10.5 4A6.5 6.5 0 0 0 4 10.5v0"/></svg>
-                        <span>برای افزودن، تگ را اسکن کنید</span>
-                    </div>`;
+                scannedPlayersList.innerHTML = `<div class="scan-prompt"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5A6.5 6.5 0 0 1 10.5 4v0A6.5 6.5 0 0 1 17 10.5V12a2 2 0 0 1-2 2h-1.5a2 2 0 0 0-2 2v1.5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1.5a2 2 0 0 0-2-2V10.5Z"/><path d="M10.5 4A6.5 6.5 0 0 0 4 10.5v0"/></svg><span>برای افزودن، تگ را اسکن کنید</span></div>`;
             } else {
                 tempPlayers.forEach((player, index) => {
                     const item = document.createElement('div');
@@ -582,17 +409,10 @@
         }
 
         startGameBtn.addEventListener('click', () => {
-            const startMoney = parseInt(toEnglishDigits(startMoneyInput.value || '15000')) || 15000;
-            const turnReward = parseInt(toEnglishDigits(turnRewardInput.value || '2000')) || 2000;
-
-            players = tempPlayers.map(p => ({
-                ...p,
-                balance: startMoney,
-                bankrupt: false
-            }));
-            
+            const startMoney = parseInt(toEnglishDigits(startMoneyInput.value.replace(/,/g, '') || '15000')) || 15000;
+            const turnReward = parseInt(toEnglishDigits(turnRewardInput.value.replace(/,/g, '') || '2000')) || 2000;
+            players = tempPlayers.map(p => ({ ...p, balance: startMoney, bankrupt: false }));
             window.turnRewardAmount = turnReward;
-
             startSection.classList.remove('active');
             gameSection.classList.add('active');
             renderPlayerList();
@@ -601,46 +421,56 @@
         // --- منطق اصلی بازی و رندر کردن ---
         function renderPlayerList() {
             playerList.innerHTML = '';
-            players.sort((a, b) => b.balance - a.balance);
-            players.forEach(p => {
+            // مرتب سازی بر اساس ورشکسته نبودن و سپس موجودی
+            players.sort((a, b) => {
+                if (a.bankrupt && !b.bankrupt) return 1;
+                if (!a.bankrupt && b.bankrupt) return -1;
+                return b.balance - a.balance;
+            });
+            players.forEach((p, index) => {
                 const playerEl = document.createElement('div');
                 playerEl.className = 'player';
                 playerEl.dataset.id = p.tagId;
-                if (p.bankrupt) {
-                    playerEl.classList.add('bankrupt');
-                }
+                if (p.bankrupt) playerEl.classList.add('bankrupt');
 
-                playerEl.innerHTML = `
-                    <div class="player-balance">${formatCurrency(p.balance)} $</div>
-                    <div class="player-info">
-                        <span class="player-name">${p.name}</span>
-                    </div>
+                // ساختار جدید کارت
+                const playerHeader = document.createElement('div');
+                playerHeader.className = 'player-header';
+                playerHeader.style.backgroundColor = playerColors[index % playerColors.length];
+                
+                playerHeader.innerHTML = `
+                    <span class="player-id">کارت ${toPersianDigits(index + 1)}</span>
+                    <span class="player-name">${p.name}</span>
                 `;
 
-                if (!p.bankrupt) {
-                     playerEl.addEventListener('contextmenu', (e) => {
-                        e.preventDefault();
-                        contextPlayerId = p.tagId;
-                        showActionMenu(e.clientX, e.clientY);
-                    });
-                }
+                const playerBody = document.createElement('div');
+                playerBody.className = 'player-body';
+                playerBody.innerHTML = `<span class="player-balance">${formatCurrency(p.balance)} $</span>`;
+
+                playerEl.appendChild(playerHeader);
+                playerEl.appendChild(playerBody);
+
+                // بازگرداندن Event Listener برای منوی عملیات
+                playerEl.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    if (p.bankrupt) return; // اگر بازیکن ورشکست بود، کاری نکن
+                    contextPlayerId = p.tagId;
+                    showActionMenu(e.clientX, e.clientY);
+                });
                 playerList.appendChild(playerEl);
             });
         }
         
         function updatePlayerBalance(playerId, newBalance) {
+            const playerEl = playerList.querySelector(`.player[data-id="${playerId}"]`);
+            if (!playerEl) return;
+            const balanceEl = playerEl.querySelector('.player-balance');
             const player = players.find(p => p.tagId === playerId);
             if (!player) return;
         
             const oldBalance = player.balance;
-            const playerEl = playerList.querySelector(`.player[data-id="${playerId}"]`);
-            if (!playerEl) return;
-        
-            const balanceEl = playerEl.querySelector('.player-balance');
             balanceEl.textContent = `${formatCurrency(newBalance)} $`;
-        
             balanceEl.classList.remove('balance-up', 'balance-down');
-            // Force reflow
             void balanceEl.offsetWidth;
         
             if (newBalance > oldBalance) {
@@ -653,15 +483,9 @@
         // --- مدیریت NFC ---
         async function scanTag() {
             try {
-                if (!ndef) {
-                    ndef = new NDEFReader();
-                }
+                if (!ndef) ndef = new NDEFReader();
                 await ndef.scan();
-                
-                ndef.onreading = event => {
-                    const serialNumber = event.serialNumber;
-                    handleTagScan(serialNumber);
-                };
+                ndef.onreading = event => handleTagScan(event.serialNumber);
             } catch (error) {
                 alert("خطا در فعال‌سازی NFC: " + error);
             }
@@ -669,33 +493,31 @@
 
         function handleTagScan(tagId) {
             if (startSection.classList.contains('active')) {
-                // مرحله ثبت نام بازیکن
-                const existingPlayer = tempPlayers.find(p => p.tagId === tagId);
-                if (existingPlayer) {
-                    alert('این بازیکن قبلا ثبت شده است.');
-                    return;
+                if (tempPlayers.find(p => p.tagId === tagId)) {
+                    alert('این بازیکن قبلا ثبت شده است.'); return;
                 }
                 currentTagId = tagId;
                 addPlayerPopup.classList.add('show');
                 newPlayerNameInput.focus();
                 return;
             }
-
             if (isTransferMode) {
-                // مرحله انتقال وجه
                 if (tagId === transferData.fromId) {
-                    alert('نمی‌توانید به خودتان پول منتقل کنید.');
-                    return;
+                    alert('نمی‌توانید به خودتان پول منتقل کنید.'); return;
                 }
                 transferData.toId = tagId;
+                const amount = parseInt(toEnglishDigits(transferAmountInput.value.replace(/,/g, ''))) || 0;
+                if(amount <= 0) {
+                     alert('لطفا مبلغ معتبری را وارد کنید.'); return;
+                }
+                transferData.amount = amount;
                 transferPopup.classList.remove('show');
                 isTransferMode = false;
+                transferAmountInput.value = '';
                 transfer(transferData.fromId, transferData.toId, transferData.amount);
                 return;
             }
-            
             if (isRewardMode) {
-                // مرحله پرداخت پاداش
                 if (tagId === rewardData.playerId) {
                     rewardPopup.classList.remove('show');
                     isRewardMode = false;
@@ -711,38 +533,28 @@
         function transfer(fromId, toId, amount) {
             const fromPlayer = players.find(p => p.tagId === fromId);
             const toPlayer = players.find(p => p.tagId === toId);
-
             if (!fromPlayer || !toPlayer || fromPlayer.balance < amount) {
-                alert('موجودی کافی نیست یا بازیکن یافت نشد.');
-                return;
+                alert('موجودی کافی نیست یا بازیکن یافت نشد.'); return;
             }
-            
             showTransferAnimation(fromPlayer.name, toPlayer.name, amount);
-
-            updatePlayerBalance(fromPlayer.tagId, fromPlayer.balance - amount);
-            updatePlayerBalance(toPlayer.tagId, toPlayer.balance + amount);
-            
+            updatePlayerBalance(fromId, fromPlayer.balance - amount);
+            updatePlayerBalance(toId, toPlayer.balance + amount);
             fromPlayer.balance -= amount;
             toPlayer.balance += amount;
-
-            renderPlayerList();
-            
-            // اجرای انیمیشن‌های قرمز و سبز روی لیست
-            animateTransferOnList(fromId, toId);
+            setTimeout(() => {
+                renderPlayerList();
+                animateTransferOnList(fromId, toId);
+            }, 100);
         }
 
         function giveReward(playerId) {
             const player = players.find(p => p.tagId === playerId);
             if (!player) return;
-            
             const rewardAmount = window.turnRewardAmount || 2000;
-            
             showRewardAnimation(player.name, rewardAmount);
-            
             updatePlayerBalance(player.tagId, player.balance + rewardAmount);
             player.balance += rewardAmount;
-            
-            renderPlayerList();
+            setTimeout(renderPlayerList, 100);
         }
 
         function bankruptPlayer(playerId) {
@@ -754,39 +566,37 @@
             }
         }
         
-        /**
-        * انیمیشن فلش قرمز و سبز را به ترتیب روی آیتم‌های بازیکنان در لیست اعمال می‌کند.
-        */
         function animateTransferOnList(giverId, receiverId) {
             const giverEl = document.querySelector(`.player[data-id="${giverId}"]`);
             const receiverEl = document.querySelector(`.player[data-id="${receiverId}"]`);
-
             if (!giverEl || !receiverEl) return;
-
-            giverEl.classList.add('flash-red');
-            giverEl.addEventListener('animationend', () => {
-                giverEl.classList.remove('flash-red');
-            }, { once: true });
-
+            
             setTimeout(() => {
-                receiverEl.classList.add('flash-green');
-                receiverEl.addEventListener('animationend', () => {
-                    receiverEl.classList.remove('flash-green');
+                giverEl.classList.add('flash-red');
+                giverEl.addEventListener('animationend', () => {
+                    giverEl.classList.remove('flash-red');
+                    renderPlayerList(); // برای بازگرداندن رنگ اصلی هدر
                 }, { once: true });
-            }, 500);
+
+                setTimeout(() => {
+                    receiverEl.classList.add('flash-green');
+                    receiverEl.addEventListener('animationend', () => {
+                        receiverEl.classList.remove('flash-green');
+                        renderPlayerList(); // برای بازگرداندن رنگ اصلی هدر
+                    }, { once: true });
+                }, 500);
+            }, 250); // کمی تاخیر برای اطمینان از رندر شدن لیست
         }
 
         // --- مدیریت پاپ‌آپ‌ها و منوها ---
         function showActionMenu(x, y) {
-            hideActionMenu(); // بستن منوی قبلی
+            hideActionMenu();
             actionMenu.style.left = `${x}px`;
             actionMenu.style.top = `${y}px`;
             actionMenu.style.display = 'flex';
         }
-
         function hideActionMenu() {
             actionMenu.style.display = 'none';
-            contextPlayerId = null;
         }
 
         // --- مدیریت انیمیشن‌های تمام‌صفحه ---
@@ -796,20 +606,15 @@
             const amountLabel = document.getElementById('transferAmountLabel');
             amountLabel.textContent = `$ ${formatCurrency(amount)}`;
             amountLabel.style.animation = 'none';
-
             const arrow = document.getElementById('transferArrow');
             arrow.style.animation = 'none';
-
             transferFade.classList.add('show');
             setTimeout(() => {
                 transferFade.classList.add('visible');
-                // Force reflow
-                void arrow.offsetWidth; 
-                void amountLabel.offsetWidth; 
+                void arrow.offsetWidth; void amountLabel.offsetWidth; 
                 arrow.style.animation = 'arrowAnimLTR 1.5s ease-out forwards';
                 amountLabel.style.animation = 'fadeInAmount 0.5s ease-out 0.2s forwards';
             }, 10);
-
             setTimeout(() => {
                 transferFade.classList.remove('visible');
                 setTimeout(() => transferFade.classList.remove('show'), 400);
@@ -821,14 +626,12 @@
             document.getElementById('rewardAmountLabel').textContent = `$ ${formatCurrency(amount)}`;
             const arrow = document.getElementById('rewardArrow');
             arrow.style.animation = 'none';
-
             rewardFade.classList.add('show');
             setTimeout(() => {
                 rewardFade.classList.add('visible');
                 void arrow.offsetWidth;
                 arrow.style.animation = 'arrowAnimTopDown 1.5s ease-out forwards';
             }, 10);
-            
             setTimeout(() => {
                 rewardFade.classList.remove('visible');
                 setTimeout(() => rewardFade.classList.remove('show'), 400);
@@ -836,109 +639,27 @@
         }
         
         // --- Event Listeners ---
-        // پاپ‌آپ افزودن بازیکن
-        confirmAddPlayerBtn.addEventListener('click', () => {
-            const name = newPlayerNameInput.value.trim();
-            if (name && currentTagId) {
-                tempPlayers.push({ tagId: currentTagId, name: name });
-                updateScannedPlayersList();
-                addPlayerPopup.classList.remove('show');
-                newPlayerNameInput.value = '';
-                currentTagId = null;
-            } else {
-                alert('لطفا نام بازیکن را وارد کنید.');
-            }
-        });
-        cancelAddPlayerBtn.addEventListener('click', () => {
-            addPlayerPopup.classList.remove('show');
-            newPlayerNameInput.value = '';
-            currentTagId = null;
-        });
+        confirmAddPlayerBtn.addEventListener('click', () => { const name = newPlayerNameInput.value.trim(); if (name && currentTagId) { tempPlayers.push({ tagId: currentTagId, name: name }); updateScannedPlayersList(); addPlayerPopup.classList.remove('show'); newPlayerNameInput.value = ''; currentTagId = null; } else { alert('لطفا نام بازیکن را وارد کنید.'); } });
+        cancelAddPlayerBtn.addEventListener('click', () => { addPlayerPopup.classList.remove('show'); newPlayerNameInput.value = ''; currentTagId = null; });
+        menuTransfer.addEventListener('click', () => { const player = players.find(p => p.tagId === contextPlayerId); transferData = { fromId: contextPlayerId }; transferGiverCircle.textContent = player.name; transferReceiverCircle.textContent = '؟'; transferPopup.classList.add('show'); transferAmountInput.focus(); isTransferMode = true; hideActionMenu(); });
+        menuReward.addEventListener('click', () => { const player = players.find(p => p.tagId === contextPlayerId); rewardData = { playerId: contextPlayerId }; rewardPlayerName.textContent = player.name; rewardPopup.classList.add('show'); isRewardMode = true; hideActionMenu(); });
+        menuBankrupt.addEventListener('click', () => { const player = players.find(p => p.tagId === contextPlayerId); bankruptPlayerName.textContent = player.name; bankruptPopup.classList.add('show'); hideActionMenu(); });
+        cancelTransferBtn.addEventListener('click', () => { transferPopup.classList.remove('show'); isTransferMode = false; transferAmountInput.value = ''; });
+        cancelRewardBtn.addEventListener('click', () => { rewardPopup.classList.remove('show'); isRewardMode = false; });
+        cancelBankruptBtn.addEventListener('click', () => { bankruptPopup.classList.remove('show'); });
+        confirmBankruptBtn.addEventListener('click', () => { bankruptPlayer(contextPlayerId); bankruptPopup.classList.remove('show'); });
 
-        // منوی عملیات
-        menuTransfer.addEventListener('click', () => {
-            const player = players.find(p => p.tagId === contextPlayerId);
-            transferData = { fromId: contextPlayerId };
-            transferGiverCircle.textContent = player.name;
-            transferReceiverCircle.textContent = '؟';
-            transferPopup.classList.add('show');
-            transferAmountInput.focus();
-            isTransferMode = true;
-            hideActionMenu();
-        });
-        
-        menuReward.addEventListener('click', () => {
-            const player = players.find(p => p.tagId === contextPlayerId);
-            rewardData = { playerId: contextPlayerId };
-            rewardPlayerName.textContent = player.name;
-            rewardPopup.classList.add('show');
-            isRewardMode = true;
-            hideActionMenu();
-        });
-
-        menuBankrupt.addEventListener('click', () => {
-            const player = players.find(p => p.tagId === contextPlayerId);
-            bankruptPlayerName.textContent = player.name;
-            bankruptPopup.classList.add('show');
-            hideActionMenu();
-        });
-        
-        // بستن پاپ‌آپ‌ها
-        cancelTransferBtn.addEventListener('click', () => {
-            transferPopup.classList.remove('show');
-            isTransferMode = false;
-            transferAmountInput.value = '';
-        });
-        cancelRewardBtn.addEventListener('click', () => {
-            rewardPopup.classList.remove('show');
-            isRewardMode = false;
-        });
-        cancelBankruptBtn.addEventListener('click', () => {
-            bankruptPopup.classList.remove('show');
-        });
-
-        confirmBankruptBtn.addEventListener('click', () => {
-            bankruptPlayer(contextPlayerId);
-            bankruptPopup.classList.remove('show');
-        });
-
-        // شنود برای ورودی‌های مبلغ و فرمت‌دهی
         [startMoneyInput, turnRewardInput, transferAmountInput].forEach(input => {
             input.addEventListener('input', (e) => {
                 let val = toEnglishDigits(e.target.value.replace(/[^۰-۹0-9]/g, ''));
-                if (val) {
-                    e.target.value = parseInt(val).toLocaleString('fa-IR').replace(/٬/g, ',');
-                } else {
-                    e.target.value = '';
-                }
+                if (val) e.target.value = parseInt(val).toLocaleString('fa-IR').replace(/٬/g, ','); else e.target.value = '';
             });
         });
         
-        // بستن منو با کلیک در جای دیگر
-        window.addEventListener('click', hideActionMenu);
+        window.addEventListener('click', (e) => { if (!actionMenu.contains(e.target)) hideActionMenu(); });
         
-        // منطق تمام‌صفحه
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    alert(`خطا در ورود به حالت تمام‌صفحه: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        }
-
-        function updateFullscreenIcons() {
-            if (document.fullscreenElement) {
-                fsEnterIcon.style.display = 'none';
-                fsExitIcon.style.display = 'block';
-            } else {
-                fsEnterIcon.style.display = 'block';
-                fsExitIcon.style.display = 'none';
-            }
-        }
+        function toggleFullscreen() { if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => alert(`Error: ${err.message}`)); } else if (document.exitFullscreen) document.exitFullscreen(); }
+        function updateFullscreenIcons() { if (document.fullscreenElement) { fsEnterIcon.style.display = 'none'; fsExitIcon.style.display = 'block'; } else { fsEnterIcon.style.display = 'block'; fsExitIcon.style.display = 'none'; } }
         fullscreenBtn.addEventListener('click', toggleFullscreen);
         document.addEventListener('fullscreenchange', updateFullscreenIcons);
 
@@ -946,6 +667,6 @@
         updateScannedPlayersList();
         scanTag();
     });
-    </script>
+    <script>
 </body>
 </html>
