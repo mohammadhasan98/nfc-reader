@@ -17,7 +17,7 @@
   --danger: #ff4b4b;
   --success: #4bff7b;
 
-  /* Player colors for card headers */
+  /* Player colors for cards */
   --player-color-1: #FF6B6B;
   --player-color-2: #4ECDC4;
   --player-color-3: #45B7D1;
@@ -101,7 +101,6 @@ button:disabled {
 .btn-danger { background: var(--danger); color: #fff; }
 .btn-danger:hover:not(:disabled) { background: #e03a3a; }
 
-/* --- تغییرات آیتم 3: بزرگ کردن دکمه شروع --- */
 #startGameBtn {
     padding: 16px 40px;
     font-size: 18px;
@@ -148,7 +147,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   animation: pulse-border 2.5s infinite cubic-bezier(0.66, 0, 0, 1);
 }
 
-/* --- تغییرات آیتم 4: کارت بازیکنان اسکن شده --- */
+/* --- تغییرات آیتم 3: طراحی جدید کارت بازیکنان اسکن شده --- */
 #scannedPlayersList {
     margin-top: 25px; padding: 0 10px;
     display: grid;
@@ -156,40 +155,39 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     gap: 15px;
 }
 .scanned-player-item {
-    background: var(--bg-light);
     border-radius: 12px;
-    font-size: 17px;
+    font-size: 16px;
     text-align: center;
-    padding: 12px;
-    border-top: 5px solid transparent; /* Placeholder for color */
+    padding: 15px 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
-    min-height: 80px;
-}
-/* اعمال رنگ‌ها به کارت‌های صفحه شروع */
-.scanned-player-item.color-1 { border-top-color: var(--player-color-1); }
-.scanned-player-item.color-2 { border-top-color: var(--player-color-2); }
-.scanned-player-item.color-3 { border-top-color: var(--player-color-3); }
-.scanned-player-item.color-4 { border-top-color: var(--player-color-4); }
-.scanned-player-item.color-5 { border-top-color: var(--player-color-5); }
-.scanned-player-item.color-6 { border-top-color: var(--player-color-6); }
-.scanned-player-item.color-7 { border-top-color: var(--player-color-7); }
-.scanned-player-item.color-8 { border-top-color: var(--player-color-8); }
-
-.scanned-player-item .name {
+    gap: 8px;
+    min-height: 70px;
+    color: #fff;
     font-weight: 600;
-    color: var(--text);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
-.scanned-player-item .id-tag {
-    font-size: 12px;
-    color: #aab;
-    background: var(--secondary);
-    padding: 2px 8px;
-    border-radius: 8px;
+/* اعمال رنگ‌ها به پس‌زمینه کارت‌های صفحه شروع */
+.scanned-player-item.color-1 { background-color: var(--player-color-1); }
+.scanned-player-item.color-2 { background-color: var(--player-color-2); }
+.scanned-player-item.color-3 { background-color: var(--player-color-3); }
+.scanned-player-item.color-4 { background-color: var(--player-color-4); }
+.scanned-player-item.color-5 { background-color: var(--player-color-5); }
+.scanned-player-item.color-6 { background-color: var(--player-color-6); }
+.scanned-player-item.color-7 { background-color: var(--player-color-7); }
+.scanned-player-item.color-8 { background-color: var(--player-color-8); }
+
+.scanned-player-item .player-id {
+    font-weight: 900;
+    background: rgba(0,0,0,0.2);
+    padding: 3px 8px;
+    border-radius: 7px;
+}
+.scanned-player-item .player-name {
+    flex-grow: 1;
+    text-align: right;
 }
 
 /* --- لیست و کارت‌های بازیکنان (صفحه بازی) --- */
@@ -217,6 +215,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   align-items: center; justify-content: space-between;
   color: #fff; font-weight: 700;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 .player-card.color-1 .player-card-header { background-color: var(--player-color-1); }
 .player-card.color-2 .player-card-header { background-color: var(--player-color-2); }
@@ -229,10 +228,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
 .player-name { font-size: 16px; }
 
-/* --- تغییرات آیتم 1: بزرگ کردن ID --- */
 .player-id-tag {
-  font-size: 18px; /* بزرگ‌تر شد */
-  font-weight: 700;
+  font-size: 18px; font-weight: 700;
   background: rgba(0,0,0,0.2);
   padding: 2px 10px;
   border-radius: 8px;
@@ -243,10 +240,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     margin: 0 0 5px 0;
 }
 
-/* --- تغییرات آیتم 2: بزرگ کردن موجودی --- */
 .player-balance { 
-  font-size: 26px; /* بزرگ‌تر شد */
-  font-weight: 700;
+  font-size: 26px; font-weight: 700;
   direction: ltr; 
   transition: color .3s ease, transform 0.3s ease; 
 }
@@ -279,10 +274,10 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   80% { color: var(--danger); transform: scale(1); }
   100% { color: var(--text); transform: scale(1); } 
 }
-.balance-up { animation: balance-up-anim 1.5s ease; }
-.balance-down { animation: balance-down-anim 1.5s ease; }
-.balance-down-delayed { animation: balance-down-anim 0.5s ease; }
-.balance-up-delayed { animation: balance-up-anim 0.5s ease; }
+.balance-up { animation: balance-up-anim 1s ease; }
+.balance-down { animation: balance-down-anim 1s ease; }
+.balance-down-delayed { animation: balance-down-anim 1s ease; }
+.balance-up-delayed { animation: balance-up-anim 1s ease; }
 
 /* --- پاپ‌آپ‌ها --- */
 @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
@@ -540,6 +535,12 @@ function handleInitialScan(scannedId) {
             customAlert("لطفا نام بازیکن را وارد کنید.");
             return;
         }
+        // --- تغییرات آیتم 4: جلوگیری از ثبت نام تکراری ---
+        if (tempPlayers.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+            customAlert("این نام قبلاً برای بازیکن دیگری استفاده شده است.");
+            return;
+        }
+        
         tempPlayers.push({ id: scannedId, name: name });
         updateScannedPlayersList();
         popups.addPlayer.classList.remove('active');
@@ -550,7 +551,7 @@ function handleInitialScan(scannedId) {
     };
 }
 
-// --- تغییرات آیتم 4: منطق جدید ساخت کارت بازیکنان اسکن شده ---
+// --- تغییرات آیتم 3: منطق جدید ساخت کارت بازیکنان اسکن شده ---
 function updateScannedPlayersList() {
     const listEl = document.getElementById('scannedPlayersList');
     listEl.innerHTML = '';
@@ -561,8 +562,8 @@ function updateScannedPlayersList() {
         item.classList.add(`color-${(index % NUM_PLAYER_COLORS) + 1}`);
         // ساختار جدید کارت
         item.innerHTML = `
-            <span class="name">${player.name}</span>
-            <span class="id-tag">کارت: ${player.id}</span>
+            <span class="player-id">${player.id}</span>
+            <span class="player-name">${player.name}</span>
         `;
         listEl.appendChild(item);
     });
@@ -607,7 +608,6 @@ function renderPlayerList() {
         card.style.animationDelay = `${index * 100}ms`;
         if (p.bankrupt) card.classList.add('bankrupt');
 
-        // --- تغییرات آیتم 1: حذف "ش.ک:" ---
         card.innerHTML = `
             <div class="player-card-header">
                 <span class="player-name">${p.name}</span>
@@ -725,8 +725,10 @@ document.getElementById('transferConfirm').onclick = () => {
     const amount = parseInt(toEnglishDigits(amountInput.value));
     if (!giverTag || !receiverTag) { customAlert("کارت دهنده و گیرنده را اسکن کنید."); return; }
     if (isNaN(amount) || amount <= 0) { customAlert("مبلغ انتقال را به درستی وارد کنید."); return; }
+    
+    const oldPlayers = JSON.parse(localStorage.getItem('players'));
+    let players = JSON.parse(JSON.stringify(oldPlayers)); // Deep copy
 
-    let players = JSON.parse(localStorage.getItem('players'));
     const giver = players.find(p => p.id === giverTag.id);
     const receiver = players.find(p => p.id === receiverTag.id);
 
@@ -736,12 +738,12 @@ document.getElementById('transferConfirm').onclick = () => {
     receiver.balance += amount;
     localStorage.setItem('players', JSON.stringify(players));
     
-    showTransferAnimation(giver.name, receiver.name, amount, giver.id, receiver.id, players); 
+    showTransferAnimation(giver.name, receiver.name, amount, giver.id, receiver.id, players, oldPlayers); 
     
     resetTransferPopup();
 };
 
-function showTransferAnimation(giverName, receiverName, amount, giverId, receiverId, newPlayers) {
+function showTransferAnimation(giverName, receiverName, amount, giverId, receiverId, newPlayers, oldPlayers) {
     const fade = document.getElementById('transferFade');
     const giverEl = document.getElementById('fadeGiver');
     const receiverEl = document.getElementById('fadeReceiver');
@@ -769,7 +771,6 @@ function showTransferAnimation(giverName, receiverName, amount, giverId, receive
     setTimeout(() => {
         fade.classList.remove('active');
         const giverData = newPlayers.find(p => p.id === giverId);
-        const receiverData = newPlayers.find(p => p.id === receiverId);
         if (giverData) {
             const giverBalanceEl = document.querySelector(`.player-balance[data-balance-id="${giverId}"]`);
             giverBalanceEl.textContent = giverData.balance.toLocaleString('fa-IR');
@@ -778,7 +779,9 @@ function showTransferAnimation(giverName, receiverName, amount, giverId, receive
             giverBalanceEl.classList.add('balance-down-delayed');
         }
         
+        // --- تغییرات آیتم 2: تاخیر 0.6 ثانیه ---
         setTimeout(() => {
+            const receiverData = newPlayers.find(p => p.id === receiverId);
             if (receiverData) {
                 const receiverBalanceEl = document.querySelector(`.player-balance[data-balance-id="${receiverId}"]`);
                 receiverBalanceEl.textContent = receiverData.balance.toLocaleString('fa-IR');
@@ -786,7 +789,7 @@ function showTransferAnimation(giverName, receiverName, amount, giverId, receive
                 void receiverBalanceEl.offsetWidth;
                 receiverBalanceEl.classList.add('balance-up-delayed');
             }
-        }, 500); 
+        }, 600); // 0.6 ثانیه تاخیر
 
     }, 2500); 
 }
@@ -800,8 +803,8 @@ function resetRewardPopup() {
     popups.reward.classList.remove('active');
 }
 document.getElementById('rewardBtn').onclick = () => {
-    const turnReward = parseInt(localStorage.getItem('turnReward'));
-    document.getElementById('rewardAmount').textContent = `مبلغ پاداش: ${turnReward.toLocaleString('fa-IR')}`;
+    const turnRewardVal = parseInt(localStorage.getItem('turnReward'));
+    document.getElementById('rewardAmount').textContent = `مبلغ پاداش: ${turnRewardVal.toLocaleString('fa-IR')}`;
     popups.reward.classList.add('active');
     startNFCScan(player => { rewardTag = player; animateCircleName(rewardCircle, player.name); stopNFCScan(); });
 };
@@ -814,16 +817,22 @@ document.getElementById('rewardConfirm').onclick = () => {
     const player = players.find(p => p.id === rewardTag.id);
     player.balance += rewardAmount;
     localStorage.setItem('players', JSON.stringify(players));
-    showRewardAnimation(player.name, rewardAmount);
+    
+    const animationDuration = 2000;
+    showRewardAnimation(player.name, rewardAmount, animationDuration);
     resetRewardPopup();
-    setTimeout(() => updatePlayerDisplays(players, oldPlayers), 100);
+    
+    // --- تغییرات آیتم 1: آپدیت موجودی بعد از اتمام انیمیشن ---
+    setTimeout(() => {
+        updatePlayerDisplays(players, oldPlayers);
+    }, animationDuration);
 };
-function showRewardAnimation(name, amount) {
+function showRewardAnimation(name, amount, duration) {
     const fade = document.getElementById('rewardFade');
     document.getElementById('rewardTo').textContent = name;
     document.getElementById('rewardShow').textContent = `+${amount.toLocaleString('fa-IR')}`;
     fade.classList.add('active');
-    setTimeout(() => fade.classList.remove('active'), 2000);
+    setTimeout(() => fade.classList.remove('active'), duration);
 }
 
 // --- اتمام بازی ---
