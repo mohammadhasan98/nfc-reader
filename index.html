@@ -17,7 +17,7 @@
   --danger: #ff4b4b;
   --success: #4bff7b;
 
-  /* NEW: Player colors for card headers */
+  /* Player colors for card headers */
   --player-color-1: #FF6B6B;
   --player-color-2: #4ECDC4;
   --player-color-3: #45B7D1;
@@ -63,7 +63,6 @@ h1, h2, h3 { text-align:center; color: var(--text); font-weight: 700; }
 h1 { 
     font-size: 2.5rem; 
     margin-bottom: 25px; 
-    /* IMPROVED: Gradient text effect for title */
     background: linear-gradient(45deg, var(--primary), var(--primary-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -72,7 +71,7 @@ h1 {
 }
 h2 { margin-bottom: 30px; font-size: 1.8rem;}
 
-/* --- استایل دکمه‌ها --- */
+/* --- دکمه‌ها --- */
 button {
   font-family:'Vazirmatn', sans-serif;
   border:none;
@@ -103,73 +102,58 @@ button:disabled {
 .btn-danger:hover:not(:disabled) { background: #e03a3a; }
 
 .floating-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: var(--secondary);
-  color: var(--text);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  z-index: 1000;
-  min-width: unset;
+  position: fixed; top: 15px; left: 15px;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--secondary); color: var(--text);
+  display: flex; justify-content: center; align-items: center;
+  padding: 0; margin: 0; z-index: 1000; min-width: unset;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-.floating-btn svg {
-  width: 24px;
-  height: 24px;
-}
+.floating-btn svg { width: 24px; height: 24px; }
 
-/* --- استایل فرم‌ها --- */
+/* --- فرم‌ها --- */
 input, select {
   font-family:'Vazirmatn', sans-serif;
-  border: 1px solid var(--secondary);
-  background: var(--bg-light);
-  color: var(--text);
-  border-radius:15px;
-  padding: 12px 20px;
-  font-size:16px;
-  text-align:center;
-  width:90%;
-  max-width: 300px;
-  margin: 10px auto;
-  display:block;
+  border: 1px solid var(--secondary); background: var(--bg-light);
+  color: var(--text); border-radius:15px; padding: 12px 20px;
+  font-size:16px; text-align:center; width:90%;
+  max-width: 300px; margin: 10px auto; display:block;
   transition: all .2s ease;
 }
 input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary);
+  outline: none; border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.3);
 }
 label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
-/* --- لیست بازیکنان اولیه --- */
-#scannedPlayersList {
-    margin-top: 25px;
-    padding: 0 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+/* --- صفحه شروع --- */
+/* NEW: استایل انیمیشن اعلان اسکن */
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 0 0 rgba(58, 134, 255, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(58, 134, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(58, 134, 255, 0); }
 }
-.scanned-player-item {
-    background: var(--secondary);
-    padding: 10px 15px;
-    border-radius: 12px;
-    font-size: 17px;
-    text-align: right;
+.scan-prompt {
+  text-align: center; font-size: 18px; color: var(--primary-hover);
+  padding: 15px; border: 2px solid var(--primary);
+  border-radius: 15px; margin: 30px auto; max-width: 320px;
+  animation: pulse-border 2.5s infinite cubic-bezier(0.66, 0, 0, 1);
 }
 
-/* --- NEW: بازطراحی لیست و کارت‌های بازیکنان --- */
+#scannedPlayersList {
+    margin-top: 25px; padding: 0 10px;
+    display: flex; flex-direction: column; gap: 12px;
+}
+.scanned-player-item {
+    background: var(--secondary); padding: 10px 15px;
+    border-radius: 12px; font-size: 17px; text-align: right;
+}
+
+/* --- لیست و کارت‌های بازیکنان --- */
 #playerList {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* دو ستون */
-  gap: 15px;
-  margin-top: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px; margin-top: 20px;
 }
 @keyframes slideInCard {
   from { opacity: 0; transform: translateY(20px) scale(0.98); }
@@ -181,19 +165,14 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   transition: transform .2s ease, background-color 0.4s ease, opacity 0.4s ease;
   animation: slideInCard 0.5s ease-out forwards;
-  opacity: 0;
-  position: relative;
-  overflow: hidden;
+  opacity: 0; position: relative; overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 .player-card:hover { transform: translateY(-3px); }
 .player-card-header {
-  padding: 12px 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #fff;
-  font-weight: 700;
+  padding: 12px 15px; display: flex;
+  align-items: center; justify-content: space-between;
+  color: #fff; font-weight: 700;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .player-card.color-1 .player-card-header { background-color: var(--player-color-1); }
@@ -204,25 +183,19 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 .player-card.color-6 .player-card-header { background-color: var(--player-color-6); }
 .player-card.color-7 .player-card-header { background-color: var(--player-color-7); }
 .player-card.color-8 .player-card-header { background-color: var(--player-color-8); }
+
 .player-name { font-size: 16px; }
 .player-id-tag {
-  font-size: 14px;
-  background: rgba(0,0,0,0.2);
-  padding: 3px 8px;
-  border-radius: 8px;
+  font-size: 14px; background: rgba(0,0,0,0.2);
+  padding: 3px 8px; border-radius: 8px;
 }
-.player-card-body {
-  padding: 15px;
-  text-align: center;
-}
+.player-card-body { padding: 15px; text-align: center; }
 .player-card-body label {
-    font-size: 14px;
-    color: #aab;
+    font-size: 14px; color: #aab;
     margin: 0 0 5px 0;
 }
 .player-balance { 
-  font-size: 22px; 
-  font-weight: 700; /* Bold */
+  font-size: 22px; font-weight: 700;
   direction: ltr; 
   transition: color .3s ease, transform 0.3s ease; 
 }
@@ -235,11 +208,10 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 .player-card.bankrupt { opacity: 0.5; background: #2a2a2a; }
 .player-card.bankrupt::after{
-  content:"ورشکسته";
-  position: absolute; top: 50%; left: 50%;
-  transform-origin: center center;
-  border: 4px solid var(--danger); color: var(--danger); background: transparent;
-  padding: 5px 20px; border-radius: 10px; font-size: 20px; font-weight: 900;
+  content:"ورشکسته"; position: absolute; top: 50%; left: 50%;
+  transform-origin: center center; border: 4px solid var(--danger);
+  color: var(--danger); background: transparent; padding: 5px 20px;
+  border-radius: 10px; font-size: 20px; font-weight: 900;
   letter-spacing: 1px; opacity: 0;
   animation: stamp-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   animation-delay: 0.2s;
@@ -262,28 +234,30 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 /* --- پاپ‌آپ‌ها --- */
 @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 .popup {
-  position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; justify-content:center; align-items:center; z-index:99;
-  backdrop-filter: blur(5px);
+  position:fixed; inset:0; background:rgba(0,0,0,0.6);
+  display:none; justify-content:center; align-items:center;
+  z-index:99; backdrop-filter: blur(5px);
 }
 .popup.active { display:flex; }
 .popup.active .popup-box { animation: popupFadeIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .popup-box {
-  background: var(--bg-light); border-radius:30px; padding:25px; width:90%; max-width:400px;
-  text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  background: var(--bg-light); border-radius:30px; padding:25px;
+  width:90%; max-width:400px; text-align:center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   border: 1px solid var(--secondary);
 }
 .popup-box .button-group {
-    display: flex; justify-content: center; gap: 10px; margin-top: 20px;
-    flex-wrap: wrap;
+    display: flex; justify-content: center; gap: 10px;
+    margin-top: 20px; flex-wrap: wrap;
 }
 .popup-box .button-group button { min-width: 120px; }
 
 /* --- کیبورد و دایره‌ها --- */
 .circle {
   width:100px; height:100px; border-radius:50%; border: 2px solid var(--primary);
-  color:var(--text); font-size:18px; display: flex; justify-content: center; align-items: center;
-  text-align: center; padding: 5px; margin:20px auto; transition: all .3s ease;
-  overflow: hidden; word-break: break-word;
+  color:var(--text); font-size:18px; display: flex; justify-content: center;
+  align-items: center; text-align: center; padding: 5px; margin:20px auto;
+  transition: all .3s ease; overflow: hidden; word-break: break-word;
 }
 .circle.filled { background: var(--primary); color: #fff; }
 @keyframes circleNameFadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
@@ -301,11 +275,9 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
 /* --- انیمیشن انتقال و پاداش --- */
 .fade {
-  position:fixed; inset:0;
-  background: rgba(13, 27, 42, 0.5);
-  backdrop-filter: blur(10px);
-  color:#fff; display:none; justify-content:center; align-items:center;
-  flex-direction:column; font-size:20px; z-index:999;
+  position:fixed; inset:0; background: rgba(13, 27, 42, 0.5);
+  backdrop-filter: blur(10px); color:#fff; display:none; justify-content:center;
+  align-items:center; flex-direction:column; font-size:20px; z-index:999;
 }
 .fade.active { display:flex; }
 
@@ -317,7 +289,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 #transferInfo .circle { opacity: 0; transform: scale(0.8); }
 #transferInfo .arrow { 
   opacity: 0; width:60px; height:60px; 
-  border-top:5px solid #fff; border-right:5px solid #fff;
+  border-top:5px solid #fff; border-left:5px solid #fff;
+  transform: rotate(-135deg); /* جهت فلش به چپ */
 }
 #fadeAmount {
     position: absolute; left: 50%; transform: translateX(-50%); top: -40px;
@@ -326,19 +299,19 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-@keyframes arrowAnimLTR {
-    from { transform: translateX(-80px) rotate(45deg); opacity: 0; }
-    to { transform: translateX(80px) rotate(45deg); opacity: 1; }
+/* انیمیشن حرکت فلش از راست به چپ */
+@keyframes arrowAnimRTL {
+    from { transform: translateX(80px) rotate(-135deg); opacity: 0; }
+    to { transform: translateX(-80px) rotate(-135deg); opacity: 1; }
 }
 .fade-giver-anim { animation: pulse 0.8s ease-in-out forwards; animation-delay: 0.1s; opacity: 1 !important; transform: scale(1); }
-.fade-arrow-anim { animation: arrowAnimLTR 1s ease-in-out forwards; animation-delay: 0.5s; opacity: 0; }
+.fade-arrow-anim { animation: arrowAnimRTL 1s ease-in-out forwards; animation-delay: 0.5s; opacity: 0; }
 .fade-receiver-anim { animation: pulse 0.8s ease-in-out forwards; animation-delay: 1.5s; opacity: 1 !important; transform: scale(1);}
 
 /* انیمیشن پاداش دور */
 .reward-arrow {
-  width:50px; height:50px; 
-  border-bottom:5px solid #fff; border-left:5px solid #fff;
-  margin: 15px auto; 
+  width:50px; height:50px; border-bottom:5px solid #fff; 
+  border-left:5px solid #fff; margin: 15px auto; 
   transform: rotate(-45deg);
   animation: rewardArrowAnim 1.2s ease-in-out infinite;
 }
@@ -367,7 +340,9 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 <section id="start" class="active">
   <h1>🏦 بانک مونوپولی</h1>
   
-  <p style="text-align: center; font-size: 18px; color: var(--primary-hover);">لطفا تگ هر بازیکن را اسکن کنید</p>
+  <!-- UPDATED: اعلان اسکن کارت با انیمیشن -->
+  <p class="scan-prompt">لطفا کارت هر بازیکن را اسکن کنید</p>
+
   <div id="scannedPlayersList"></div>
 
   <label for="startMoney">موجودی اولیه:</label>
@@ -378,7 +353,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 </section>
 
 <section id="game">
-  <h2>مدیریت بازی</h2>
+  <!-- REMOVED: حذف عنوان مدیریت بازی -->
   <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 30px;">
     <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
     <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
@@ -396,7 +371,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     <div class="keyboard" id="numPad"></div>
     <div style="display:flex; justify-content:space-around; align-items: center; margin-top:10px;">
       <div class="circle" id="giverCircle">دهنده</div>
-      <p style="font-size: 30px; margin: 0 10px;">←</p>
+      <!-- UPDATED: تغییر جهت فلش به راست -->
+      <p style="font-size: 30px; margin: 0 10px;">→</p>
       <div class="circle" id="receiverCircle">گیرنده</div>
     </div>
     <div class="button-group">
@@ -441,6 +417,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 <div id="transferFade" class="fade">
   <div id="transferInfo">
     <div id="fadeAmount"></div>
+    <!-- توجه: در حالت RTL، ترتیب نمایش عناصر flex معکوس است -->
+    <!-- پس giver در سمت راست و receiver در چپ نمایش داده می‌شود -->
     <div class="circle filled" id="fadeGiver"></div>
     <div class="arrow"></div>
     <div class="circle filled" id="fadeReceiver"></div>
@@ -470,7 +448,7 @@ let ndefReader, nfcAbortController = null;
 const startMoney = document.getElementById('startMoney');
 const turnReward = document.getElementById('turnReward');
 const startGameBtn = document.getElementById('startGameBtn');
-const NUM_PLAYER_COLORS = 8; // NEW: تعداد رنگ‌های تعریف شده در CSS
+const NUM_PLAYER_COLORS = 8;
 
 let tempPlayers = [];
 
@@ -510,7 +488,7 @@ function toEnglishDigits(str) {
 // --- مرحله ۱: تنظیمات و افزودن بازیکنان ---
 function handleInitialScan(scannedId) {
     if (tempPlayers.some(p => p.id === scannedId)) {
-        customAlert("این تگ قبلا برای بازیکن دیگری ثبت شده است.");
+        customAlert("این کارت قبلا برای بازیکن دیگری ثبت شده است.");
         return;
     }
     
@@ -572,25 +550,23 @@ startGameBtn.onclick = () => {
 
 
 // --- مرحله ۳: صفحه بازی ---
-// UPDATED: تابع رندر کردن کارت‌های بازیکن با ظاهر جدید
 function renderPlayerList() {
     const container = document.getElementById('playerList');
     container.innerHTML = '';
     JSON.parse(localStorage.getItem('players')).forEach((p, index) => {
         const card = document.createElement('div');
         card.className = 'player-card';
-        // NEW: اختصاص کلاس رنگ بر اساس ایندکس بازیکن
         card.classList.add(`color-${(index % NUM_PLAYER_COLORS) + 1}`);
 
         card.dataset.playerId = p.id;
         card.style.animationDelay = `${index * 100}ms`;
         if (p.bankrupt) card.classList.add('bankrupt');
 
-        // NEW: ساختار جدید HTML برای کارت
+        // UPDATED: تغییر "تگ" به "ش.ک"
         card.innerHTML = `
             <div class="player-card-header">
                 <span class="player-name">${p.name}</span>
-                <span class="player-id-tag">تگ: ${p.id}</span>
+                <span class="player-id-tag">ش.ک: ${p.id}</span>
             </div>
             <div class="player-card-body">
                 <label>موجودی</label>
@@ -619,7 +595,6 @@ function updatePlayerDisplays(newPlayers, oldPlayers) {
     newPlayers.forEach(p => {
         const card = document.querySelector(`.player-card[data-player-id="${p.id}"]`);
         if (!card) return;
-        // آدرس‌دهی به عنصر موجودی همچنان درست است
         const balanceEl = card.querySelector(`.player-balance[data-balance-id="${p.id}"]`);
         if (p.bankrupt) card.classList.add('bankrupt'); else card.classList.remove('bankrupt');
         
@@ -702,7 +677,7 @@ document.getElementById('transferBtn').onclick = () => {
 document.getElementById('transferCancel').onclick = resetTransferPopup;
 document.getElementById('transferConfirm').onclick = () => {
     const amount = parseInt(toEnglishDigits(amountInput.value));
-    if (!giverTag || !receiverTag) { customAlert("تگ دهنده و گیرنده را اسکن کنید."); return; }
+    if (!giverTag || !receiverTag) { customAlert("کارت دهنده و گیرنده را اسکن کنید."); return; }
     if (isNaN(amount) || amount <= 0) { customAlert("مبلغ انتقال را به درستی وارد کنید."); return; }
     const oldPlayers = JSON.parse(localStorage.getItem('players'));
     let players = JSON.parse(JSON.stringify(oldPlayers));
@@ -756,7 +731,7 @@ document.getElementById('rewardBtn').onclick = () => {
 };
 document.getElementById('rewardCancel').onclick = resetRewardPopup;
 document.getElementById('rewardConfirm').onclick = () => {
-    if (!rewardTag) { customAlert("تگ بازیکن را اسکن کنید."); return; }
+    if (!rewardTag) { customAlert("کارت بازیکن را اسکن کنید."); return; }
     const rewardAmount = parseInt(localStorage.getItem('turnReward'));
     const oldPlayers = JSON.parse(localStorage.getItem('players'));
     let players = JSON.parse(JSON.stringify(oldPlayers));
