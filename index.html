@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFC Reader</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: "Vazirmatn", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    textarea {
+      width: 90%;
+      height: 180px;
+      background: #1b1b1b;
+      color: #00ffea;
+      border: 1px solid #333;
+      padding: 10px;
+      font-family: "Vazirmatn", monospace;
+      font-size: 16px;
+      border-radius: 8px;
+      direction: ltr;
+    }
+    button {
+      background: linear-gradient(135deg, #009688, #00bcd4);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: "Vazirmatn", sans-serif;
+    }
+    button:hover { opacity: .85; }
+  </style>
+</head>
+<body>
+  <h2>📡 خواندن تگ NFC</h2>
+  <textarea id="output" readonly placeholder="محتوای تگ در اینجا نمایش داده می‌شود..."></textarea>
+  <button id="startBtn">شروع خواندن NFC</button>
+
+  <script>
+    const output = document.getElementById('output');
+    document.getElementById('startBtn').addEventListener('click', async () => {
+      try {
+        output.value = "در حال انتظار برای تگ...";
+        const ndef = new NDEFReader();
+        await ndef.scan();
+        ndef.onreading = event => {
+          const decoder = new TextDecoder();
+          let text = "";
+          for (const record of event.message.records) {
+            text += decoder.decode(record.data) + "\\n";
+          }
+          output.value = text.trim() || "[تگی شناسایی نشد]";
+        };
+      } catch (err) {
+        output.value = "❌ خطا: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
