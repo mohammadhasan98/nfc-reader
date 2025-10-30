@@ -346,7 +346,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   display: flex; justify-content: space-around; align-items: center; 
   width: 100%; max-width: 400px; padding: 0 20px; position: relative;
 }
-#transferInfo .circle, .bank-entity { opacity: 0; transform: scale(0.8); }
+#transferInfo .circle, #bankTxInfo .bank-entity { opacity: 0; transform: scale(0.8); }
 
 #fadeAmount, #fadeBankTxAmount {
     position: absolute; left: 50%; transform: translateX(-50%); top: -40px;
@@ -443,11 +443,10 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 </section>
 
 <section id="game">
-  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 30px;">
+  <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom: 30px;">
     <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
     <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
     <button id="bankTxBtn" class="btn-primary">🏦 پرداخت/دریافت</button>
-    <button class="btn-secondary" disabled>🏠 رهن ملک</button>
   </div>
   <div id="playerList"></div>
   <button id="endGame" class="btn-danger" style="margin-top: 30px;">اتمام و شروع مجدد 🔄</button>
@@ -988,32 +987,37 @@ function showBankTxAnimation(giver, receiver, amount) {
     const amountEl = document.getElementById('fadeBankTxAmount');
 
     const setupParty = (container, party) => {
-        container.innerHTML = ''; 
-        let element;
+        container.innerHTML = '';
         if (typeof party === 'object') { // Player
-            element = document.createElement('div');
-            element.className = 'circle filled';
-            element.textContent = party.name;
+            const playerCircle = document.createElement('div');
+            playerCircle.className = 'circle filled';
+            playerCircle.textContent = party.name;
+            container.appendChild(playerCircle);
         } else { // Bank
-            element = document.createElement('div');
-            element.className = 'bank-text-label';
-            element.textContent = 'بانک';
+            const bankLabel = document.createElement('div');
+            bankLabel.className = 'bank-text-label';
+            bankLabel.textContent = 'بانک';
+            container.appendChild(bankLabel);
         }
-        container.appendChild(element);
-        return element;
     };
     
-    const giverEl = setupParty(giverContainer, giver);
-    const receiverEl = setupParty(receiverContainer, receiver);
+    setupParty(giverContainer, giver);
+    setupParty(receiverContainer, receiver);
 
     amountEl.textContent = amount.toLocaleString('fa-IR');
     amountEl.style.opacity = '0';
     
+    // Reset animation classes before applying them
+    giverContainer.classList.remove('fade-entity-anim', 'fade-receiver-anim');
+    receiverContainer.classList.remove('fade-entity-anim', 'fade-receiver-anim');
+    void giverContainer.offsetWidth; // Force browser reflow
+
     fade.classList.add('active');
     
     setTimeout(() => {
-        giverEl.classList.add('fade-entity-anim'); 
-        receiverEl.classList.add('fade-entity-anim', 'fade-receiver-anim');
+        // Apply animation classes to the CONTAINERS
+        giverContainer.classList.add('fade-entity-anim'); 
+        receiverContainer.classList.add('fade-entity-anim', 'fade-receiver-anim');
         amountEl.style.opacity = '1';
     }, 50);
 
