@@ -8,125 +8,50 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
-  /* New Modern Color Scheme */
-  --bg-main: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-card: #1e293b;
-  --primary: #6366f1;
-  --primary-hover: #818cf8;
-  --accent: #0ea5e9;
-  --accent-hover: #38bdf8;
-  --success: #10b981;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --text-main: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --danger-bg: rgba(239, 68, 68, 0.8);
-  --success-bg: rgba(16, 185, 129, 0.8);
-  
-  /* Player Colors */
-  --player-color-1: #f87171;
-  --player-color-2: #60a5fa;
-  --player-color-3: #34d399;
-  --player-color-4: #fbbf24;
-  --player-color-5: #a78bfa;
-  --player-color-6: #f472b6;
-  --player-color-7: #2dd4bf;
-  --player-color-8: #fb923c;
-
-  /* Player Colors RGB for rgba() */
-  --player-color-1-rgb: 248, 113, 113;
-  --player-color-2-rgb: 96, 165, 250;
-  --player-color-3-rgb: 52, 211, 153;
-  --player-color-4-rgb: 251, 191, 36;
-  --player-color-5-rgb: 167, 139, 250;
-  --player-color-6-rgb: 244, 114, 182;
-  --player-color-7-rgb: 45, 212, 191;
-  --player-color-8-rgb: 251, 146, 60;
-
-  /* Effects */
+  --bg-main: #0f172a; --bg-secondary: #1e293b; --bg-card: #1e293b;
+  --primary: #6366f1; --primary-hover: #818cf8; --accent: #0ea5e9;
+  --accent-hover: #38bdf8; --success: #10b981; --danger: #ef4444;
+  --warning: #f59e0b; --text-main: #f1f5f9; --text-secondary: #94a3b8;
+  --danger-bg: rgba(239, 68, 68, 0.8); --success-bg: rgba(16, 185, 129, 0.8);
+  --player-color-1: #f87171; --player-color-2: #60a5fa; --player-color-3: #34d399;
+  --player-color-4: #fbbf24; --player-color-5: #a78bfa; --player-color-6: #f472b6;
+  --player-color-7: #2dd4bf; --player-color-8: #fb923c;
+  --player-color-1-rgb: 248, 113, 113; --player-color-2-rgb: 96, 165, 250;
+  --player-color-3-rgb: 52, 211, 153; --player-color-4-rgb: 251, 191, 36;
+  --player-color-5-rgb: 167, 139, 250; --player-color-6-rgb: 244, 114, 182;
+  --player-color-7-rgb: 45, 212, 191; --player-color-8-rgb: 251, 146, 60;
   --card-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
   --btn-shadow: 0 4px 14px -4px rgba(99, 102, 241, 0.5);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
   font-family: 'Vazirmatn', sans-serif;
 }
-
-* { 
-  box-sizing: border-box; 
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
-  background: var(--bg-main);
-  color: var(--text-main);
-  min-height: 100vh;
-  user-select: none;
-  -webkit-user-select: none;
-  font-size: 16px;
-  overflow: hidden; /* Changed from overflow-x: hidden */
-  position: relative;
+  background: var(--bg-main); color: var(--text-main); min-height: 100vh;
+  user-select: none; -webkit-user-select: none; font-size: 16px;
+  overflow: hidden; position: relative;
   background: radial-gradient(circle at top left, #0d1b2a 0%, #0f172a 100%);
 }
-
-/* Header Styles */
 .header {
-  background: var(--bg-secondary);
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 73px; /* Fixed height for calculations */
+  background: var(--bg-secondary); padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  position: sticky; top: 0; z-index: 100; display: flex;
+  justify-content: space-between; align-items: center; height: 73px;
 }
-
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-icon {
-  background: var(--primary); width: 40px; height: 40px;
-  border-radius: 12px; display: flex; align-items: center;
-  justify-content: center; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+  background: var(--primary); width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
 }
 .logo-text {
   font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, var(--accent), var(--primary));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-
-/* Sections */
-section { 
-  padding: 15px; /* Reduced padding */
-  display: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
+section { padding: 15px; display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
 section.active { display: block; opacity: 1; transform: translateY(0); }
 .section-inner { max-width: 800px; margin: 0 auto; }
-
-/* Typography */
-h2 {
-  font-size: 1.8rem; font-weight: 700; margin-bottom: 25px;
-  position: relative; display: inline-block; padding-bottom: 10px;
-}
-h2:after {
-  content: ""; position: absolute; bottom: 0; right: 0;
-  width: 50px; height: 4px; background: var(--primary); border-radius: 2px;
-}
-
-/* Cards & Containers */
-.card {
-  background: var(--bg-card); border-radius: 20px;
-  padding: 20px; /* Reduced padding */
-  margin-top: 20px; box-shadow: var(--card-shadow);
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-/* Buttons */
+.card { background: var(--bg-card); border-radius: 20px; padding: 20px; margin-top: 20px; box-shadow: var(--card-shadow); border: 1px solid rgba(255,255,255,0.05); }
 .btn {
   font-family: 'Vazirmatn', sans-serif; border: none; border-radius: 14px;
   padding: 14px 28px; font-size: 16px; font-weight: 600; cursor: pointer;
@@ -145,31 +70,13 @@ h2:after {
 .btn-danger:hover:not(:disabled) { background: #dc2626; transform: translateY(-2px); }
 .btn-success { background: var(--success); color: white; }
 .btn-success:hover:not(:disabled) { background: #059669; transform: translateY(-2px); }
-
-/* Grid for buttons in game section */
-.action-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px; margin-bottom: 25px; /* Adjusted margin */
-}
-
-/* --- Start Section Modifications --- */
-#start .section-inner {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 73px - 30px); /* Fullscreen height minus header and section padding */
-}
-#start .card {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Makes the card take up all available space */
-    overflow: hidden; /* Prevents card from overflowing */
-    margin-top: 15px;
-}
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+#start .section-inner { display: flex; flex-direction: column; height: calc(100vh - 73px - 30px); }
+#start .card { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; margin-top: 15px; }
 .scan-prompt {
   text-align: right; background: rgba(99, 102, 241, 0.1); border: 2px solid var(--primary);
-  border-radius: 16px; padding: 16px; margin: 0 0 15px 0; /* Adjusted margin */
-  position: relative; overflow: hidden;
-  display: flex; align-items: center; gap: 15px; /* Flexbox for icon and text */
+  border-radius: 16px; padding: 16px; margin: 0 0 15px 0;
+  position: relative; overflow: hidden; display: flex; align-items: center; gap: 15px;
 }
 .scan-prompt p { margin-top: 0; }
 @keyframes scanLine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
@@ -178,34 +85,24 @@ h2:after {
   background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
   animation: scanLine 3s infinite linear;
 }
-
 #scannedPlayersList {
-  flex-grow: 1; /* This is the key for scrolling */
-  overflow-y: auto; /* Enable vertical scroll if needed */
-  margin: 0; padding: 10px;
-  display: grid; grid-template-columns: 1fr;
-  gap: 10px; background: rgba(0,0,0,0.15); border-radius: 12px;
+  flex-grow: 1; overflow-y: auto; margin: 0; padding: 10px;
+  display: grid; grid-template-columns: 1fr; gap: 10px;
+  background: rgba(0,0,0,0.15); border-radius: 12px;
 }
-/* Custom scrollbar for webkit browsers */
 #scannedPlayersList::-webkit-scrollbar { width: 6px; }
 #scannedPlayersList::-webkit-scrollbar-track { background: transparent; }
 #scannedPlayersList::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
 .scanned-player-item {
-  border-radius: 14px; padding: 12px 16px; /* Adjusted padding */
-  display: flex; flex-direction: row; /* Changed to row */
-  align-items: center; justify-content: space-between; /* Space between name and ID tag */
-  font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative;
-  border: 2px solid transparent; transition: var(--transition);
+  border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: row;
+  align-items: center; justify-content: space-between; font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; border: 2px solid transparent;
+  transition: var(--transition);
 }
 .scanned-player-item:hover { transform: translateY(-3px); }
 .scanned-player-item:after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; }
 .scanned-player-item .player-name { font-size: 16px; font-weight: 700; color: var(--text-main); }
-.scanned-player-id-tag {
-  background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 8px;
-  font-size: 12px; font-weight: 500; color: var(--text-secondary);
-}
-
+.scanned-player-id-tag { background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
 .scanned-player-item.color-1 { --player-accent: var(--player-color-1); }
 .scanned-player-item.color-2 { --player-accent: var(--player-color-2); }
 .scanned-player-item.color-3 { --player-accent: var(--player-color-3); }
@@ -214,51 +111,21 @@ h2:after {
 .scanned-player-item.color-6 { --player-accent: var(--player-color-6); }
 .scanned-player-item.color-7 { --player-accent: var(--player-color-7); }
 .scanned-player-item.color-8 { --player-accent: var(--player-color-8); }
-
-.scanned-player-item { background: rgba(var(--player-accent-rgb), 0.15); border-color: var(--player-accent); }
+.scanned-player-item { background: rgba(var(--player-color-1-rgb), 0.15); border-color: var(--player-accent); }
 .scanned-player-item:after { background: var(--player-accent); }
-
-/* Input groups (pushed to bottom in start screen) */
-.start-inputs-container {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+.start-inputs-container { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
 .input-group { margin: 0; }
 .input-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 500; }
 .input-group input {
-  width: 100%; background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
-  padding: 14px 20px; color: var(--text-main); font-size: 16px;
+  width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 14px 20px; color: var(--text-main); font-size: 16px;
   font-family: 'Vazirmatn', sans-serif; transition: var(--transition); text-align: right;
 }
-.input-group input:focus {
-  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
-}
-
-#startGameBtn {
-    width: 100%; padding: 16px;
-    margin-top: 15px;
-}
-
-/* --- Game Section Modifications --- */
-#game.active {
-    overflow-y: auto; /* Allow game section to scroll if content overflows */
-    height: calc(100vh - 73px); /* Minus header height */
-}
-
-#playerList {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 items per row */
-  gap: 15px; /* Reduced gap */
-}
-@media (max-width: 600px) {
-  #playerList {
-    grid-template-columns: 1fr; /* 1 item per row on small screens */
-  }
-}
-
+.input-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3); }
+#startGameBtn { width: 100%; padding: 16px; margin-top: 15px; }
+#game.active { overflow-y: auto; height: calc(100vh - 73px); }
+#playerList { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+@media (max-width: 600px) { #playerList { grid-template-columns: 1fr; } }
 .player-card {
   background: var(--bg-card); border-radius: 20px; overflow: hidden;
   box-shadow: var(--card-shadow); transition: var(--transition);
@@ -279,102 +146,36 @@ h2:after {
 .player-name { font-weight: 700; font-size: 18px; }
 .player-card-body { padding: 20px; text-align: center; }
 .player-balance { font-size: 32px; font-weight: 800; direction: ltr; margin: 10px 0; transition: all 0.3s ease; display: inline-block; border-radius: 10px; padding: 5px 15px; }
-
-/* The rest of the CSS remains largely the same... */
-@keyframes stamp-animation {
-  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-15deg) scale(2.5); }
-  60% { opacity: 0.8; transform: translate(-50%, -50%) rotate(-15deg) scale(0.9); }
-  80% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); }
-  100% { opacity: 0.8; transform: translate(-50%, -50%) rotate(-15deg) scale(1); }
-}
+@keyframes stamp-animation { 0% { opacity: 0; transform: translate(-50%, -50%) rotate(-15deg) scale(2.5); } 60% { opacity: 0.8; transform: translate(-50%, -50%) rotate(-15deg) scale(0.9); } 80% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); } 100% { opacity: 0.8; transform: translate(-50%, -50%) rotate(-15deg) scale(1); } }
 .player-card.bankrupt { opacity: 0.5; background: #2a2a2a; }
-.player-card.bankrupt::after{
-  content:"ورشکسته"; position: absolute; top: 50%; left: 50%;
-  transform-origin: center center; border: 4px solid var(--danger);
-  color: var(--danger); background: transparent; padding: 5px 20px;
-  border-radius: 10px; font-size: 20px; font-weight: 900;
-  letter-spacing: 1px; opacity: 0;
-  animation: stamp-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  animation-delay: 0.2s;
-}
-
-@keyframes balance-up-anim { 
-  0% { background-color: var(--success-bg); transform: scale(1.1); } 
-  80% { background-color: var(--success-bg); transform: scale(1); }
-  100% { background-color: transparent; transform: scale(1); } 
-}
-@keyframes balance-down-anim { 
-  0% { background-color: var(--danger-bg); transform: scale(1.1); } 
-  80% { background-color: var(--danger-bg); transform: scale(1); }
-  100% { background-color: transparent; transform: scale(1); } 
-}
-.balance-up { animation: balance-up-anim 1.8s ease; }
-.balance-down { animation: balance-down-anim 1.8s ease; }
-.balance-down-delayed { animation: balance-down-anim 1.8s ease; }
-.balance-up-delayed { animation: balance-up-anim 1.8s ease; }
-
-
-.popup {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease; backdrop-filter: blur(8px);
-}
+.player-card.bankrupt::after{ content:"ورشکسته"; position: absolute; top: 50%; left: 50%; transform-origin: center center; border: 4px solid var(--danger); color: var(--danger); background: transparent; padding: 5px 20px; border-radius: 10px; font-size: 20px; font-weight: 900; letter-spacing: 1px; opacity: 0; animation: stamp-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.2s; }
+@keyframes balance-up-anim { 0% { background-color: var(--success-bg); transform: scale(1.1); } 80% { background-color: var(--success-bg); transform: scale(1); } 100% { background-color: transparent; transform: scale(1); } }
+@keyframes balance-down-anim { 0% { background-color: var(--danger-bg); transform: scale(1.1); } 80% { background-color: var(--danger-bg); transform: scale(1); } 100% { background-color: transparent; transform: scale(1); } }
+.balance-up { animation: balance-up-anim 1.8s ease; } .balance-down { animation: balance-down-anim 1.8s ease; }
+.popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(8px); }
 .popup.active { opacity: 1; pointer-events: all; }
-.popup-box {
-  background: var(--bg-secondary); border-radius: 25px;
-  width: 90%; max-width: 450px; padding: 30px;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-  transform: translateY(20px); opacity: 0;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+.popup-box { background: var(--bg-secondary); border-radius: 25px; width: 90%; max-width: 450px; padding: 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); transform: translateY(20px); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .popup.active .popup-box { transform: translateY(0); opacity: 1; }
 .popup-header { margin-bottom: 25px; text-align: center; position: relative; }
 .popup-header h3 { font-size: 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; }
-.popup-icon {
-  width: 40px; height: 40px; background: var(--primary);
-  border-radius: 50%; display: flex;
-  align-items: center; justify-content: center; margin: 0 auto 15px;
-}
+.popup-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; }
 .keyboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-.keyboard button {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px; padding: 16px; font-size: 20px;
-  color: var(--text-main); transition: var(--transition);
-  font-weight: 700;
-}
+.keyboard button { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; font-size: 20px; color: var(--text-main); transition: var(--transition); font-weight: 700; }
 .keyboard button:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
 .keyboard button:active { transform: scale(0.95); background: var(--primary); }
-#amountInput, #bankTxAmountInput {
-    text-align: center; font-size: 24px; font-weight: 700;
-    padding: 16px 20px;
-}
+#amountInput, #bankTxAmountInput { text-align: center; font-size: 24px; font-weight: 700; padding: 16px 20px; }
 .circle-container { display: flex; justify-content: space-around; align-items: center; margin: 25px 0; }
-.circle {
-  width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center;
-  font-weight: 600; position: relative; overflow: hidden; border: 3px solid var(--primary); transition: var(--transition);
-  padding: 5px; font-size: 14px; word-break: break-word;
-}
+.circle { width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 600; position: relative; overflow: hidden; border: 3px solid var(--primary); transition: var(--transition); padding: 5px; font-size: 14px; word-break: break-word; }
 .circle.filled { background: var(--primary); color: white; border-color: transparent; }
 .arrow { font-size: 24px; color: var(--accent); }
 .button-group { display: flex; justify-content: center; gap: 14px; margin-top: 25px; flex-wrap: wrap; }
 @keyframes name-animating { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 .name-animating { animation: name-animating 0.4s ease; }
-@keyframes pulsing-effect {
-  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
-}
+@keyframes pulsing-effect { 0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
 .pulsing { animation: pulsing-effect 1.5s infinite cubic-bezier(0.66, 0, 0, 1); }
-
-.fade {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center;
-  flex-direction: column; background: rgba(15, 23, 42, 0.9); z-index: 2000; backdrop-filter: blur(5px);
-}
+.fade { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; flex-direction: column; background: rgba(15, 23, 42, 0.9); z-index: 2000; backdrop-filter: blur(5px); }
 .fade.active { display: flex; }
 #transferInfo, #bankTxInfo { display: flex; justify-content: space-around; align-items: center; width: 100%; max-width: 400px; padding: 0 20px; position: relative; }
-#transferInfo .circle, #bankTxInfo .bank-entity { opacity: 0; transform: scale(0.8); }
 #fadeAmount, #fadeBankTxAmount { position: absolute; left: 50%; transform: translateX(-50%); top: -40px; font-size: 24px; font-weight: bold; opacity: 0; transition: opacity 0.5s ease 0.5s; color: white; }
 .bank-entity { width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
 .bank-entity .bank-text-label { width: 100px; height: 100px; border-radius: 20px; border: 2px dashed #aaa; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white; }
@@ -390,31 +191,19 @@ h2:after {
 #rewardFade .transfer-flow { width: 10px; height: 80px; margin: 15px 0; }
 #rewardFade .dot { animation-name: flow-dot-vertical-anim; animation-duration: 1.5s; }
 @keyframes flow-dot-vertical-anim { 0% { transform: translateY(-50px); opacity: 0; } 25% { opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(50px); opacity: 0; } }
-#rewardShow { color: white; }
-
-@media (max-width: 768px) {
-  .logo-text { font-size: 1.5rem; }
-  .action-grid { grid-template-columns: 1fr; }
-}
-
+@media (max-width: 768px) { .logo-text { font-size: 1.5rem; } .action-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <header class="header">
   <div class="logo">
-    <div class="logo-icon">
-      <i class="fas fa-landmark"></i>
-    </div>
+    <div class="logo-icon"><i class="fas fa-landmark"></i></div>
     <div class="logo-text">بانک مونوپولی</div>
   </div>
-  <button id="fullscreenBtn" class="btn btn-secondary">
-    <i class="fas fa-expand"></i>
-  </button>
+  <button id="fullscreenBtn" class="btn btn-secondary"><i class="fas fa-expand"></i></button>
 </header>
 
-<!-- Start Section -->
 <section id="start" class="active">
   <div class="section-inner">
     <div class="card">
@@ -433,48 +222,24 @@ h2:after {
             <input type="text" id="turnReward" placeholder="مثلاً ۲,۰۰۰" inputmode="numeric">
           </div>
       </div>
-      <button id="startGameBtn" class="btn btn-primary" disabled>
-        <i class="fas fa-play"></i> شروع بازی
-      </button>
+      <button id="startGameBtn" class="btn btn-primary" disabled><i class="fas fa-play"></i> شروع بازی</button>
     </div>
   </div>
 </section>
 
-<!-- Game Section -->
 <section id="game">
   <div class="section-inner">
     <div class="action-grid">
-      <button id="transferBtn" class="btn btn-primary">
-        <i class="fas fa-exchange-alt"></i> کارت به کارت
-      </button>
-      <button id="rewardBtn" class="btn btn-success">
-        <i class="fas fa-gift"></i> پاداش دور
-      </button>
-      <button id="bankTxBtn" class="btn btn-accent">
-        <i class="fas fa-university"></i> بانک
-      </button>
+      <button id="transferBtn" class="btn btn-primary"><i class="fas fa-exchange-alt"></i> کارت به کارت</button>
+      <button id="rewardBtn" class="btn btn-success"><i class="fas fa-gift"></i> پاداش دور</button>
+      <button id="bankTxBtn" class="btn btn-accent"><i class="fas fa-university"></i> بانک</button>
     </div>
     <div id="playerList"></div>
-    <button id="endGame" class="btn btn-danger" style="width: 100%; margin-top: 30px;">
-      <i class="fas fa-redo"></i> اتمام بازی و شروع مجدد
-    </button>
+    <button id="endGame" class="btn btn-danger" style="width: 100%; margin-top: 30px;"><i class="fas fa-redo"></i> اتمام بازی و شروع مجدد</button>
   </div>
 </section>
 
-<!-- Popups and Fades (Unchanged HTML) -->
-<div id="transferPopup" class="popup">...</div>
-<div id="rewardPopup" class="popup">...</div>
-<div id="bankTxPopup" class="popup">...</div>
-<div id="dialogPopup" class="popup">...</div>
-<div id="addPlayerPopup" class="popup">...</div>
-<div id="transferFade" class="fade">...</div>
-<div id="bankTxFade" class="fade">...</div>
-<div id="rewardFade" class="fade">...</div>
-
-<!-- The rest of the HTML for popups remains unchanged as it's not part of the layout modifications -->
-<!-- To keep the code block clean, I've truncated the unchanged popup/fade HTML. -->
-<!-- You can copy it from the previous response if needed. -->
-<!-- All necessary popup content is exactly the same -->
+<!-- Popups and Fades -->
 <div id="transferPopup" class="popup"><div class="popup-box"><div class="popup-header"><div class="popup-icon"><i class="fas fa-exchange-alt"></i></div><h3>انتقال وجه بین بازیکنان</h3></div><input type="text" id="amountInput" class="input-group" placeholder="مبلغ انتقال" readonly><div class="keyboard" id="numPad"></div><div class="circle-container"><div class="circle" id="giverCircle">انتخاب دهنده</div><div class="arrow"><i class="fas fa-arrow-left fa-2x"></i></div><div class="circle" id="receiverCircle">انتخاب گیرنده</div></div><div class="button-group"><button id="transferConfirm" class="btn btn-primary">تایید انتقال</button><button id="transferCancel" class="btn btn-secondary">انصراف</button></div></div></div>
 <div id="rewardPopup" class="popup"><div class="popup-box"><div class="popup-header"><div class="popup-icon" style="background:var(--success);"><i class="fas fa-gift"></i></div><h3>اعطای پاداش دور</h3></div><div id="rewardAmount" style="text-align: center; font-size: 1.5rem; margin: 20px 0; color: var(--success);"></div><div class="circle-container"><div class="circle pulsing" id="rewardCircle">انتخاب بازیکن</div></div><div class="button-group"><button id="rewardConfirm" class="btn btn-success">تایید پرداخت</button><button id="rewardCancel" class="btn btn-secondary">انصراف</button></div></div></div>
 <div id="bankTxPopup" class="popup"><div class="popup-box"><div class="popup-header"><div class="popup-icon" style="background:var(--accent);"><i class="fas fa-university"></i></div><h3>دریافت یا پرداخت به بانک</h3></div><input type="text" id="bankTxAmountInput" class="input-group" readonly placeholder="مبلغ"><div class="keyboard" id="bankTxNumPad"></div><div class="circle-container"><div class="circle pulsing" id="bankTxCircle">بازیکن</div></div><div class="button-group"><button id="bankPayBtn" class="btn btn-danger">پرداخت به بانک</button><button id="bankReceiveBtn" class="btn btn-success">دریافت از بانک</button><button id="bankTxCancelBtn" class="btn btn-secondary">انصراف</button></div></div></div>
@@ -485,33 +250,64 @@ h2:after {
 <div id="rewardFade" class="fade"><div style="text-align: center; display: flex; flex-direction: column; align-items: center;"><div id="rewardShow" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;"></div><div class="transfer-flow"><div class="dot"></div> <div class="dot"></div> <div class="dot"></div></div><div class="circle filled" id="rewardTo"></div></div></div>
 
 <script>
-// --- JAVASCRIPT LOGIC FROM THE FIRST VERSION ---
-// This code remains functionally identical to the original version.
-// Only minor adjustments to innerHTML generation were made to match the new UI.
-
 document.addEventListener('contextmenu', e => e.preventDefault());
 
 const sections = { start: document.getElementById('start'), game: document.getElementById('game') };
-const popups = { 
-    transfer: document.getElementById('transferPopup'), 
-    reward: document.getElementById('rewardPopup'), 
-    dialog: document.getElementById('dialogPopup'),
-    addPlayer: document.getElementById('addPlayerPopup'),
-    bankTx: document.getElementById('bankTxPopup'),
-};
-const fades = {
-    transfer: document.getElementById('transferFade'),
-    bankTx: document.getElementById('bankTxFade'),
-    reward: document.getElementById('rewardFade'),
-};
+const popups = { transfer: document.getElementById('transferPopup'), reward: document.getElementById('rewardPopup'), dialog: document.getElementById('dialogPopup'), addPlayer: document.getElementById('addPlayerPopup'), bankTx: document.getElementById('bankTxPopup') };
+const fades = { transfer: document.getElementById('transferFade'), bankTx: document.getElementById('bankTxFade'), reward: document.getElementById('rewardFade') };
 
+// --- NEW ROBUST NFC LOGIC ---
 let ndefReader, nfcAbortController = null;
+let scanCallback = null; // This will hold the function to be called on scan
+
+function initializeNFCReader() {
+    if (!('NDEFReader' in window)) {
+        customAlert("مرورگر شما از Web NFC پشتیبانی نمی‌کند. از گوگل کروم در اندروید استفاده کنید.", "خطای NFC");
+        return;
+    }
+    ndefReader = new NDEFReader();
+    ndefReader.onreading = event => {
+        if (!scanCallback) return; // If no one is listening, do nothing
+
+        const decoder = new TextDecoder();
+        const idString = decoder.decode(event.message.records[0].data).split('\n')[0];
+        const id = parseInt(idString);
+        if (isNaN(id)) return;
+        
+        scanCallback(id); // Execute the active callback with the scanned ID
+    };
+}
+
+async function startNFCScan(callback) {
+    if (!ndefReader) {
+        customAlert("NFC Reader مقداردهی اولیه نشده است.", "خطای سیستمی");
+        return;
+    }
+    scanCallback = callback;
+    try {
+        nfcAbortController = new AbortController();
+        await ndefReader.scan({ signal: nfcAbortController.signal });
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            customAlert(`خطا در فعالسازی NFC: ${error.message}.`, "خطای NFC");
+        }
+    }
+}
+
+function stopNFCScan() {
+    scanCallback = null; // Stop listening logically
+    if (nfcAbortController) {
+        nfcAbortController.abort(); // Stop listening physically
+        nfcAbortController = null;
+    }
+}
+// --- END OF NEW NFC LOGIC ---
+
 
 const startMoney = document.getElementById('startMoney');
 const turnReward = document.getElementById('turnReward');
 const startGameBtn = document.getElementById('startGameBtn');
 const NUM_PLAYER_COLORS = 8;
-
 let tempPlayers = [];
 
 const dialogTitle = document.getElementById('dialogTitle'), dialogMessage = document.getElementById('dialogMessage'), dialogButtons = document.getElementById('dialogButtons');
@@ -534,21 +330,16 @@ function customConfirm(message, title = "تاییدیه") {
         document.getElementById('dialogCancel').onclick = () => { popups.dialog.classList.remove('active'); resolve(false); };
     });
 }
-
 function showSection(id) {
     Object.values(sections).forEach(s => s.classList.remove('active'));
     sections[id].classList.add('active');
-    // Control body scroll based on active section
     document.body.style.overflow = (id === 'game') ? 'auto' : 'hidden';
 }
-
 function toEnglishDigits(str) {
   if (typeof str !== 'string') return str;
   const persianArabicMap = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9', '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
   return str.replace(/[۰-۹٠-٩]/g, c => persianArabicMap[c]);
 }
-
-// --- NumPad ---
 function createNumPad(containerId, inputId) {
     const numPadContainer = document.getElementById(containerId);
     const amountInputElement = document.getElementById(inputId);
@@ -563,8 +354,6 @@ function createNumPad(containerId, inputId) {
         numPadContainer.appendChild(btn);
     });
 }
-
-// --- Step 1: Setup and Add Players ---
 function handleInitialScan(scannedId) {
     if (tempPlayers.some(p => p.id === scannedId)) {
         customAlert("این کارت قبلا برای بازیکن دیگری ثبت شده است.");
@@ -578,27 +367,18 @@ function handleInitialScan(scannedId) {
     
     document.getElementById('confirmAddPlayer').onclick = async () => {
         const name = newPlayerNameInput.value.trim();
-        if (!name) {
-            await customAlert("لطفا نام بازیکن را وارد کنید.");
-            return;
-        }
+        if (!name) { await customAlert("لطفا نام بازیکن را وارد کنید."); return; }
         if (tempPlayers.some(p => p.name.toLowerCase() === name.toLowerCase())) {
             popups.addPlayer.classList.remove('active'); 
             await customAlert("این نام قبلاً استفاده شده. لطفاً کارت دیگری اسکن و نام متفاوتی انتخاب کنید.");
             return;
         }
-        
         tempPlayers.push({ id: scannedId, name: name });
         updateScannedPlayersList();
         popups.addPlayer.classList.remove('active');
     };
-    
-    document.getElementById('cancelAddPlayer').onclick = () => {
-        popups.addPlayer.classList.remove('active');
-    };
+    document.getElementById('cancelAddPlayer').onclick = () => { popups.addPlayer.classList.remove('active'); };
 }
-
-// --- JAVASCRIPT MODIFIED for new player list item design ---
 function updateScannedPlayersList() {
     const listEl = document.getElementById('scannedPlayersList');
     listEl.innerHTML = '';
@@ -606,46 +386,31 @@ function updateScannedPlayersList() {
         const item = document.createElement('div');
         const colorClass = `color-${(index % NUM_PLAYER_COLORS) + 1}`;
         item.className = `scanned-player-item ${colorClass}`;
-        
-        // This innerHTML is updated to match the new side-by-side design
-        item.innerHTML = `
-            <span class="player-name">${player.name}</span>
-            <span class="scanned-player-id-tag">کارت #${player.id}</span>
-        `;
+        item.innerHTML = `<span class="player-name">${player.name}</span><span class="scanned-player-id-tag">کارت #${player.id}</span>`;
         listEl.appendChild(item);
     });
-    
     startGameBtn.disabled = tempPlayers.length < 2;
 }
-
 startGameBtn.onclick = () => {
     const startMoneyVal = parseInt(toEnglishDigits(startMoney.value).replace(/,/g, ''));
     const rewardVal = parseInt(toEnglishDigits(turnReward.value).replace(/,/g, ''));
     if (isNaN(startMoneyVal) || startMoneyVal <= 0 || isNaN(rewardVal) || rewardVal <= 0) {
-        customAlert("مقادیر پولی را به درستی و بزرگتر از صفر وارد کنید.");
-        return;
+        customAlert("مقادیر پولی را به درستی و بزرگتر از صفر وارد کنید."); return;
     }
-    
     const finalPlayers = tempPlayers.map(p => ({ ...p, balance: startMoneyVal, bankrupt: false }));
-
     localStorage.setItem('players', JSON.stringify(finalPlayers));
     localStorage.setItem('startMoney', startMoneyVal);
     localStorage.setItem('turnReward', rewardVal);
-
     stopNFCScan();
     renderPlayerList();
     showSection('game');
 };
-
-
-// --- Step 2: Game Screen ---
 function triggerBalanceAnimation(element, animClass) {
     if (!element) return;
-    element.classList.remove('balance-up', 'balance-down', 'balance-up-delayed', 'balance-down-delayed');
+    element.classList.remove('balance-up', 'balance-down');
     void element.offsetWidth; 
     element.classList.add(animClass);
 }
-
 function renderPlayerList() {
     const container = document.getElementById('playerList');
     container.innerHTML = '';
@@ -653,76 +418,32 @@ function renderPlayerList() {
         const card = document.createElement('div');
         const colorClass = `color-${(index % NUM_PLAYER_COLORS) + 1}`;
         card.className = `player-card ${colorClass}`;
-        
         card.dataset.playerId = p.id;
         if (p.bankrupt) card.classList.add('bankrupt');
-
-        card.innerHTML = `
-            <div class="player-card-header">
-                <span class="player-name">${p.name}</span>
-                <span class="player-id-tag">#${p.id}</span>
-            </div>
-            <div class="player-card-body">
-                <label class="text-secondary">موجودی</label>
-                <div class="player-balance" data-balance-id="${p.id}">${p.balance.toLocaleString('fa-IR')}</div>
-            </div>
-        `;
-        
+        card.innerHTML = `<div class="player-card-header"><span class="player-name">${p.name}</span><span class="player-id-tag">#${p.id}</span></div><div class="player-card-body"><label class="text-secondary">موجودی</label><div class="player-balance" data-balance-id="${p.id}">${p.balance.toLocaleString('fa-IR')}</div></div>`;
         card.addEventListener('contextmenu', async e => {
-            e.preventDefault();
-            if (p.bankrupt) return; 
+            e.preventDefault(); if (p.bankrupt) return; 
             if (await customConfirm(`آیا از ورشکستگی بازیکن «${p.name}» مطمئن هستید؟ این عمل غیرقابل بازگشت است.`, "تایید ورشکستگی")) {
                 let players = JSON.parse(localStorage.getItem('players'));
                 const target = players.find(pl => pl.id === p.id);
-                if (target) {
-                    target.bankrupt = true;
-                    localStorage.setItem('players', JSON.stringify(players));
-                    updatePlayerDisplays(players);
-                }
+                if (target) { target.bankrupt = true; localStorage.setItem('players', JSON.stringify(players)); updatePlayerDisplays(players); }
             }
         });
         container.appendChild(card);
     });
 }
-// The rest of the JavaScript (NFC logic, popups, transactions, etc.) is the same as before.
-// Only the `updateScannedPlayersList` and `showSection` functions were modified.
-// All other functions are copied here for completeness.
 function updatePlayerDisplays(newPlayers, oldPlayers) {
     newPlayers.forEach(p => {
-        const card = document.querySelector(`.player-card[data-player-id="${p.id}"]`);
-        if (!card) return;
+        const card = document.querySelector(`.player-card[data-player-id="${p.id}"]`); if (!card) return;
         const balanceEl = card.querySelector(`.player-balance[data-balance-id="${p.id}"]`);
         if (p.bankrupt) card.classList.add('bankrupt'); else card.classList.remove('bankrupt');
-        
         const oldPlayer = oldPlayers?.find(op => op.id === p.id);
         balanceEl.textContent = p.balance.toLocaleString('fa-IR');
-        
         if (oldPlayer && p.balance !== oldPlayer.balance && !p.bankrupt) {
-            const animClass = p.balance > oldPlayer.balance ? 'balance-up' : 'balance-down';
-            triggerBalanceAnimation(balanceEl, animClass);
+            triggerBalanceAnimation(balanceEl, p.balance > oldPlayer.balance ? 'balance-up' : 'balance-down');
         }
     });
 }
-async function startNFCScan(onRead) {
-    if (!('NDEFReader' in window)) { customAlert("مرورگر شما از Web NFC پشتیبانی نمی‌کند. از گوگل کروم در اندروید استفاده کنید.", "خطای NFC"); return; }
-    try {
-        if (!ndefReader) ndefReader = new NDEFReader();
-        nfcAbortController = new AbortController();
-        await ndefReader.scan({ signal: nfcAbortController.signal });
-        ndefReader.onreading = event => {
-            const decoder = new TextDecoder();
-            const idString = decoder.decode(event.message.records[0].data).split('\n')[0];
-            const id = parseInt(idString);
-            if (isNaN(id)) return;
-            if (sections.game.classList.contains('active')) {
-                const player = JSON.parse(localStorage.getItem('players')).find(p => p.id === id);
-                if (player && !player.bankrupt) onRead(player);
-                else if (player && player.bankrupt) customAlert(`بازیکن «${player.name}» ورشکسته شده و نمی‌تواند در تراکنش‌ها شرکت کند.`);
-            } else if (sections.start.classList.contains('active')) { onRead(id); }
-        };
-    } catch (error) { if (error.name !== 'AbortError') { customAlert(`خطا در فعالسازی NFC: ${error.message}.`, "خطای NFC"); } }
-}
-function stopNFCScan() { if (nfcAbortController) { nfcAbortController.abort(); nfcAbortController = null; } }
 function animateCircleName(circle, name) {
     circle.textContent = name;
     circle.classList.add('filled', 'name-animating');
@@ -738,7 +459,11 @@ function resetTransferPopup() {
 }
 document.getElementById('transferBtn').onclick = () => {
     popups.transfer.classList.add('active'); giverCircle.classList.add('pulsing');
-    startNFCScan(player => {
+    startNFCScan(id => {
+        const players = JSON.parse(localStorage.getItem('players'));
+        const player = players.find(p => p.id === id);
+        if (!player) return;
+        if (player.bankrupt) { customAlert(`بازیکن «${player.name}» ورشکسته است.`); return; }
         if (!giverTag) { giverTag = player; animateCircleName(giverCircle, player.name); giverCircle.classList.remove('pulsing'); receiverCircle.classList.add('pulsing'); } 
         else if (!receiverTag && player.id !== giverTag.id) { receiverTag = player; animateCircleName(receiverCircle, player.name); receiverCircle.classList.remove('pulsing'); stopNFCScan(); } 
         else if (player.id === giverTag.id) { customAlert("کارت دهنده و گیرنده باید متفاوت باشند."); }
@@ -775,7 +500,13 @@ document.getElementById('rewardBtn').onclick = () => {
     const turnRewardVal = parseInt(localStorage.getItem('turnReward'));
     document.getElementById('rewardAmount').textContent = `+${turnRewardVal.toLocaleString('fa-IR')}`;
     popups.reward.classList.add('active'); rewardCircle.classList.add('pulsing');
-    startNFCScan(player => { rewardTag = player; animateCircleName(rewardCircle, player.name); rewardCircle.classList.remove('pulsing'); stopNFCScan(); });
+    startNFCScan(id => {
+        const players = JSON.parse(localStorage.getItem('players'));
+        const player = players.find(p => p.id === id);
+        if (!player) return;
+        if (player.bankrupt) { customAlert(`بازیکن «${player.name}» ورشکسته است.`); return; }
+        rewardTag = player; animateCircleName(rewardCircle, player.name); rewardCircle.classList.remove('pulsing'); stopNFCScan();
+    });
 };
 document.getElementById('rewardCancel').onclick = resetRewardPopup;
 document.getElementById('rewardConfirm').onclick = () => {
@@ -800,7 +531,13 @@ function resetBankTxPopup() {
 }
 document.getElementById('bankTxBtn').onclick = () => {
     popups.bankTx.classList.add('active'); bankTxCircle.classList.add('pulsing');
-    startNFCScan(player => { bankTxPlayerTag = player; animateCircleName(bankTxCircle, player.name); bankTxCircle.classList.remove('pulsing'); stopNFCScan(); });
+    startNFCScan(id => {
+        const players = JSON.parse(localStorage.getItem('players'));
+        const player = players.find(p => p.id === id);
+        if (!player) return;
+        if (player.bankrupt) { customAlert(`بازیکن «${player.name}» ورشکسته است.`); return; }
+        bankTxPlayerTag = player; animateCircleName(bankTxCircle, player.name); bankTxCircle.classList.remove('pulsing'); stopNFCScan();
+    });
 };
 document.getElementById('bankTxCancelBtn').onclick = resetBankTxPopup;
 document.getElementById('bankPayBtn').onclick = () => handleBankTransaction('pay');
@@ -833,11 +570,9 @@ function showBankTxAnimation(giver, receiver, amount, type) {
     };
     setupParty(giverContainer, giver); setupParty(receiverContainer, receiver);
     amountEl.textContent = (type === 'pay' ? '-' : '+') + amount.toLocaleString('fa-IR');
-    amountEl.style.opacity = '0'; giverContainer.classList.remove('fade-entity-anim', 'fade-receiver-anim');
-    receiverContainer.classList.remove('fade-entity-anim', 'fade-receiver-anim'); void giverContainer.offsetWidth;
-    fade.classList.add('active');
+    amountEl.style.opacity = '0'; fade.classList.add('active');
     setTimeout(() => { giverContainer.classList.add('fade-entity-anim'); receiverContainer.classList.add('fade-entity-anim', 'fade-receiver-anim'); amountEl.style.opacity = '1'; }, 50);
-    setTimeout(() => fade.classList.remove('active'), 2500);
+    setTimeout(() => { fade.classList.remove('active'), 2500});
 }
 document.getElementById('endGame').onclick = async () => {
     if (await customConfirm("آیا برای شروع یک بازی جدید، تمام اطلاعات پاک شود؟", "پایان بازی")) {
@@ -857,8 +592,14 @@ document.addEventListener('fullscreenchange', () => {
 });
 function init() {
     createNumPad('numPad', 'amountInput'); createNumPad('bankTxNumPad', 'bankTxAmountInput');
-    if (localStorage.getItem('players')) { renderPlayerList(); showSection('game'); } 
-    else { showSection('start'); startNFCScan(handleInitialScan); }
+    initializeNFCReader(); // Setup the one-time NFC listener
+    if (localStorage.getItem('players')) {
+        renderPlayerList();
+        showSection('game');
+    } else {
+        showSection('start');
+        startNFCScan(handleInitialScan); // Set the initial callback for adding players
+    }
 }
 init();
 </script>
