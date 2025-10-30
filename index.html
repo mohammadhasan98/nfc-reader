@@ -80,13 +80,13 @@ button {
   border-radius: 25px;
   padding: 12px 28px;
   font-size:16px;
-  margin: 10px auto;
+  margin: 0; /* Changed from margin: 10px auto */
   display:block;
   cursor:pointer;
   transition: all .2s ease-in-out;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  min-width: 180px;
+  width: 100%;
 }
 button:active { transform: translateY(1px) scale(0.98); }
 button:disabled {
@@ -110,15 +110,19 @@ button:disabled {
     font-size: 18px;
     font-weight: 700;
     border-radius: 30px;
-    margin-top: 30px;
+    margin: 30px auto 0;
+    min-width: 180px;
+    width: auto;
 }
+
+#endGame { margin: 30px auto 0; max-width: 300px; }
 
 .floating-btn {
   position: fixed; top: 15px; left: 15px;
   width: 50px; height: 50px; border-radius: 50%;
   background: var(--secondary); color: var(--text);
   display: flex; justify-content: center; align-items: center;
-  padding: 0; margin: 0; z-index: 1000; min-width: unset;
+  padding: 0; margin: 0; z-index: 1000;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 .floating-btn svg { width: 24px; height: 24px; }
@@ -191,6 +195,20 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     flex-grow: 1;
     text-align: right;
 }
+
+/* --- چیدمان جدید دکمه‌های بازی --- */
+#game-actions-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+#game-actions-container button { height: 100%; }
+#transferBtn { grid-column: 2 / 3; grid-row: 1 / 3; font-size: 18px; padding: 20px; }
+#rewardBtn { grid-column: 1 / 2; grid-row: 1 / 2; }
+#bankTxBtn { grid-column: 1 / 2; grid-row: 2 / 3; }
+
 
 /* --- لیست و کارت‌های بازیکنان (صفحه بازی) --- */
 #playerList {
@@ -302,7 +320,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     display: flex; justify-content: center; gap: 10px;
     margin-top: 20px; flex-wrap: wrap;
 }
-.popup-box .button-group button { min-width: 120px; }
+.popup-box .button-group button { min-width: 120px; width: auto; }
 
 /* --- کیبورد و دایره‌ها --- */
 .circle {
@@ -330,7 +348,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 .keyboard button{ 
     border-radius:15px; padding:14px; font-size:20px; background: var(--secondary);
-    box-shadow: none; margin: 0; min-width: auto;
+    box-shadow: none; margin: 0; min-width: auto; width: 100%;
 }
 .keyboard button:hover { background: var(--secondary-hover); transform: none; }
 .keyboard button:active { transform: scale(0.95); background: var(--primary); }
@@ -352,6 +370,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     position: absolute; left: 50%; transform: translateX(-50%); top: -40px;
     font-size: 24px; font-weight: bold; opacity: 0;
     transition: opacity 0.5s ease 0.5s;
+    z-index: 3;
 }
 
 .bank-entity {
@@ -369,7 +388,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 .fade-entity-anim { animation: pulse 0.8s ease-in-out forwards; animation-delay: 0.1s; opacity: 1 !important; transform: scale(1); }
 .fade-receiver-anim { animation-delay: 1.5s !important; }
 
-/* New Flow Animation */
+
+/* New Flow Animation & Z-INDEX FIX */
 .transfer-flow {
     position: absolute;
     left: 50%;
@@ -377,7 +397,17 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     transform: translate(-50%, -50%);
     width: 100px;
     height: 10px;
+    z-index: 1; /* لایه زیرین */
 }
+/* Z-INDEX FIX: Make sure entities are on top */
+#transferInfo .circle, 
+#bankTxInfo .bank-entity,
+#rewardFade .circle {
+    position: relative; /* Must be positioned for z-index to work */
+    z-index: 2; /* لایه رویی */
+}
+
+
 .dot {
     position: absolute;
     width: 10px;
@@ -443,619 +473,703 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 </section>
 
 <section id="game">
-  <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom: 30px;">
+  <div id="game-actions-container">
     <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
     <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
-    <button id="bankTxBtn" class="btn-primary">🏦 پرداخت/دریافت</button>
+    <button id="bankTxBtn" class="btn-primary">🏦 دریافت/پرداخت به بانک</button>
   </div>
   <div id="playerList"></div>
-  <button id="endGame" class="btn-danger" style="margin-top: 30px;">اتمام و شروع مجدد 🔄</button>
+  <button id="endGame" class="btn-danger">پایان بازی</button>
 </section>
 
 <!-- Popups -->
 <div id="transferPopup" class="popup">
   <div class="popup-box">
-    <h3>💳 کارت به کارت</h3>
-    <input type="text" id="amountInput" readonly placeholder="مبلغ">
-    <div class="keyboard" id="numPad"></div>
-    <div style="display:flex; justify-content:space-around; align-items: center; margin-top:10px;">
-      <div class="circle" id="giverCircle">دهنده</div>
-      <p style="font-size: 30px; margin: 0 10px;">←</p>
-      <div class="circle" id="receiverCircle">گیرنده</div>
+    <h2 id="transferTitle">💸 کارت به کارت</h2>
+    <div id="transferCircles" style="display:flex; justify-content:center; gap:20px;">
+      <div><label>از</label><div id="fromCircle" class="circle">کارت بکشید</div></div>
+      <div><label>به</label><div id="toCircle" class="circle">کارت بکشید</div></div>
     </div>
+    <input type="text" inputmode="numeric" id="transferAmount" placeholder="مبلغ را وارد کنید">
     <div class="button-group">
-        <button id="transferConfirm" class="btn-primary">انتقال</button>
-        <button id="transferCancel" class="btn-secondary">انصراف</button>
+      <button id="confirmTransfer" class="btn-success" disabled>تایید</button>
+      <button onclick="hidePopup('transferPopup')" class="btn-secondary">انصراف</button>
     </div>
   </div>
 </div>
 
 <div id="rewardPopup" class="popup">
   <div class="popup-box">
-    <h3>🎁 دریافت پاداش دور</h3>
-    <div id="rewardAmount" style="font-size:22px;margin:20px;"></div>
-    <div class="circle" id="rewardCircle">بازیکن</div>
+    <h2 id="rewardTitle">🎁 پاداش دور</h2>
+    <div id="rewardCircle" class="circle">کارت بکشید</div>
     <div class="button-group">
-        <button id="rewardConfirm" class="btn-primary">تایید</button>
-        <button id="rewardCancel" class="btn-secondary">انصراف</button>
+      <button id="confirmReward" class="btn-success" disabled>تایید</button>
+      <button onclick="hidePopup('rewardPopup')" class="btn-secondary">انصراف</button>
     </div>
   </div>
 </div>
 
 <div id="bankTxPopup" class="popup">
     <div class="popup-box">
-      <h3>🏦 دریافت یا پرداخت به بانک</h3>
-      <input type="text" id="bankTxAmountInput" readonly placeholder="مبلغ">
-      <div class="keyboard" id="bankTxNumPad"></div>
-      <div class="circle" id="bankTxCircle">بازیکن</div>
-      <div class="button-group">
-          <button id="bankPayBtn" class="btn-danger">پرداخت به بانک</button>
-          <button id="bankReceiveBtn" class="btn-success">دریافت از بانک</button>
-          <button id="bankTxCancelBtn" class="btn-secondary">انصراف</button>
-      </div>
-    </div>
-</div>
-
-<div id="dialogPopup" class="popup">
-    <div class="popup-box">
-        <h3 id="dialogTitle">توجه!</h3>
-        <p id="dialogMessage"></p>
-        <div class="button-group" id="dialogButtons"></div>
-    </div>
-</div>
-
-<div id="addPlayerPopup" class="popup">
-    <div class="popup-box">
-        <h3>افزودن بازیکن جدید</h3>
-        <p>لطفا نام بازیکن را وارد کنید:</p>
-        <input type="text" id="newPlayerNameInput" placeholder="نام بازیکن">
+        <h2 id="bankTxPopupTitle">دریافت یا پرداخت به بانک</h2>
+        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+            <button id="bankTxTypeReceive" class="btn-primary">دریافت از بانک</button>
+            <button id="bankTxTypePay" class="btn-secondary">پرداخت به بانک</button>
+        </div>
+        <div id="bankTxCircle" class="circle">کارت بازیکن را بکشید</div>
+        <input type="text" inputmode="numeric" id="bankTxAmount" placeholder="مبلغ را وارد کنید">
         <div class="button-group">
-            <button id="confirmAddPlayer" class="btn-primary">تایید</button>
-            <button id="cancelAddPlayer" class="btn-secondary">انصراف</button>
+            <button id="confirmBankTx" class="btn-success" disabled>تایید</button>
+            <button onclick="hidePopup('bankTxPopup')" class="btn-secondary">انصراف</button>
         </div>
     </div>
 </div>
 
-<!-- Fade Animations -->
-<div id="transferFade" class="fade">
-  <div id="transferInfo">
-    <div id="fadeAmount"></div>
-    <div class="circle filled" id="fadeGiver"></div>
-    <div class="transfer-flow">
-      <div class="dot"></div> <div class="dot"></div> <div class="dot"></div>
+
+<div id="dialogPopup" class="popup">
+  <div class="popup-box">
+    <h2 id="dialogTitle">توجه</h2>
+    <p id="dialogMessage"></p>
+    <div class="button-group">
+      <button id="dialogConfirm" class="btn-primary">باشه</button>
+      <button id="dialogCancel" class="btn-secondary" style="display:none;">انصراف</button>
     </div>
-    <div class="circle filled" id="fadeReceiver"></div>
   </div>
 </div>
 
-<div id="bankTxFade" class="fade">
-  <div id="bankTxInfo">
-    <div id="fadeBankTxAmount"></div>
-    <div class="bank-entity" id="fadeBankTxGiver"></div>
-    <div class="transfer-flow">
-      <div class="dot"></div> <div class="dot"></div> <div class="dot"></div>
+<div id="addPlayerPopup" class="popup">
+    <div class="popup-box">
+        <h2>افزودن بازیکن جدید</h2>
+        <p>کارت جدید با شماره <strong id="newPlayerId"></strong> اسکن شد.</p>
+        <input type="text" id="newPlayerName" placeholder="نام بازیکن را وارد کنید">
+        <div class="button-group">
+            <button id="confirmAddPlayer" class="btn-success">افزودن</button>
+            <button onclick="hidePopup('addPlayerPopup')" class="btn-secondary">انصراف</button>
+        </div>
     </div>
-    <div class="bank-entity" id="fadeBankTxReceiver"></div>
+</div>
+
+<!-- Fade Animation Screens -->
+<div id="transferFade" class="fade">
+  <span id="fadeAmount"></span>
+  <div id="transferInfo">
+    <div id="fadeFromCircle" class="circle"></div>
+    <div class="transfer-flow"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div id="fadeToCircle" class="circle"></div>
   </div>
 </div>
 
 <div id="rewardFade" class="fade">
-  <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-    <div id="rewardShow" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;"></div>
-    <div class="transfer-flow">
-      <div class="dot"></div> <div class="dot"></div> <div class="dot"></div>
+  <div class="bank-entity"><div class="bank-text-label">بانک</div></div>
+  <div class="transfer-flow"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  <div class="circle"></div>
+</div>
+
+<div id="bankTxFade" class="fade">
+    <span id="fadeBankTxAmount"></span>
+    <div id="bankTxInfo">
+        <div id="fadeBankTxGiver"></div>
+        <div class="transfer-flow"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div id="fadeBankTxReceiver"></div>
     </div>
-    <div class="circle filled" id="rewardTo"></div>
-  </div>
 </div>
 
 
 <script>
-document.addEventListener('contextmenu', e => e.preventDefault());
-
-const sections = { start: document.getElementById('start'), game: document.getElementById('game') };
-const popups = { 
-    transfer: document.getElementById('transferPopup'), 
-    reward: document.getElementById('rewardPopup'), 
-    dialog: document.getElementById('dialogPopup'),
-    addPlayer: document.getElementById('addPlayerPopup'),
-    bankTx: document.getElementById('bankTxPopup'),
-};
-const fades = {
-    transfer: document.getElementById('transferFade'),
-    bankTx: document.getElementById('bankTxFade'),
-    reward: document.getElementById('rewardFade'),
-};
-
-let ndefReader, nfcAbortController = null;
-
-const startMoney = document.getElementById('startMoney');
-const turnReward = document.getElementById('turnReward');
-const startGameBtn = document.getElementById('startGameBtn');
-const NUM_PLAYER_COLORS = 8;
-
-let tempPlayers = [];
-
-const dialogTitle = document.getElementById('dialogTitle'), dialogMessage = document.getElementById('dialogMessage'), dialogButtons = document.getElementById('dialogButtons');
-function customAlert(message, title = "توجه") {
-    dialogTitle.textContent = title;
-    dialogMessage.textContent = message;
-    dialogButtons.innerHTML = `<button id="dialogOk" class="btn-primary">باشه</button>`;
-    popups.dialog.classList.add('active');
-    return new Promise(resolve => {
-        document.getElementById('dialogOk').onclick = () => { popups.dialog.classList.remove('active'); resolve(); };
-    });
-}
-function customConfirm(message, title = "تاییدیه") {
-    dialogTitle.textContent = title;
-    dialogMessage.textContent = message;
-    dialogButtons.innerHTML = `<button id="dialogConfirm" class="btn-primary">بله</button><button id="dialogCancel" class="btn-secondary">خیر</button>`;
-    popups.dialog.classList.add('active');
-    return new Promise(resolve => {
-        document.getElementById('dialogConfirm').onclick = () => { popups.dialog.classList.remove('active'); resolve(true); };
-        document.getElementById('dialogCancel').onclick = () => { popups.dialog.classList.remove('active'); resolve(false); };
-    });
-}
-
-function showSection(id) {
-    Object.values(sections).forEach(s => s.classList.remove('active'));
-    sections[id].classList.add('active');
-}
-
-function toEnglishDigits(str) {
-  if (typeof str !== 'string') return str;
-  const persianArabicMap = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9', '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
-  return str.replace(/[۰-۹٠-٩]/g, c => persianArabicMap[c]);
-}
-
-// --- کیبورد عددی ---
-function createNumPad(containerId, inputId) {
-    const numPadContainer = document.getElementById(containerId);
-    const amountInputElement = document.getElementById(inputId);
-    numPadContainer.innerHTML = '';
-    ['۱','۲','۳','۴','۵','۶','۷','۸','۹','پاک','۰','⌫'].forEach(key => {
-        const btn = document.createElement('button'); btn.textContent = key;
-        if (key === '⌫') btn.onclick = () => amountInputElement.value = amountInputElement.value.slice(0, -1);
-        else if (key === 'پاک') btn.onclick = () => amountInputElement.value = '';
-        else btn.onclick = () => amountInputElement.value += key;
-        numPadContainer.appendChild(btn);
-    });
-}
-
-// --- مرحله ۱: تنظیمات و افزودن بازیکنان ---
-function handleInitialScan(scannedId) {
-    if (tempPlayers.some(p => p.id === scannedId)) {
-        customAlert("این کارت قبلا برای بازیکن دیگری ثبت شده است.");
-        return;
-    }
-    
-    const newPlayerNameInput = document.getElementById('newPlayerNameInput');
-    newPlayerNameInput.value = '';
-    popups.addPlayer.classList.add('active');
-    
-    document.getElementById('confirmAddPlayer').onclick = async () => {
-        const name = newPlayerNameInput.value.trim();
-        if (!name) {
-            await customAlert("لطفا نام بازیکن را وارد کنید.");
-            return;
-        }
-        if (tempPlayers.some(p => p.name.toLowerCase() === name.toLowerCase())) {
-            popups.addPlayer.classList.remove('active'); 
-            await customAlert("این نام قبلاً استفاده شده. لطفاً کارت دیگری اسکن و نام متفاوتی انتخاب کنید.");
-            return;
-        }
-        
-        tempPlayers.push({ id: scannedId, name: name });
-        updateScannedPlayersList();
-        popups.addPlayer.classList.remove('active');
+document.addEventListener('DOMContentLoaded', () => {
+    // ---- Global State & DOM Elements ----
+    const sections = {
+        start: document.getElementById('start'),
+        game: document.getElementById('game'),
     };
-    
-    document.getElementById('cancelAddPlayer').onclick = () => {
-        popups.addPlayer.classList.remove('active');
+    const popups = {
+        transfer: document.getElementById('transferPopup'),
+        reward: document.getElementById('rewardPopup'),
+        bankTx: document.getElementById('bankTxPopup'),
+        dialog: document.getElementById('dialogPopup'),
+        addPlayer: document.getElementById('addPlayerPopup'),
     };
-}
+    const fades = {
+        transfer: document.getElementById('transferFade'),
+        reward: document.getElementById('rewardFade'),
+        bankTx: document.getElementById('bankTxFade'),
+    };
 
-function updateScannedPlayersList() {
-    const listEl = document.getElementById('scannedPlayersList');
-    listEl.innerHTML = '';
-    tempPlayers.forEach((player, index) => {
-        const item = document.createElement('div');
-        item.className = 'scanned-player-item';
-        item.classList.add(`color-${(index % NUM_PLAYER_COLORS) + 1}`);
-        item.innerHTML = `
-            <span class="player-id">${player.id}</span>
-            <span class="player-name">${player.name}</span>
-        `;
-        listEl.appendChild(item);
-    });
+    let players = [];
+    let gameState = {
+        initialMoney: 15000,
+        turnReward: 2000,
+        scanTarget: null, // 'from', 'to', 'reward', 'addPlayer', 'bankTx'
+        transfer: { from: null, to: null, amount: 0 },
+        reward: { player: null, amount: 0 },
+        bankTx: { player: null, amount: 0, type: 'receive' }, // 'receive' or 'pay'
+        nextPlayerColorIndex: 1,
+    };
+    let nfcAbortController = null;
+
+    // --- Formatters & Helpers ---
+    const formatMoney = (amount) => new Intl.NumberFormat('fa-IR').format(amount);
+    const parseFormattedNumber = (str) => parseInt(str.replace(/,/g, ''), 10) || 0;
     
-    startGameBtn.disabled = tempPlayers.length < 2;
-}
-
-startGameBtn.onclick = () => {
-    const startMoneyVal = parseInt(toEnglishDigits(startMoney.value).replace(/,/g, ''));
-    const rewardVal = parseInt(toEnglishDigits(turnReward.value).replace(/,/g, ''));
-    if (isNaN(startMoneyVal) || startMoneyVal <= 0 || isNaN(rewardVal) || rewardVal <= 0) {
-        customAlert("مقادیر پولی را به درستی و بزرگتر از صفر وارد کنید.");
-        return;
-    }
-    
-    const finalPlayers = tempPlayers.map(p => ({ ...p, balance: startMoneyVal, bankrupt: false }));
-
-    localStorage.setItem('players', JSON.stringify(finalPlayers));
-    localStorage.setItem('startMoney', startMoneyVal);
-    localStorage.setItem('turnReward', rewardVal);
-
-    stopNFCScan();
-    renderPlayerList();
-    showSection('game');
-};
-
-
-// --- مرحله ۳: صفحه بازی ---
-function triggerBalanceAnimation(element, animClass) {
-    if (!element) return;
-    element.classList.remove('balance-up', 'balance-down', 'balance-up-delayed', 'balance-down-delayed');
-    void element.offsetWidth; 
-    element.classList.add(animClass);
-}
-
-function renderPlayerList() {
-    const container = document.getElementById('playerList');
-    container.innerHTML = '';
-    JSON.parse(localStorage.getItem('players')).forEach((p, index) => {
-        const card = document.createElement('div');
-        card.className = 'player-card';
-        card.classList.add(`color-${(index % NUM_PLAYER_COLORS) + 1}`);
-
-        card.dataset.playerId = p.id;
-        card.style.animationDelay = `${index * 100}ms`;
-        if (p.bankrupt) card.classList.add('bankrupt');
-
-        card.innerHTML = `
-            <div class="player-card-header">
-                <span class="player-name">${p.name}</span>
-                <span class="player-id-tag">${p.id}</span>
-            </div>
-            <div class="player-card-body">
-                <label>موجودی</label>
-                <div class="player-balance" data-balance-id="${p.id}">${p.balance.toLocaleString('fa-IR')}</div>
-            </div>
-        `;
-        
-        card.addEventListener('contextmenu', async e => {
-            e.preventDefault();
-            if (p.bankrupt) return; 
-            if (await customConfirm(`آیا از ورشکستگی بازیکن «${p.name}» مطمئن هستید؟`)) {
-                let players = JSON.parse(localStorage.getItem('players'));
-                const target = players.find(pl => pl.id === p.id);
-                if (target) {
-                    target.bankrupt = true;
-                    localStorage.setItem('players', JSON.stringify(players));
-                    updatePlayerDisplays(players);
-                }
+    // Auto-format number inputs
+    document.querySelectorAll('input[inputmode="numeric"]').forEach(input => {
+        input.addEventListener('input', (e) => {
+            let value = parseFormattedNumber(e.target.value);
+            if (!isNaN(value)) {
+                e.target.value = formatMoney(value);
+            } else {
+                e.target.value = '';
             }
         });
-        container.appendChild(card);
     });
-}
 
-function updatePlayerDisplays(newPlayers, oldPlayers) {
-    newPlayers.forEach(p => {
-        const card = document.querySelector(`.player-card[data-player-id="${p.id}"]`);
-        if (!card) return;
-        const balanceEl = card.querySelector(`.player-balance[data-balance-id="${p.id}"]`);
-        if (p.bankrupt) card.classList.add('bankrupt'); else card.classList.remove('bankrupt');
-        
-        const oldPlayer = oldPlayers?.find(op => op.id === p.id);
-        balanceEl.textContent = p.balance.toLocaleString('fa-IR');
-        
-        if (oldPlayer && p.balance !== oldPlayer.balance) {
-            const animClass = p.balance > oldPlayer.balance ? 'balance-up' : 'balance-down';
-            triggerBalanceAnimation(balanceEl, animClass);
-        }
-    });
-}
+    // ---- Page/Section Navigation ----
+    const showSection = (sectionId) => {
+        Object.values(sections).forEach(s => s.classList.remove('active'));
+        sections[sectionId].classList.add('active');
+    };
 
+    const showPopup = (popupId) => { 
+        if(popups[popupId]) popups[popupId].classList.add('active'); 
+    };
+    const hidePopup = (popupId) => { 
+        if(popups[popupId]) popups[popupId].classList.remove('active'); 
+    };
+    
+    const showDialog = (title, message, onConfirm, showCancel = false) => {
+        document.getElementById('dialogTitle').textContent = title;
+        document.getElementById('dialogMessage').innerHTML = message;
+        const confirmBtn = document.getElementById('dialogConfirm');
+        const cancelBtn = document.getElementById('dialogCancel');
 
-// --- منطق NFC ---
-async function startNFCScan(onRead) {
-    if (!('NDEFReader' in window)) {
-        customAlert("مرورگر شما از Web NFC پشتیبانی نمی‌کند. از گوگل کروم در اندروید استفاده کنید.", "خطای NFC");
-        return;
-    }
-    try {
-        if (!ndefReader) ndefReader = new NDEFReader();
-        nfcAbortController = new AbortController();
-        await ndefReader.scan({ signal: nfcAbortController.signal });
-        ndefReader.onreading = event => {
-            const decoder = new TextDecoder();
-            const idString = decoder.decode(event.message.records[0].data).split('\n')[0];
-            const id = parseInt(idString);
-            if (isNaN(id)) return;
-            
-            if (sections.game.classList.contains('active')) {
-                const player = JSON.parse(localStorage.getItem('players')).find(p => p.id === id);
-                if (player && !player.bankrupt) onRead(player);
-            } else if (sections.start.classList.contains('active')) {
-                onRead(id);
-            }
+        const confirmHandler = () => {
+            hidePopup('dialog');
+            if(onConfirm) onConfirm();
+            confirmBtn.removeEventListener('click', confirmHandler);
+            cancelBtn.removeEventListener('click', cancelHandler);
         };
-    } catch (error) {
-        customAlert(`خطا در فعالسازی NFC: ${error.message}.`, "خطای NFC");
-    }
-}
-function stopNFCScan() { if (nfcAbortController) { nfcAbortController.abort(); nfcAbortController = null; } }
-
-function animateCircleName(circle, name) {
-    circle.textContent = name;
-    circle.classList.add('filled', 'name-animating');
-    circle.addEventListener('animationend', () => circle.classList.remove('name-animating'), { once: true });
-}
-
-// --- کارت به کارت ---
-let giverTag = null, receiverTag = null;
-const giverCircle = document.getElementById('giverCircle'), receiverCircle = document.getElementById('receiverCircle');
-function resetTransferPopup() {
-    stopNFCScan();
-    giverTag = receiverTag = null;
-    giverCircle.textContent = 'دهنده';
-    receiverCircle.textContent = 'گیرنده';
-    giverCircle.classList.remove('filled', 'pulsing');
-    receiverCircle.classList.remove('filled', 'pulsing');
-    document.getElementById('amountInput').value = '';
-    popups.transfer.classList.remove('active');
-}
-document.getElementById('transferBtn').onclick = () => {
-    popups.transfer.classList.add('active');
-    giverCircle.classList.add('pulsing');
-    startNFCScan(player => {
-        if (!giverTag) { 
-            giverTag = player; 
-            animateCircleName(giverCircle, player.name); 
-            giverCircle.classList.remove('pulsing');
-            receiverCircle.classList.add('pulsing');
-        } 
-        else if (!receiverTag && player.id !== giverTag.id) { 
-            receiverTag = player; 
-            animateCircleName(receiverCircle, player.name); 
-            receiverCircle.classList.remove('pulsing');
-            stopNFCScan(); 
-        }
-    });
-};
-document.getElementById('transferCancel').onclick = resetTransferPopup;
-
-document.getElementById('transferConfirm').onclick = () => {
-    const amount = parseInt(toEnglishDigits(document.getElementById('amountInput').value));
-    if (!giverTag || !receiverTag) { customAlert("کارت دهنده و گیرنده را اسکن کنید."); return; }
-    if (isNaN(amount) || amount <= 0) { customAlert("مبلغ انتقال را به درستی وارد کنید."); return; }
-    
-    let players = JSON.parse(localStorage.getItem('players'));
-    const giver = players.find(p => p.id === giverTag.id);
-    const receiver = players.find(p => p.id === receiverTag.id);
-
-    if (giver.balance < amount) { customAlert(`موجودی «${giver.name}» کافی نیست!`); return; }
-    
-    giver.balance -= amount;
-    receiver.balance += amount;
-    localStorage.setItem('players', JSON.stringify(players));
-    
-    showTransferAnimation(giver, receiver, amount); 
-    resetTransferPopup();
-};
-
-function showTransferAnimation(giver, receiver, amount) {
-    const fade = fades.transfer;
-    const giverEl = document.getElementById('fadeGiver');
-    const receiverEl = document.getElementById('fadeReceiver');
-    const amountEl = document.getElementById('fadeAmount');
-    
-    giverEl.textContent = giver.name; receiverEl.textContent = receiver.name;
-    amountEl.textContent = amount.toLocaleString('fa-IR');
-    
-    [giverEl, receiverEl].forEach(el => el.className = el.className.split(' ')[0] + ' filled circle');
-    amountEl.style.opacity = '0';
-    
-    fade.classList.add('active');
-    
-    setTimeout(() => {
-        giverEl.classList.add('fade-entity-anim'); 
-        receiverEl.classList.add('fade-entity-anim', 'fade-receiver-anim');
-        amountEl.style.opacity = '1';
-    }, 50);
-
-    setTimeout(() => {
-        fade.classList.remove('active');
-        const giverBalanceEl = document.querySelector(`.player-balance[data-balance-id="${giver.id}"]`);
-        giverBalanceEl.textContent = giver.balance.toLocaleString('fa-IR');
-        triggerBalanceAnimation(giverBalanceEl, 'balance-down-delayed');
+        const cancelHandler = () => {
+            hidePopup('dialog');
+            confirmBtn.removeEventListener('click', confirmHandler);
+            cancelBtn.removeEventListener('click', cancelHandler);
+        };
         
-        setTimeout(() => {
-            const receiverBalanceEl = document.querySelector(`.player-balance[data-balance-id="${receiver.id}"]`);
-            receiverBalanceEl.textContent = receiver.balance.toLocaleString('fa-IR');
-            triggerBalanceAnimation(receiverBalanceEl, 'balance-up-delayed');
-        }, 1100);
+        confirmBtn.addEventListener('click', confirmHandler);
+        cancelBtn.addEventListener('click', cancelHandler);
+        
+        cancelBtn.style.display = showCancel ? 'block' : 'none';
+        showPopup('dialog');
+    };
 
-    }, 2500); 
-}
+    // ---- Player Management ----
+    const addPlayer = (id, name) => {
+        if(players.some(p => p.id === id)) {
+            console.warn(`Player with ID ${id} already exists.`);
+            return;
+        }
+        const newPlayer = {
+            id,
+            name,
+            balance: gameState.initialMoney,
+            colorClass: `color-${gameState.nextPlayerColorIndex}`,
+            isBankrupt: false,
+        };
+        players.push(newPlayer);
+        gameState.nextPlayerColorIndex = (gameState.nextPlayerColorIndex % 8) + 1;
+        renderPlayers();
+        updateStartButtonState();
+    };
 
-// --- پاداش دور ---
-let rewardTag = null;
-const rewardCircle = document.getElementById('rewardCircle');
-function resetRewardPopup() {
-    stopNFCScan(); rewardTag = null;
-    rewardCircle.textContent = 'بازیکن'; 
-    rewardCircle.classList.remove('filled', 'pulsing');
-    popups.reward.classList.remove('active');
-}
-document.getElementById('rewardBtn').onclick = () => {
-    const turnRewardVal = parseInt(localStorage.getItem('turnReward'));
-    document.getElementById('rewardAmount').textContent = `مبلغ پاداش: ${turnRewardVal.toLocaleString('fa-IR')}`;
-    popups.reward.classList.add('active');
-    rewardCircle.classList.add('pulsing');
-    startNFCScan(player => { 
-        rewardTag = player; 
-        animateCircleName(rewardCircle, player.name); 
-        rewardCircle.classList.remove('pulsing');
-        stopNFCScan(); 
-    });
-};
-document.getElementById('rewardCancel').onclick = resetRewardPopup;
-document.getElementById('rewardConfirm').onclick = () => {
-    if (!rewardTag) { customAlert("کارت بازیکن را اسکن کنید."); return; }
-    const rewardAmount = parseInt(localStorage.getItem('turnReward'));
-    const oldPlayers = JSON.parse(localStorage.getItem('players'));
-    let players = JSON.parse(JSON.stringify(oldPlayers));
-    const player = players.find(p => p.id === rewardTag.id);
-    player.balance += rewardAmount;
-    localStorage.setItem('players', JSON.stringify(players));
-    
-    showRewardAnimation(player.name, rewardAmount, 2000);
-    resetRewardPopup();
-    
-    setTimeout(() => updatePlayerDisplays(players, oldPlayers), 2000);
-};
-function showRewardAnimation(name, amount, duration) {
-    const fade = fades.reward;
-    document.getElementById('rewardTo').textContent = name;
-    document.getElementById('rewardShow').textContent = `+${amount.toLocaleString('fa-IR')}`;
-    fade.classList.add('active');
-    setTimeout(() => fade.classList.remove('active'), duration);
-}
+    const updateBalance = (playerId, amount, isDelayed = false) => {
+        const player = players.find(p => p.id === playerId);
+        if (!player) return;
 
-// --- پرداخت/دریافت از بانک ---
-let bankTxPlayerTag = null;
-const bankTxCircle = document.getElementById('bankTxCircle');
-function resetBankTxPopup() {
-    stopNFCScan();
-    bankTxPlayerTag = null;
-    bankTxCircle.textContent = 'بازیکن';
-    bankTxCircle.classList.remove('filled', 'pulsing');
-    document.getElementById('bankTxAmountInput').value = '';
-    popups.bankTx.classList.remove('active');
-}
-document.getElementById('bankTxBtn').onclick = () => {
-    popups.bankTx.classList.add('active');
-    bankTxCircle.classList.add('pulsing');
-    startNFCScan(player => {
-        bankTxPlayerTag = player;
-        animateCircleName(bankTxCircle, player.name);
-        bankTxCircle.classList.remove('pulsing');
-        stopNFCScan();
-    });
-};
-document.getElementById('bankTxCancelBtn').onclick = resetBankTxPopup;
-document.getElementById('bankPayBtn').onclick = () => handleBankTransaction('pay');
-document.getElementById('bankReceiveBtn').onclick = () => handleBankTransaction('receive');
-
-function handleBankTransaction(type) {
-    const amount = parseInt(toEnglishDigits(document.getElementById('bankTxAmountInput').value));
-    if (!bankTxPlayerTag) { customAlert("لطفا کارت بازیکن را اسکن کنید."); return; }
-    if (isNaN(amount) || amount <= 0) { customAlert("مبلغ را به درستی وارد کنید."); return; }
-
-    const oldPlayers = JSON.parse(localStorage.getItem('players'));
-    let players = JSON.parse(JSON.stringify(oldPlayers));
-    const player = players.find(p => p.id === bankTxPlayerTag.id);
-    let finalBalance;
-
-    if (type === 'pay') {
-        if (player.balance < amount) { customAlert(`موجودی «${player.name}» برای پرداخت این مبلغ کافی نیست!`); return; }
-        player.balance -= amount;
-        finalBalance = player.balance;
-        showBankTxAnimation(player, 'بانک', amount);
-    } else { // receive
         player.balance += amount;
-        finalBalance = player.balance;
-        showBankTxAnimation('بانک', player, amount);
-    }
+        
+        if (player.balance < 0) {
+            player.isBankrupt = true;
+        }
 
-    localStorage.setItem('players', JSON.stringify(players));
-    resetBankTxPopup();
-    
-    setTimeout(() => {
-        const balanceEl = document.querySelector(`.player-balance[data-balance-id="${player.id}"]`);
-        balanceEl.textContent = finalBalance.toLocaleString('fa-IR');
-        triggerBalanceAnimation(balanceEl, type === 'pay' ? 'balance-down' : 'balance-up');
-    }, 2500);
-}
+        const cardElement = document.getElementById(`player-${playerId}`);
+        if(cardElement){
+            const balanceEl = cardElement.querySelector('.player-balance');
+            balanceEl.textContent = formatMoney(player.balance);
+            
+            const animClass = amount > 0 ? (isDelayed ? 'balance-up-delayed' : 'balance-up') : (isDelayed ? 'balance-down-delayed' : 'balance-down');
+            balanceEl.classList.remove('balance-up', 'balance-down', 'balance-up-delayed', 'balance-down-delayed');
+            void balanceEl.offsetWidth; // Trigger reflow
+            balanceEl.classList.add(animClass);
 
-function showBankTxAnimation(giver, receiver, amount) {
-    const fade = fades.bankTx;
-    const giverContainer = document.getElementById('fadeBankTxGiver');
-    const receiverContainer = document.getElementById('fadeBankTxReceiver');
-    const amountEl = document.getElementById('fadeBankTxAmount');
-
-    const setupParty = (container, party) => {
-        container.innerHTML = '';
-        if (typeof party === 'object') { // Player
-            const playerCircle = document.createElement('div');
-            playerCircle.className = 'circle filled';
-            playerCircle.textContent = party.name;
-            container.appendChild(playerCircle);
-        } else { // Bank
-            const bankLabel = document.createElement('div');
-            bankLabel.className = 'bank-text-label';
-            bankLabel.textContent = 'بانک';
-            container.appendChild(bankLabel);
+            if(player.isBankrupt) {
+                cardElement.classList.add('bankrupt');
+            }
         }
     };
     
-    setupParty(giverContainer, giver);
-    setupParty(receiverContainer, receiver);
+    const getPlayerById = (id) => players.find(p => p.id === id);
 
-    amountEl.textContent = amount.toLocaleString('fa-IR');
-    amountEl.style.opacity = '0';
+    // ---- Rendering ----
+    const renderScannedPlayers = () => {
+        const list = document.getElementById('scannedPlayersList');
+        list.innerHTML = players.map(p => `
+            <div class="scanned-player-item ${p.colorClass}">
+                <span class="player-name">${p.name}</span>
+                <span class="player-id">${p.id}</span>
+            </div>
+        `).join('');
+    };
+
+    const renderPlayers = () => {
+        const list = document.getElementById('playerList');
+        list.innerHTML = players.map(p => `
+            <div id="player-${p.id}" class="player-card ${p.colorClass} ${p.isBankrupt ? 'bankrupt' : ''}">
+                <div class="player-card-header">
+                    <span class="player-name">${p.name}</span>
+                    <span class="player-id-tag">${p.id}</span>
+                </div>
+                <div class="player-card-body">
+                    <label>موجودی</label>
+                    <div class="player-balance">${formatMoney(p.balance)}</div>
+                </div>
+            </div>
+        `).join('');
+    };
     
-    // Reset animation classes before applying them
-    giverContainer.classList.remove('fade-entity-anim', 'fade-receiver-anim');
-    receiverContainer.classList.remove('fade-entity-anim', 'fade-receiver-anim');
-    void giverContainer.offsetWidth; // Force browser reflow
+    const updateStartButtonState = () => {
+        document.getElementById('startGameBtn').disabled = players.length < 2;
+    };
 
-    fade.classList.add('active');
+    // ---- NFC Logic ----
+    const startNFCScan = async (target) => {
+        if (!("NDEFReader" in window)) {
+            showDialog("خطا", "دستگاه شما از NFC پشتیبانی نمی‌کند.");
+            return;
+        }
+
+        gameState.scanTarget = target;
+        nfcAbortController = new AbortController();
+        
+        try {
+            const ndef = new NDEFReader();
+            await ndef.scan({ signal: nfcAbortController.signal });
+
+            ndef.addEventListener("reading", ({ serialNumber }) => {
+                const playerId = serialNumber; // Use the card's unique serial number
+                handleNFCScan(playerId);
+            });
+            ndef.addEventListener("readingerror", () => {
+                console.error("خطا در خواندن کارت NFC.");
+                showDialog("خطا", "مشکلی در خواندن کارت پیش آمد. لطفاً دوباره امتحان کنید.");
+            });
+        } catch (error) {
+            console.error(`اسکن NFC ناموفق بود: ${error}`);
+            if (error.name !== 'AbortError') {
+                showDialog("خطا", "امکان فعال‌سازی NFC وجود ندارد. آیا روشن است؟");
+            }
+        }
+    };
+
+    const stopNFCScan = () => {
+        if (nfcAbortController) {
+            nfcAbortController.abort();
+            nfcAbortController = null;
+        }
+        gameState.scanTarget = null;
+        document.querySelectorAll('.pulsing').forEach(el => el.classList.remove('pulsing'));
+    };
+
+    const handleNFCScan = (id) => {
+        const target = gameState.scanTarget;
+        const player = getPlayerById(id);
+
+        if (target === 'addPlayer') {
+            if (player) {
+                showDialog("خطا", `این کارت قبلاً برای بازیکن "${player.name}" ثبت شده است.`);
+            } else {
+                document.getElementById('newPlayerId').textContent = id;
+                document.getElementById('newPlayerName').value = '';
+                showPopup('addPlayerPopup');
+                stopNFCScan();
+            }
+        } else if (target) {
+            if (!player) {
+                showDialog("خطای بازیکن", "این کارت در بازی ثبت نشده است.");
+                return;
+            }
+            if (player.isBankrupt) {
+                 showDialog("خطا", `بازیکن "${player.name}" ورشکسته شده و نمی‌تواند در تراکنش‌ها شرکت کند.`);
+                 return;
+            }
+
+            switch(target) {
+                case 'from':
+                    if (gameState.transfer.to && gameState.transfer.to.id === id) {
+                        showDialog("خطا", "بازیکن مبدا و مقصد نمی‌توانند یکسان باشند.");
+                        return;
+                    }
+                    gameState.transfer.from = player;
+                    updateCircle('fromCircle', player);
+                    break;
+                case 'to':
+                    if (gameState.transfer.from && gameState.transfer.from.id === id) {
+                        showDialog("خطا", "بازیکن مبدا و مقصد نمی‌توانند یکسان باشند.");
+                        return;
+                    }
+                    gameState.transfer.to = player;
+                    updateCircle('toCircle', player);
+                    break;
+                case 'reward':
+                    gameState.reward.player = player;
+                    updateCircle('rewardCircle', player);
+                    break;
+                case 'bankTx':
+                    gameState.bankTx.player = player;
+                    updateCircle('bankTxCircle', player);
+                    break;
+            }
+            
+            stopNFCScan();
+            validatePopupForms();
+        }
+    };
+
+    // ---- UI Update Logic ----
+    const updateCircle = (circleId, player) => {
+        const circle = document.getElementById(circleId);
+        if(player) {
+            circle.innerHTML = `<span class="name-animating">${player.name}</span>`;
+            circle.classList.add('filled');
+            circle.style.borderColor = `var(--player-color-${player.colorClass.split('-')[2]})`;
+        } else {
+            circle.innerHTML = circle.dataset.defaultText || "کارت بکشید";
+            circle.classList.remove('filled');
+            circle.style.borderColor = 'var(--primary)';
+        }
+    };
     
-    setTimeout(() => {
-        // Apply animation classes to the CONTAINERS
-        giverContainer.classList.add('fade-entity-anim'); 
-        receiverContainer.classList.add('fade-entity-anim', 'fade-receiver-anim');
-        amountEl.style.opacity = '1';
-    }, 50);
+    // ---- Game Flow & Actions ----
+    const startGame = () => {
+        const startMoneyInput = document.getElementById('startMoney');
+        const turnRewardInput = document.getElementById('turnReward');
+        
+        gameState.initialMoney = parseFormattedNumber(startMoneyInput.value) || 15000;
+        gameState.turnReward = parseFormattedNumber(turnRewardInput.value) || 2000;
 
-    setTimeout(() => fade.classList.remove('active'), 2500);
-}
+        // Update existing players with new initial money
+        players.forEach(p => p.balance = gameState.initialMoney);
 
-
-// --- اتمام بازی ---
-document.getElementById('endGame').onclick = async () => {
-    if (await customConfirm("آیا برای شروع یک بازی جدید، تمام اطلاعات پاک شود؟", "پایان بازی")) {
-        localStorage.clear();
-        location.reload();
-    }
-};
-
-// --- دکمه تمام صفحه ---
-document.getElementById('fullscreenBtn').onclick = () => {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            customAlert(`خطا در ورود به حالت تمام‌صفحه: ${err.message}`);
-        });
-    } else { document.exitFullscreen(); }
-};
-
-// --- اجرای اولیه ---
-function init() {
-    createNumPad('numPad', 'amountInput');
-    createNumPad('bankTxNumPad', 'bankTxAmountInput');
-
-    if (localStorage.getItem('players')) {
-        renderPlayerList();
+        stopNFCScan();
+        renderPlayers();
         showSection('game');
-    } else {
+    };
+
+    const endGame = () => {
+        showDialog(
+            "پایان بازی؟",
+            "آیا از پایان دادن به بازی و شروع مجدد مطمئن هستید؟",
+            () => {
+                players = [];
+                gameState.nextPlayerColorIndex = 1;
+                document.getElementById('scannedPlayersList').innerHTML = '';
+                document.getElementById('startMoney').value = formatMoney(15000);
+                document.getElementById('turnReward').value = formatMoney(2000);
+                updateStartButtonState();
+                showSection('start');
+                startNFCScan('addPlayer');
+            },
+            true // Show cancel button
+        );
+    };
+
+    // ---- Transaction Logic ----
+    const executeTransfer = () => {
+        const { from, to } = gameState.transfer;
+        const amount = parseFormattedNumber(document.getElementById('transferAmount').value);
+
+        if (!from || !to || amount <= 0) {
+            showDialog("خطا", "لطفاً تمام اطلاعات را به درستی وارد کنید.");
+            return;
+        }
+        if (from.balance < amount) {
+            showDialog("خطا", `موجودی "${from.name}" برای این انتقال کافی نیست.`);
+            return;
+        }
+
+        hidePopup('transferPopup');
+        showTransferAnimation(from, to, amount, () => {
+            updateBalance(from.id, -amount, true); // delayed update
+            updateBalance(to.id, +amount, true); // delayed update
+        });
+    };
+
+    const executeReward = () => {
+        const { player } = gameState.reward;
+        const amount = gameState.turnReward;
+
+        if (!player) return;
+
+        hidePopup('rewardPopup');
+        showRewardAnimation(player, amount, () => {
+            updateBalance(player.id, +amount, true);
+        });
+    };
+
+    const executeBankTx = () => {
+        const { player, type } = gameState.bankTx;
+        const amount = parseFormattedNumber(document.getElementById('bankTxAmount').value);
+
+        if (!player || amount <= 0) {
+             showDialog("خطا", "لطفاً بازیکن و مبلغ را به درستی وارد کنید.");
+            return;
+        }
+
+        if (type === 'pay' && player.balance < amount) {
+            showDialog("خطا", `موجودی "${player.name}" برای پرداخت این مبلغ به بانک کافی نیست.`);
+            return;
+        }
+
+        hidePopup('bankTxPopup');
+        
+        const change = type === 'receive' ? +amount : -amount;
+        showBankTxAnimation(player, amount, type, () => {
+             updateBalance(player.id, change, true);
+        });
+    };
+
+
+    // ---- Animations ----
+    const showTransferAnimation = (from, to, amount, onComplete) => {
+        const fadeFrom = document.getElementById('fadeFromCircle');
+        const fadeTo = document.getElementById('fadeToCircle');
+        document.getElementById('fadeAmount').textContent = formatMoney(amount);
+
+        fadeFrom.className = `circle color-${from.colorClass.split('-')[2]}`;
+        fadeFrom.innerHTML = `<span>${from.name}</span>`;
+        fadeTo.className = `circle color-${to.colorClass.split('-')[2]}`;
+        fadeTo.innerHTML = `<span>${to.name}</span>`;
+
+        fades.transfer.classList.add('active');
+
+        // Animation sequence
+        setTimeout(() => { fadeFrom.classList.add('fade-entity-anim'); }, 100);
+        setTimeout(() => { document.getElementById('fadeAmount').style.opacity = '1'; }, 300);
+        setTimeout(() => { fadeTo.classList.add('fade-entity-anim', 'fade-receiver-anim'); }, 500);
+
+        setTimeout(() => {
+            fades.transfer.classList.remove('active');
+            onComplete();
+        }, 2800);
+    };
+    
+    const showRewardAnimation = (player, amount, onComplete) => {
+        const playerCircle = fades.reward.querySelector('.circle');
+        
+        playerCircle.className = `circle color-${player.colorClass.split('-')[2]}`;
+        playerCircle.innerHTML = `<span>${player.name}</span>`;
+        
+        fades.reward.querySelector('.bank-entity').innerHTML = `<div class="bank-text-label">🎁 ${formatMoney(amount)}</div>`;
+
+        fades.reward.classList.add('active');
+
+        // Animation sequence
+        setTimeout(() => { fades.reward.querySelector('.bank-entity').classList.add('fade-entity-anim'); }, 100);
+        setTimeout(() => { playerCircle.classList.add('fade-entity-anim', 'fade-receiver-anim'); }, 500);
+
+        setTimeout(() => {
+            fades.reward.classList.remove('active');
+            onComplete();
+        }, 2800);
+    };
+
+    const showBankTxAnimation = (player, amount, type, onComplete) => {
+        const giverEl = document.getElementById('fadeBankTxGiver');
+        const receiverEl = document.getElementById('fadeBankTxReceiver');
+        const amountEl = document.getElementById('fadeBankTxAmount');
+
+        giverEl.innerHTML = '';
+        receiverEl.innerHTML = '';
+        amountEl.textContent = formatMoney(amount);
+        
+        const playerCircleHTML = `<div class="circle color-${player.colorClass.split('-')[2]}"><span>${player.name}</span></div>`;
+        const bankBoxHTML = `<div class="bank-entity"><div class="bank-text-label">بانک</div></div>`;
+
+        if (type === 'receive') {
+            giverEl.innerHTML = bankBoxHTML;
+            receiverEl.innerHTML = playerCircleHTML;
+            amountEl.style.color = 'var(--success)';
+        } else { // pay
+            giverEl.innerHTML = playerCircleHTML;
+            receiverEl.innerHTML = bankBoxHTML;
+            amountEl.style.color = 'var(--danger)';
+        }
+
+        fades.bankTx.classList.add('active');
+        
+        // Animation sequence
+        setTimeout(() => { giverEl.classList.add('fade-entity-anim'); }, 100);
+        setTimeout(() => { amountEl.style.opacity = '1'; }, 300);
+        setTimeout(() => { receiverEl.classList.add('fade-entity-anim', 'fade-receiver-anim'); }, 500);
+
+        setTimeout(() => {
+            fades.bankTx.classList.remove('active');
+            giverEl.classList.remove('fade-entity-anim');
+            receiverEl.classList.remove('fade-entity-anim', 'fade-receiver-anim');
+            amountEl.style.opacity = '0';
+            onComplete();
+        }, 2800);
+    };
+    
+    // ---- Popup Setup & Validation ----
+    const setupPopups = () => {
+        // Transfer Popup
+        document.getElementById('transferBtn').addEventListener('click', () => {
+            gameState.transfer = { from: null, to: null, amount: 0 };
+            updateCircle('fromCircle', null);
+            updateCircle('toCircle', null);
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('fromCircle').classList.add('pulsing');
+            startNFCScan('from');
+            showPopup('transferPopup');
+            validatePopupForms();
+        });
+        document.getElementById('fromCircle').addEventListener('click', () => {
+            stopNFCScan();
+            document.querySelectorAll('.pulsing').forEach(el => el.classList.remove('pulsing'));
+            document.getElementById('fromCircle').classList.add('pulsing');
+            startNFCScan('from');
+        });
+        document.getElementById('toCircle').addEventListener('click', () => {
+            stopNFCScan();
+            document.querySelectorAll('.pulsing').forEach(el => el.classList.remove('pulsing'));
+            document.getElementById('toCircle').classList.add('pulsing');
+            startNFCScan('to');
+        });
+        document.getElementById('confirmTransfer').addEventListener('click', executeTransfer);
+
+        // Reward Popup
+        document.getElementById('rewardBtn').addEventListener('click', () => {
+            gameState.reward = { player: null, amount: gameState.turnReward };
+            document.getElementById('rewardTitle').textContent = `🎁 پاداش دور (${formatMoney(gameState.turnReward)})`;
+            updateCircle('rewardCircle', null);
+            document.getElementById('rewardCircle').classList.add('pulsing');
+            startNFCScan('reward');
+            showPopup('rewardPopup');
+            validatePopupForms();
+        });
+        document.getElementById('rewardCircle').addEventListener('click', () => {
+             stopNFCScan();
+             document.getElementById('rewardCircle').classList.add('pulsing');
+             startNFCScan('reward');
+        });
+        document.getElementById('confirmReward').addEventListener('click', executeReward);
+
+        // Bank TX Popup
+        document.getElementById('bankTxBtn').addEventListener('click', () => {
+            gameState.bankTx = { player: null, amount: 0, type: 'receive' };
+            updateCircle('bankTxCircle', null);
+            document.getElementById('bankTxAmount').value = '';
+            document.getElementById('bankTxCircle').classList.add('pulsing');
+            document.getElementById('bankTxTypeReceive').classList.add('btn-primary');
+            document.getElementById('bankTxTypeReceive').classList.remove('btn-secondary');
+            document.getElementById('bankTxTypePay').classList.add('btn-secondary');
+            document.getElementById('bankTxTypePay').classList.remove('btn-primary');
+            startNFCScan('bankTx');
+            showPopup('bankTxPopup');
+            validatePopupForms();
+        });
+        document.getElementById('bankTxCircle').addEventListener('click', () => {
+            stopNFCScan();
+            document.getElementById('bankTxCircle').classList.add('pulsing');
+            startNFCScan('bankTx');
+        });
+        document.getElementById('bankTxTypeReceive').addEventListener('click', () => {
+            gameState.bankTx.type = 'receive';
+            document.getElementById('bankTxTypeReceive').classList.replace('btn-secondary', 'btn-primary');
+            document.getElementById('bankTxTypePay').classList.replace('btn-primary', 'btn-secondary');
+        });
+        document.getElementById('bankTxTypePay').addEventListener('click', () => {
+            gameState.bankTx.type = 'pay';
+            document.getElementById('bankTxTypePay').classList.replace('btn-secondary', 'btn-primary');
+            document.getElementById('bankTxTypeReceive').classList.replace('btn-primary', 'btn-secondary');
+        });
+        document.getElementById('confirmBankTx').addEventListener('click', executeBankTx);
+        
+        // Add Player Popup
+        document.getElementById('confirmAddPlayer').addEventListener('click', () => {
+            const id = document.getElementById('newPlayerId').textContent;
+            const name = document.getElementById('newPlayerName').value.trim();
+            if (name) {
+                addPlayer(id, name);
+                renderScannedPlayers();
+                hidePopup('addPlayerPopup');
+                startNFCScan('addPlayer'); // Ready for next scan
+            } else {
+                showDialog("خطا", "لطفاً نام بازیکن را وارد کنید.");
+            }
+        });
+
+        // Close popups when clicking outside the box
+        Object.values(popups).forEach(p => {
+            p.addEventListener('click', (e) => {
+                if(e.target === p) {
+                    hidePopup(p.id);
+                    stopNFCScan();
+                }
+            });
+        });
+
+        // Listen for input changes to validate forms
+        document.getElementById('transferAmount').addEventListener('input', validatePopupForms);
+        document.getElementById('bankTxAmount').addEventListener('input', validatePopupForms);
+    };
+
+    const validatePopupForms = () => {
+        // Transfer
+        const transferAmount = parseFormattedNumber(document.getElementById('transferAmount').value);
+        document.getElementById('confirmTransfer').disabled = !(gameState.transfer.from && gameState.transfer.to && transferAmount > 0);
+        // Reward
+        document.getElementById('confirmReward').disabled = !gameState.reward.player;
+        // Bank TX
+        const bankTxAmount = parseFormattedNumber(document.getElementById('bankTxAmount').value);
+        document.getElementById('confirmBankTx').disabled = !(gameState.bankTx.player && bankTxAmount > 0);
+    };
+
+    // ---- Event Listeners ----
+    document.getElementById('startGameBtn').addEventListener('click', startGame);
+    document.getElementById('endGame').addEventListener('click', endGame);
+    
+    document.querySelector('.scan-prompt').addEventListener('click', () => startNFCScan('addPlayer'));
+
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    });
+
+    // ---- Initialization ----
+    const init = () => {
+        // Set default text for circles
+        document.getElementById('fromCircle').dataset.defaultText = 'کارت بکشید';
+        document.getElementById('toCircle').dataset.defaultText = 'کارت بکشید';
+        document.getElementById('rewardCircle').dataset.defaultText = 'کارت بکشید';
+        document.getElementById('bankTxCircle').dataset.defaultText = 'کارت بازیکن را بکشید';
+        
+        // Set initial values
+        document.getElementById('startMoney').value = formatMoney(gameState.initialMoney);
+        document.getElementById('turnReward').value = formatMoney(gameState.turnReward);
+
+        setupPopups();
         showSection('start');
-        startNFCScan(handleInitialScan);
-    }
-}
-init();
+        startNFCScan('addPlayer');
+        updateStartButtonState();
+    };
+
+    init();
+});
 </script>
 
 </body>
