@@ -19,7 +19,6 @@
   font-family: 'Vazirmatn', sans-serif;
 }
 
-/* پالت رنگی برای کارت‌های بازیکن */
 .color-1 { --card-color: #FF6B6B; --card-light: #FF8E8E; }
 .color-2 { --card-color: #4ECDC4; --card-light: #7ED9D2; }
 .color-3 { --card-color: #FFD93D; --card-light: #FFE26E; }
@@ -72,7 +71,6 @@ h1 {
 }
 h2 { margin-bottom: 30px; font-size: 1.8rem;}
 
-/* --- استایل دکمه‌ها --- */
 button {
   font-family:'Vazirmatn', sans-serif;
   border:none;
@@ -137,7 +135,6 @@ button:disabled {
   height: 24px;
 }
 
-/* --- استایل فرم‌ها --- */
 input, select {
   font-family:'Vazirmatn', sans-serif;
   border: 1px solid var(--secondary);
@@ -160,7 +157,6 @@ input:focus, select:focus {
 }
 label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
-/* --- لیست بازیکنان --- */
 #scannedPlayersList {
     margin-top: 25px;
     padding: 0 10px;
@@ -176,7 +172,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     text-align: right;
 }
 
-/* --- طراحی جدید لیست بازیکنان (Grid 2 ستونی) --- */
 #playerList {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -214,7 +209,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
-/* هدر کارت با رنگ منحصر به فرد */
 .player-card-header {
   background: linear-gradient(135deg, var(--card-color), var(--card-light));
   padding: 15px;
@@ -248,7 +242,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   flex: 1;
 }
 
-/* بدنه کارت */
 .player-card-body {
   padding: 20px 15px;
   text-align: center;
@@ -306,7 +299,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-/* انیمیشن‌های تغییر موجودی */
 @keyframes balance-up { 
   0% { 
     transform: scale(1.2); 
@@ -334,7 +326,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 .balance-up { animation: balance-up 1.5s ease; }
 .balance-down { animation: balance-down 1.5s ease; }
 
-/* --- پاپ‌آپ‌ها --- */
 @keyframes popupFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 .popup {
   position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; justify-content:center; align-items:center; z-index:99;
@@ -358,7 +349,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 .popup-box .button-group button { min-width: 120px; }
 
-/* --- کیبورد و دایره‌ها --- */
 .circle {
   width:100px; height:100px; border-radius:50%; border: 3px solid var(--primary);
   color:var(--text); font-size:18px; display: flex; justify-content: center; align-items: center;
@@ -385,7 +375,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 .keyboard button:hover { background: var(--secondary-hover); transform: none; }
 .keyboard button:active { transform: scale(0.95); background: var(--primary); }
 
-/* --- انیمیشن انتقال و پاداش --- */
 .fade {
   position:fixed; inset:0;
   background: rgba(13, 27, 42, 0.5);
@@ -447,7 +436,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 #dialogPopup, #addPlayerPopup { z-index: 100; }
 #dialogMessage { font-size: 18px; line-height: 1.6; margin-bottom: 25px;}
 
-/* دکمه‌های مدیریت بازی */
 .game-controls {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -600,8 +588,6 @@ const turnReward = document.getElementById('turnReward');
 const startGameBtn = document.getElementById('startGameBtn');
 
 let tempPlayers = [];
-
-// رنگ‌های کارت (8 رنگ منحصر به فرد)
 const cardColors = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6', 'color-7', 'color-8'];
 
 const dialogTitle = document.getElementById('dialogTitle'), dialogMessage = document.getElementById('dialogMessage'), dialogButtons = document.getElementById('dialogButtons');
@@ -675,6 +661,37 @@ function updateScannedPlayersList() {
     startGameBtn.disabled = tempPlayers.length < 2;
 }
 
+async function startNFCReading() {
+    if (!('NDEFReader' in window)) {
+        await customAlert('دستگاه شما از NFC پشتیبانی نمی‌کند!');
+        return;
+    }
+    
+    try {
+        ndefReader = new NDEFReader();
+        nfcAbortController = new AbortController();
+        await ndefReader.scan({ signal: nfcAbortController.signal });
+        
+        ndefReader.onreading = event => {
+            const decoder = new TextDecoder();
+            let scannedId = null;
+            
+            for (const record of event.message.records) {
+                if (record.recordType === "text") {
+                    scannedId = decoder.decode(record.data);
+                    break;
+                }
+            }
+            
+            if (scannedId) {
+                handleInitialScan(scannedId.trim());
+            }
+        };
+    } catch (error) {
+        await customAlert(`خطا در فعال‌سازی NFC: ${error.message}`);
+    }
+}
+
 startGameBtn.onclick = () => {
     const startMoneyVal = parseInt(toEnglishDigits(startMoney.value).replace(/,/g, ''));
-    const rewardVal
+    const rewardVal = parseInt(toEnglishDigits(turnRewar
