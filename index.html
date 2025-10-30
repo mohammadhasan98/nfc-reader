@@ -7,19 +7,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-dark: #0D1B2A;    /* سرمه‌ای تیره برای پس‌زمینه */
-  --bg-light: #1B263B;   /* سرمه‌ای روشن برای حباب‌ها و کارت‌ها */
-  --primary: #3A86FF;     /* آبی روشن برای دکمه‌های اصلی */
+  --bg-dark: #0D1B2A;    
+  --bg-light: #1B263B;   
+  --primary: #3A86FF;     
   --primary-hover: #5c9bff;
-  --secondary: #415A77; /* خاکستری-آبی برای دکمه‌های فرعی */
+  --secondary: #415A77; 
   --secondary-hover: #527194;
-  --text: #E0E1DD;       /* سفید مایل به کرم برای متن */
+  --text: #E0E1DD;       
   --danger: #ff4b4b;
   font-family: 'Vazirmatn', sans-serif;
 }
 * { 
   box-sizing: border-box; 
-  -webkit-tap-highlight-color: transparent; /* حذف هایلایت لمس در موبایل */
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   background: var(--bg-dark);
@@ -29,6 +29,7 @@ body {
   user-select: none;
   -webkit-user-select: none;
   font-size: 16px;
+  font-family: 'Vazirmatn', sans-serif;
 }
 section { display: none; padding: 20px; }
 section.active { display:block; }
@@ -36,12 +37,12 @@ h1, h2, h3 { text-align:center; color: var(--text); font-weight: 700; }
 h1 { font-size: 28px; }
 h2 { margin-bottom: 30px;}
 
-/* --- استایل دکمه‌ها --- */
+/* --- دکمه‌ها --- */
 button {
   border:none;
-  border-radius: 25px; /* گردی بیشتر */
+  border-radius: 25px;
   padding: 12px 28px;
-  font-family:'Vazirmatn';
+  font-family:'Vazirmatn', sans-serif; /* اطمینان از فونت */
   font-size:16px;
   margin: 10px auto;
   display:block;
@@ -57,25 +58,19 @@ button:disabled {
   cursor: not-allowed;
   box-shadow: none;
 }
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-}
+.btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
-
-.btn-secondary {
-  background: var(--secondary);
-  color: var(--text);
-}
+.btn-secondary { background: var(--secondary); color: var(--text); }
 .btn-secondary:hover:not(:disabled) { background: var(--secondary-hover); }
 
-/* --- استایل فرم‌ها --- */
+/* --- فرم‌ها --- */
 input, select {
   border: 1px solid var(--secondary);
   background: var(--bg-light);
   color: var(--text);
   border-radius:15px;
   padding: 12px 20px;
+  font-family: 'Vazirmatn', sans-serif; /* اطمینان از فونت */
   font-size:16px;
   text-align:center;
   width:90%;
@@ -91,7 +86,7 @@ input:focus, select:focus {
 }
 label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 
-/* --- لیست بازیکنان (جایگزین جدول) --- */
+/* --- لیست بازیکنان --- */
 #playerList {
   display: flex;
   flex-direction: column;
@@ -106,48 +101,34 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: transform .2s ease;
 }
-.player-card.bankrupt {
-  opacity: 0.5;
-  background: #2a2a2a;
-}
-.player-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+.player-card.bankrupt { opacity: 0.5; background: #2a2a2a; }
+.player-info { display: flex; align-items: center; gap: 15px; }
 .player-tag {
-  background: var(--primary);
-  color: #fff;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-  font-size: 18px;
+  background: var(--primary); color: #fff; width: 40px; height: 40px;
+  border-radius: 50%; display: flex; justify-content: center; align-items: center;
+  font-weight: 700; font-size: 18px;
 }
 .player-name { font-size: 18px; font-weight: 600; }
 .player-balance { font-size: 18px; font-weight: 400; direction: ltr; }
-.bankrupt-stamp {
-  position: relative;
-  overflow: hidden;
-}
 .bankrupt-stamp::after{
-  content:"ورشکسته";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-15deg);
-  background: var(--danger);
+  content:"ورشکسته"; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg); background: var(--danger);
+  color: #fff; padding: 5px 50px; font-size: 18px; font-weight: bold;
+  opacity: 0.9; letter-spacing: 2px;
+}
+
+/* --- کادر تست NFC --- */
+#nfcDebugOutput {
+  background: #000;
+  border: 1px dashed var(--primary);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 25px 0;
+  text-align: center;
   color: #fff;
-  padding: 5px 50px;
-  font-size: 18px;
-  font-weight: bold;
-  opacity: 0.9;
-  letter-spacing: 2px;
+  font-family: monospace; /* برای دیدن دقیق کاراکترها */
+  font-size: 14px;
 }
 
 /* --- پاپ‌آپ‌ها --- */
@@ -156,53 +137,42 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 .popup.active { display:flex; }
 .popup-box {
-  background: var(--bg-light);
-  border-radius:30px; 
-  padding:25px; 
-  width:90%; 
-  max-width:400px; 
-  text-align:center;
+  background: var(--bg-light); border-radius:30px; padding:25px; 
+  width:90%; max-width:400px; text-align:center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 .popup-box .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+    display: flex; justify-content: center; gap: 10px; margin-top: 20px;
+}
+
+#formattedAmountDisplay {
+    color: var(--text);
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    min-height: 30px; /* برای جلوگیری از پرش صفحه */
 }
 
 .circle {
   width:100px; height:100px; border-radius:50%;
-  border: 2px solid var(--primary);
-  color:var(--text); font-size:20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 5px;
-  margin:20px auto;
-  transition: all .3s ease;
+  border: 2px solid var(--primary); color:var(--text); font-size:16px; /* فونت کوچکتر برای جا شدن نام‌ها */
+  display: flex; justify-content: center; align-items: center; text-align: center;
+  padding: 5px; margin:20px auto; transition: all .3s ease;
+  word-break: break-word;
 }
-.circle.filled {
-    background: var(--primary);
-    color: #fff;
-}
+.circle.filled { background: var(--primary); color: #fff; }
+
 .keyboard { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:10px;}
 .keyboard button{ 
-    border-radius:15px; 
-    padding:14px; 
-    font-size:20px; 
-    background: var(--secondary);
-    box-shadow: none;
-    margin: 0;
-    min-width: auto; /* FIX: برای جلوگیری از بیرون زدن دکمه‌ها */
+    border-radius:15px; padding:14px; font-size:20px; background: var(--secondary);
+    box-shadow: none; margin: 0; min-width: auto;
 }
 .keyboard button:hover { background: var(--secondary-hover); transform: none; }
 
 /* --- انیمیشن‌ها --- */
 .fade {
-  position:fixed; inset:0; background:#000000dd; color:#fff; display:flex;
-  justify-content:center; align-items:center; flex-direction:column; font-size:20px; z-index:999; display:none;
+  position:fixed; inset:0; background:#000000dd; color:#fff; display:none;
+  justify-content:center; align-items:center; flex-direction:column; font-size:20px; z-index:999;
 }
 .fade.active{ display:flex; animation:fadeInOut 1.2s ease-in-out;}
 @keyframes fadeInOut{0%{opacity:0;}40%{opacity:1;}80%{opacity:1;}100%{opacity:0;}}
@@ -222,11 +192,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   <h1>🏦 بانک مونوپولی</h1>
   <label for="playerCount">تعداد بازیکنان:</label>
   <select id="playerCount">
-    <option value="2">۲</option>
-    <option value="3">۳</option>
-    <option value="4">۴</option>
-    <option value="5">۵</option>
-    <option value="6">۶</option>
+    <option value="2">۲</option><option value="3">۳</option><option value="4">۴</option><option value="5">۵</option><option value="6">۶</option>
   </select>
   <label for="startMoney">موجودی اولیه:</label>
   <input type="number" id="startMoney" placeholder="مثلاً 15000">
@@ -247,13 +213,11 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   <h2>مدیریت بازی</h2>
   <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
   <button id="rewardBtn" class="btn-primary">🎁 دریافت پاداش دور</button>
-  <button class="btn-secondary" disabled>🏦 پرداخت/دریافت بانک</button>
-  <button class="btn-secondary" disabled>🏠 رهن بانک</button>
   
-  <div id="playerList">
-    <!-- Player cards will be generated here by JS -->
-  </div>
+  <!-- کادر تست NFC -->
+  <div id="nfcDebugOutput">برای تست، تگ را به گوشی نزدیک کنید تا محتوای آن اینجا نمایش داده شود.</div>
   
+  <div id="playerList"></div>
   <button id="endGame" class="btn-secondary">اتمام بازی ❌</button>
 </section>
 
@@ -261,7 +225,8 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 <div id="transferPopup" class="popup">
   <div class="popup-box">
     <h3>💳 کارت به کارت</h3>
-    <input type="text" id="amountInput" readonly placeholder="مبلغ">
+    <div id="formattedAmountDisplay"></div>
+    <input type="hidden" id="amountInput"> <!-- مخفی شد و فقط برای نگهداری عدد خام استفاده می‌شود -->
     <div class="keyboard" id="numPad"></div>
     <div style="display:flex; justify-content:space-around; align-items: center; margin-top:10px;">
       <div class="circle" id="giverCircle">دهنده</div>
@@ -279,7 +244,7 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 <div id="rewardPopup" class="popup">
   <div class="popup-box">
     <h3>🎁 دریافت پاداش دور</h3>
-    <div id="rewardAmount" style="font-size:22px;margin:10px;">مبلغ:</div>
+    <div id="rewardAmount" style="font-size:22px;margin:10px;"></div>
     <div class="circle" id="rewardCircle">بازیکن</div>
     <div class="button-group">
         <button id="rewardConfirm" class="btn-primary">تایید</button>
@@ -306,27 +271,28 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 </div>
 
 <script>
-// جلوگیری از انتخاب متن و کلیک‌راست
 document.addEventListener('contextmenu', e => e.preventDefault());
 
 // ------------------------- متغیرهای گلوبال -------------------------
-const sections = { 
-    start: document.getElementById('start'), 
-    names: document.getElementById('names'), 
-    game: document.getElementById('game') 
-};
-const popups = {
-    transfer: document.getElementById('transferPopup'),
-    reward: document.getElementById('rewardPopup')
-};
+const sections = { start: document.getElementById('start'), names: document.getElementById('names'), game: document.getElementById('game') };
+const popups = { transfer: document.getElementById('transferPopup'), reward: document.getElementById('rewardPopup') };
+const nfcDebugOutput = document.getElementById('nfcDebugOutput');
 let ndefReader;
-let nfcAbortController = null; // برای کنترل و توقف اسکن NFC
+let nfcAbortController = null;
 
+// ------------------------- تابع کمکی برای فرمت اعداد -------------------------
+function formatToPersian(num) {
+  return new Intl.NumberFormat('fa-IR').format(num);
+}
 
 // ------------------------- مدیریت صفحات -------------------------
 function showSection(id) {
   for (let key in sections) sections[key].classList.remove('active');
   sections[id].classList.add('active');
+  // اگر به صفحه بازی رفتیم، اسکن NFC برای تست فعال شود
+  if (id === 'game') {
+      startGlobalNFCScanForDebug();
+  }
 }
 
 // ------------------------- مرحله ۱: تنظیمات اولیه -------------------------
@@ -386,10 +352,9 @@ function renderPlayerList() {
         <div class="player-tag">${p.id}</div>
         <div class="player-name">${p.name}</div>
       </div>
-      <div class="player-balance">${p.balance.toLocaleString('fa-IR')}</div>
+      <div class="player-balance">${formatToPersian(p.balance)}</div>
     `;
     
-    // رویداد ورشکستگی با کلیک راست (یا لمس طولانی در موبایل)
     card.addEventListener('contextmenu', e => {
       e.preventDefault();
       if (p.bankrupt) return;
@@ -404,41 +369,46 @@ function renderPlayerList() {
 }
 
 // ------------------------- منطق NFC -------------------------
-async function startNFCScan(onRead) {
+async function startNFCScan(onRead, onScanStart, onScanEnd) {
     if (!('NDEFReader' in window)) {
         alert("مرورگر شما از Web NFC پشتیبانی نمی‌کند. از گوگل کروم در اندروید استفاده کنید.");
         return;
     }
-
     try {
         if (!ndefReader) ndefReader = new NDEFReader();
-
         nfcAbortController = new AbortController();
-        nfcAbortController.signal.onabort = () => {};
-        
-        await ndefReader.scan({ signal: nfcAbortController.signal });
-        
+        if (onScanStart) onScanStart();
+
         ndefReader.onreading = event => {
             const decoder = new TextDecoder();
-            const rawText = decoder.decode(event.message.records[0].data);
+            const rawText = decoder.decode(event.message.records[0].data).trim();
             
-            // *** FIX: خواندن فرمت ID\nName از تگ ***
+            // نمایش خروجی خام در کادر تست
+            nfcDebugOutput.textContent = `داده خام تگ: [${rawText}]`;
+
             const parts = rawText.split('\n');
-            if (parts.length < 1) return; // اگر فرمت نامعتبر بود، رد شو
-            
             const id = parseInt(parts[0]);
-            if (isNaN(id)) return; // اگر ID عدد نبود، رد شو
+            
+            if (isNaN(id)) {
+                nfcDebugOutput.textContent += ' | خطا: ID خوانده شده عدد نیست!';
+                return; 
+            }
             
             const players = JSON.parse(localStorage.getItem('players'));
             const player = players.find(p => p.id === id);
             
             if (player && !player.bankrupt) {
                 onRead(player);
+            } else if (!player) {
+                nfcDebugOutput.textContent += ` | خطا: بازیکنی با ID=${id} یافت نشد!`;
             }
         };
 
+        await ndefReader.scan({ signal: nfcAbortController.signal });
+
     } catch (error) {
-        alert(`خطا در فعالسازی NFC: ${error.message}. مطمئن شوید NFC روشن و دسترسی به آن مجاز است.`);
+        if (onScanEnd) onScanEnd();
+        nfcDebugOutput.textContent = `خطا در فعالسازی NFC: ${error.message}`;
     }
 }
 
@@ -449,21 +419,51 @@ function stopNFCScan() {
     }
 }
 
+// تابع اسکن سراسری فقط برای کادر تست
+async function startGlobalNFCScanForDebug() {
+    if (!('NDEFReader' in window)) return;
+    try {
+        const reader = new NDEFReader();
+        await reader.scan();
+        reader.onreading = event => {
+            const decoder = new TextDecoder();
+            const rawText = decoder.decode(event.message.records[0].data).trim();
+            nfcDebugOutput.textContent = `داده خام تگ: [${rawText}]`;
+        };
+    } catch (error) {
+        // این خطا طبیعی است اگر اسکن دیگری (از پاپ‌آپ‌ها) فعال شود
+    }
+}
+
 // ------------------------- کارت به کارت -------------------------
 const numPad = document.getElementById('numPad');
 const amountInput = document.getElementById('amountInput');
+const formattedAmountDisplay = document.getElementById('formattedAmountDisplay');
 
-// ساخت کیبورد عددی
-['۱','۲','۳','۴','۵','۶','۷','۸','۹','۰','⌫','پاک'].forEach((key, index) => {
+function updateFormattedAmount() {
+    const amount = parseInt(amountInput.value) || 0;
+    formattedAmountDisplay.textContent = amount > 0 ? `${formatToPersian(amount)} تومان` : '';
+}
+
+['۱','۲','۳','۴','۵','۶','۷','۸','۹','۰','⌫','پاک'].forEach((key, i) => {
     const btn = document.createElement('button');
     btn.textContent = key;
     if (key === '⌫') {
-        btn.onclick = () => amountInput.value = amountInput.value.slice(0, -1);
+        btn.onclick = () => {
+            amountInput.value = amountInput.value.slice(0, -1);
+            updateFormattedAmount();
+        };
     } else if (key === 'پاک') {
-        btn.onclick = () => amountInput.value = '';
+        btn.onclick = () => {
+            amountInput.value = '';
+            updateFormattedAmount();
+        };
     } else {
-        const num = index === 9 ? '0' : (index + 1).toString();
-        btn.onclick = () => amountInput.value += num;
+        const num = i === 9 ? '0' : (i + 1).toString();
+        btn.onclick = () => {
+            amountInput.value += num;
+            updateFormattedAmount();
+        };
     }
     numPad.appendChild(btn);
 });
@@ -474,53 +474,59 @@ const receiverCircle = document.getElementById('receiverCircle');
 
 function resetTransferPopup() {
     stopNFCScan();
-    giverTag = null;
-    receiverTag = null;
+    giverTag = null; receiverTag = null;
     giverCircle.textContent = 'دهنده';
     receiverCircle.textContent = 'گیرنده';
     giverCircle.classList.remove('filled');
     receiverCircle.classList.remove('filled');
     amountInput.value = '';
+    updateFormattedAmount();
     popups.transfer.classList.remove('active');
 }
 
 document.getElementById('transferBtn').onclick = () => {
     popups.transfer.classList.add('active');
-    startNFCScan(player => {
-        if (!giverTag) {
-            giverTag = player;
-            giverCircle.textContent = player.name;
-            giverCircle.classList.add('filled');
-        } else if (!receiverTag && player.id !== giverTag.id) {
-            receiverTag = player;
-            receiverCircle.textContent = player.name;
-            receiverCircle.classList.add('filled');
-            stopNFCScan(); // اسکن پس از یافتن نفر دوم متوقف می‌شود
+    giverCircle.textContent = 'در حال اسکن...';
+    startNFCScan(
+        // onRead
+        player => {
+            if (!giverTag) {
+                giverTag = player;
+                giverCircle.textContent = player.name;
+                giverCircle.classList.add('filled');
+                receiverCircle.textContent = 'در حال اسکن...';
+            } else if (!receiverTag && player.id !== giverTag.id) {
+                receiverTag = player;
+                receiverCircle.textContent = player.name;
+                receiverCircle.classList.add('filled');
+                stopNFCScan();
+            }
+        },
+        // onScanStart
+        () => {
+            if (!giverTag) giverCircle.textContent = 'در حال اسکن...';
+            else receiverCircle.textContent = 'در حال اسکن...';
+        },
+        // onScanEnd
+        () => {
+            if (!giverTag) giverCircle.textContent = 'دهنده';
+            if (!receiverTag) receiverCircle.textContent = 'گیرنده';
         }
-    });
+    );
 };
 
 document.getElementById('transferCancel').onclick = resetTransferPopup;
 
 document.getElementById('transferConfirm').onclick = () => {
     const amount = parseInt(amountInput.value);
-    if (!giverTag || !receiverTag) {
-        alert("لطفاً تگ دهنده و گیرنده را اسکن کنید.");
-        return;
-    }
-    if (isNaN(amount) || amount <= 0) {
-        alert("مبلغ انتقال را به درستی وارد کنید.");
-        return;
-    }
+    if (!giverTag || !receiverTag) { alert("لطفاً تگ دهنده و گیرنده را اسکن کنید."); return; }
+    if (isNaN(amount) || amount <= 0) { alert("مبلغ انتقال را به درستی وارد کنید."); return; }
     
     let players = JSON.parse(localStorage.getItem('players'));
     const giver = players.find(p => p.id === giverTag.id);
     const receiver = players.find(p => p.id === receiverTag.id);
 
-    if (giver.balance < amount) {
-        alert(`موجودی «${giver.name}» کافی نیست!`);
-        return;
-    }
+    if (giver.balance < amount) { alert(`موجودی «${giver.name}» کافی نیست!`); return; }
 
     giver.balance -= amount;
     receiver.balance += amount;
@@ -528,15 +534,14 @@ document.getElementById('transferConfirm').onclick = () => {
     
     showTransferAnimation(giver.name, receiver.name);
     resetTransferPopup();
-    setTimeout(renderPlayerList, 1100); // تا انیمیشن تمام شود
+    setTimeout(renderPlayerList, 1100);
 };
 
 function showTransferAnimation(giverName, receiverName) {
-    const fade = document.getElementById('transferFade');
     document.getElementById('fadeGiver').textContent = giverName;
     document.getElementById('fadeReceiver').textContent = receiverName;
-    fade.classList.add('active');
-    setTimeout(() => fade.classList.remove('active'), 1200);
+    document.getElementById('transferFade').classList.add('active');
+    setTimeout(() => document.getElementById('transferFade').classList.remove('active'), 1200);
 }
 
 // ------------------------- پاداش دور -------------------------
@@ -553,24 +558,25 @@ function resetRewardPopup() {
 
 document.getElementById('rewardBtn').onclick = () => {
     const turnReward = parseInt(localStorage.getItem('turnReward'));
-    document.getElementById('rewardAmount').textContent = 
-        `مبلغ پاداش: ${turnReward.toLocaleString('fa-IR')} تومان`;
+    document.getElementById('rewardAmount').textContent = `مبلغ پاداش: ${formatToPersian(turnReward)} تومان`;
     popups.reward.classList.add('active');
-    startNFCScan(player => {
-        rewardTag = player;
-        rewardCircle.textContent = player.name;
-        rewardCircle.classList.add('filled');
-        stopNFCScan(); // پس از یافتن بازیکن، اسکن متوقف می‌شود
-    });
+    rewardCircle.textContent = 'در حال اسکن...';
+    startNFCScan(
+        player => {
+            rewardTag = player;
+            rewardCircle.textContent = player.name;
+            rewardCircle.classList.add('filled');
+            stopNFCScan();
+        },
+        () => { rewardCircle.textContent = 'در حال اسکن...'; },
+        () => { if (!rewardTag) rewardCircle.textContent = 'بازیکن'; }
+    );
 };
 
 document.getElementById('rewardCancel').onclick = resetRewardPopup;
 
 document.getElementById('rewardConfirm').onclick = () => {
-    if (!rewardTag) {
-        alert("لطفا تگ بازیکن را اسکن کنید.");
-        return;
-    }
+    if (!rewardTag) { alert("لطفا تگ بازیکن را اسکن کنید."); return; }
     const rewardAmount = parseInt(localStorage.getItem('turnReward'));
     let players = JSON.parse(localStorage.getItem('players'));
     const player = players.find(p => p.id === rewardTag.id);
@@ -583,11 +589,10 @@ document.getElementById('rewardConfirm').onclick = () => {
 };
 
 function showRewardAnimation(name, amount) {
-    const fade = document.getElementById('rewardFade');
     document.getElementById('rewardTo').textContent = name;
-    document.getElementById('rewardShow').textContent = `+${amount.toLocaleString('fa-IR')} تومان`;
-    fade.classList.add('active');
-    setTimeout(() => fade.classList.remove('active'), 1200);
+    document.getElementById('rewardShow').textContent = `+${formatToPersian(amount)} تومان`;
+    document.getElementById('rewardFade').classList.add('active');
+    setTimeout(() => document.getElementById('rewardFade').classList.remove('active'), 1200);
 }
 
 // ------------------------- اتمام بازی -------------------------
