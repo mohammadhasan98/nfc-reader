@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>بانک مونوپولی</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-dark: #0D1B2A;
@@ -124,12 +124,13 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: transform .2s ease, background-color 0.4s ease;
+  transition: transform .2s ease, background-color 0.4s ease, opacity 0.4s ease;
   animation: slideInCard 0.5s ease forwards;
   opacity: 0;
+  position: relative;
+  overflow: hidden;
 }
 .player-card:hover { transform: scale(1.02); }
-.player-card.bankrupt { opacity: 0.5; background: #2a2a2a; }
 .player-info { display: flex; align-items: center; gap: 15px; }
 .player-tag {
   background: var(--primary); color: #fff; width: 40px; height: 40px; border-radius: 50%;
@@ -138,12 +139,32 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 .player-name { font-size: 18px; font-weight: 600; }
 .player-balance { font-size: 18px; font-weight: 400; direction: ltr; transition: color .3s ease; }
-.bankrupt-stamp { position: relative; overflow: hidden; }
-.bankrupt-stamp::after{
-  content:"ورشکسته"; position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-15deg);
-  background: var(--danger); color: #fff; padding: 5px 50px;
-  font-size: 18px; font-weight: bold; opacity: 0.9; letter-spacing: 2px;
+
+/* NEW: استایل و انیمیشن مهر ورشکستگی */
+@keyframes stamp-animation {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-15deg) scale(2.5); }
+  60% { opacity: 0.8; transform: translate(-50%, -50%) rotate(-15deg) scale(0.9); }
+  80% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); }
+  100% { opacity: 0.8; transform: translate(-50%, -50%) rotate(-15deg) scale(1); }
+}
+.player-card.bankrupt { opacity: 0.6; background: #2a2a2a; }
+.player-card.bankrupt::after{
+  content:"ورشکسته";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  border: 4px solid var(--danger);
+  color: var(--danger);
+  background: transparent;
+  padding: 5px 20px;
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: 0;
+  animation: stamp-animation 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: 0.2s;
 }
 
 /* انیمیشن تغییر موجودی */
@@ -165,10 +186,10 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 }
 .popup-box .button-group {
     display: flex; justify-content: center; gap: 10px; margin-top: 20px;
-    flex-wrap: wrap; /* FIX: برای جلوگیری از بیرون زدن دکمه‌ها */
+    flex-wrap: wrap;
 }
 .popup-box .button-group button {
-    min-width: 120px; /* تنظیم عرض کمتر برای دکمه‌های داخل پاپ‌آپ */
+    min-width: 120px;
 }
 
 /* --- کیبورد و دایره‌ها --- */
@@ -200,14 +221,13 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 /* --- انیمیشن انتقال و پاداش --- */
 .fade {
   position:fixed; inset:0;
-  background: rgba(13, 27, 42, 0.5); /* NEW: Semi-transparent background */
-  backdrop-filter: blur(10px); /* NEW: Blur effect */
+  background: rgba(13, 27, 42, 0.5);
+  backdrop-filter: blur(10px);
   color:#fff; display:none; justify-content:center; align-items:center;
   flex-direction:column; font-size:20px; z-index:999;
 }
 .fade.active { display:flex; }
 
-/* NEW: انیمیشن انتقال بازطراحی شده */
 #transferInfo {
     display: flex;
     justify-content: center;
@@ -233,10 +253,9 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     to { transform: translateX(-100px) rotate(-45deg); opacity: 1; }
 }
 .fade-giver-anim { animation: pulse 0.8s ease-in-out forwards; animation-delay: 0.1s; opacity: 1 !important; transform: scale(1); }
-.fade-arrow-anim { animation: arrowAnimRTL 1s ease-in-out forwards; animation-delay: 0.5s; opacity: 0; /* starts transparently */}
+.fade-arrow-anim { animation: arrowAnimRTL 1s ease-in-out forwards; animation-delay: 0.5s; opacity: 0; }
 .fade-receiver-anim { animation: pulse 0.8s ease-in-out forwards; animation-delay: 1.5s; opacity: 1 !important; transform: scale(1);}
 
-/* انیمیشن پاداش (قدیمی) */
 .reward-arrow {
   width:60px; height:60px; border-top:5px solid #fff; border-left:5px solid #fff;
   transform:rotate(-45deg); margin-top:10px;
@@ -267,9 +286,9 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     <option value="6">۶</option>
   </select>
   <label for="startMoney">موجودی اولیه:</label>
-  <input type="number" id="startMoney" placeholder="مثلاً ۱۵,۰۰۰">
+  <input type="text" inputmode="numeric" id="startMoney" placeholder="مثلاً ۱۵,۰۰۰">
   <label for="turnReward">پاداش دور کامل:</label>
-  <input type="number" id="turnReward" placeholder="مثلاً ۲,۰۰۰">
+  <input type="text" inputmode="numeric" id="turnReward" placeholder="مثلاً ۲,۰۰۰">
   <button id="continueToNames" class="btn-primary">ادامه</button>
 </section>
 
@@ -329,7 +348,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     </div>
 </div>
 
-<!-- انیمیشن انتقال بازطراحی شده -->
 <div id="transferFade" class="fade">
   <div id="transferInfo">
     <div class="circle filled" id="fadeReceiver"></div>
@@ -338,7 +356,6 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
   </div>
 </div>
 
-<!-- انیمیشن پاداش -->
 <div id="rewardFade" class="fade">
   <div style="text-align: center;">
     <div id="rewardShow" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;"></div>
@@ -353,6 +370,9 @@ document.addEventListener('contextmenu', e => e.preventDefault());
 const sections = { start: document.getElementById('start'), names: document.getElementById('names'), game: document.getElementById('game') };
 const popups = { transfer: document.getElementById('transferPopup'), reward: document.getElementById('rewardPopup'), dialog: document.getElementById('dialogPopup') };
 let ndefReader, nfcAbortController = null;
+
+const startMoney = document.getElementById('startMoney');
+const turnReward = document.getElementById('turnReward');
 
 // --- سیستم دیالوگ شخصی سازی شده ---
 const dialogTitle = document.getElementById('dialogTitle'), dialogMessage = document.getElementById('dialogMessage'), dialogButtons = document.getElementById('dialogButtons');
@@ -381,10 +401,19 @@ function showSection(id) {
     sections[id].classList.add('active');
 }
 
+// FIX: تابع جدید برای تبدیل اعداد فارسی/عربی به انگلیسی
+function toEnglishDigits(str) {
+  if (typeof str !== 'string') return str;
+  const persianArabicMap = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9', '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+  return str.replace(/[۰-۹٠-٩]/g, c => persianArabicMap[c]);
+}
+
+
 // --- مرحله ۱: تنظیمات اولیه ---
 document.getElementById('continueToNames').onclick = () => {
-    const startMoneyVal = parseInt(startMoney.value.replace(/,/g, ''));
-    const rewardVal = parseInt(turnReward.value.replace(/,/g, ''));
+    // FIX: استفاده از تابع toEnglishDigits قبل از parseInt
+    const startMoneyVal = parseInt(toEnglishDigits(startMoney.value).replace(/,/g, ''));
+    const rewardVal = parseInt(toEnglishDigits(turnReward.value).replace(/,/g, ''));
     if (isNaN(startMoneyVal) || startMoneyVal <= 0 || isNaN(rewardVal) || rewardVal <= 0) {
         customAlert("مقادیر پولی را به درستی و بزرگتر از صفر وارد کنید.");
         return;
@@ -430,7 +459,7 @@ function renderPlayerList() {
         card.className = 'player-card';
         card.dataset.playerId = p.id;
         card.style.animationDelay = `${index * 100}ms`;
-        if (p.bankrupt) card.classList.add('bankrupt-stamp');
+        if (p.bankrupt) card.classList.add('bankrupt');
         card.innerHTML = `<div class="player-info"><div class="player-tag">${p.id}</div><div class="player-name">${p.name}</div></div><div class="player-balance" data-balance-id="${p.id}">${p.balance.toLocaleString('fa-IR')}</div>`;
         card.addEventListener('contextmenu', async e => {
             e.preventDefault();
@@ -454,12 +483,13 @@ function updatePlayerDisplays(newPlayers, oldPlayers) {
         const card = document.querySelector(`.player-card[data-player-id="${p.id}"]`);
         if (!card) return;
         const balanceEl = card.querySelector(`.player-balance[data-balance-id="${p.id}"]`);
-        if (p.bankrupt) card.classList.add('bankrupt-stamp'); else card.classList.remove('bankrupt-stamp');
+        if (p.bankrupt) card.classList.add('bankrupt'); else card.classList.remove('bankrupt');
         
         const oldPlayer = oldPlayers?.find(op => op.id === p.id);
-        const currentBalance = parseInt(balanceEl.textContent.replace(/,/g, ''));
+        const currentBalanceString = toEnglishDigits(balanceEl.textContent).replace(/,/g, '');
+        const currentBalance = parseInt(currentBalanceString);
         
-        if (oldPlayer && p.balance !== currentBalance) {
+        if (oldPlayer && p.balance !== oldPlayer.balance) { // Compare with old data, not DOM
             balanceEl.textContent = p.balance.toLocaleString('fa-IR');
             const animClass = p.balance > oldPlayer.balance ? 'balance-up' : 'balance-down';
             balanceEl.classList.remove('balance-up', 'balance-down');
@@ -500,10 +530,9 @@ const numPad = document.getElementById('numPad'), amountInput = document.getElem
 ['۱','۲','۳','۴','۵','۶','۷','۸','۹','پاک','۰','⌫'].forEach(key => {
     const btn = document.createElement('button');
     btn.textContent = key;
-    const persianMap = {'۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','۰':'0'};
     if (key === '⌫') btn.onclick = () => amountInput.value = amountInput.value.slice(0, -1);
     else if (key === 'پاک') btn.onclick = () => amountInput.value = '';
-    else btn.onclick = () => amountInput.value += persianMap[key];
+    else btn.onclick = () => amountInput.value += key;
     numPad.appendChild(btn);
 });
 
@@ -542,7 +571,7 @@ document.getElementById('transferBtn').onclick = () => {
 };
 document.getElementById('transferCancel').onclick = resetTransferPopup;
 document.getElementById('transferConfirm').onclick = () => {
-    const amount = parseInt(amountInput.value);
+    const amount = parseInt(toEnglishDigits(amountInput.value));
     if (!giverTag || !receiverTag) { customAlert("تگ دهنده و گیرنده را اسکن کنید."); return; }
     if (isNaN(amount) || amount <= 0) { customAlert("مبلغ انتقال را به درستی وارد کنید."); return; }
     
@@ -570,23 +599,21 @@ function showTransferAnimation(giverName, receiverName) {
     giverEl.textContent = giverName;
     receiverEl.textContent = receiverName;
     
-    // Reset classes for re-animation
     giverEl.className = 'circle filled';
     receiverEl.className = 'circle filled';
     arrowEl.className = 'arrow';
     
     fade.classList.add('active');
     
-    // Add animation classes
     setTimeout(() => {
         giverEl.classList.add('fade-giver-anim');
         arrowEl.classList.add('fade-arrow-anim');
         receiverEl.classList.add('fade-receiver-anim');
-    }, 50); // Small delay to ensure CSS applies
+    }, 50);
 
     setTimeout(() => {
         fade.classList.remove('active');
-    }, 2500); // Duration of the whole sequence
+    }, 2500);
 }
 
 
