@@ -192,6 +192,31 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
     text-align: right;
 }
 
+/* --- دکمه‌های صفحه بازی --- */
+.game-actions-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* دو ستون مساوی */
+    gap: 15px;
+    margin-bottom: 30px;
+    align-items: stretch; /* هم‌قد کردن ستون‌ها */
+}
+.stacked-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+/* بازنویسی استایل پیش‌فرض دکمه‌ها در این بخش */
+.game-actions-container > button, 
+.stacked-buttons > button {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+/* این باعث می‌شود دکمه‌ها در ستون چپ، فضای عمودی را به طور مساوی تقسیم کنند */
+.stacked-buttons > button {
+    flex-grow: 1;
+}
+
 /* --- لیست و کارت‌های بازیکنان (صفحه بازی) --- */
 #playerList {
   display: grid;
@@ -443,11 +468,18 @@ label { display: block; text-align: center; margin-top: 20px; color: #aab; }
 </section>
 
 <section id="game">
-  <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom: 30px;">
+  <!-- CHANGE START: ساختار دکمه‌ها طبق درخواست تغییر کرد -->
+  <div class="game-actions-container">
+    <!-- به دلیل dir="rtl"، این دکمه در سمت راست نمایش داده می‌شود -->
     <button id="transferBtn" class="btn-primary">💸 کارت به کارت</button>
-    <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
-    <button id="bankTxBtn" class="btn-primary">🏦 پرداخت/دریافت</button>
+    <!-- این بخش در سمت چپ نمایش داده می‌شود -->
+    <div class="stacked-buttons">
+      <button id="rewardBtn" class="btn-primary">🎁 پاداش دور</button>
+      <button id="bankTxBtn" class="btn-primary">🏦 پرداخت/دریافت</button>
+    </div>
   </div>
+  <!-- CHANGE END -->
+
   <div id="playerList"></div>
   <button id="endGame" class="btn-danger" style="margin-top: 30px;">اتمام و شروع مجدد 🔄</button>
 </section>
